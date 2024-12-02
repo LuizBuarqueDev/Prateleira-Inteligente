@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth"
 const firebaseConfig = {
     apiKey: "AIzaSyBF6aowvCkRp_J2Xh7JETZliylDK7s1aGE",
     authDomain: "prateleira-inteligente.firebaseapp.com",
@@ -17,4 +17,4 @@ const db = getFirestore(app);
 
 const auth = getAuth(app);
 
-export { db,auth };
+export { db, auth, createUserWithEmailAndPassword, onAuthStateChanged };

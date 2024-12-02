@@ -1,4 +1,40 @@
+<script setup>
+import { ref } from 'vue';
+import { auth, createUserWithEmailAndPassword } from '@/assets/js/firebase';
+
+const newUser = ref({
+  username: '',
+  email: '',
+  password: '',
+  repeatPassword: ''
+});
+
+const registerUser = async () => {
+  if (newUser.value.password !== newUser.value.repeatPassword) {
+    alert('As senhas não coincidem!');
+    return;
+  }
+
+  try {
+    // Cria o usuário no Firebase Authentication
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      newUser.value.email,
+      newUser.value.password
+    );
+    const user = userCredential.user;
+    console.log('Usuário registrado:', user);
+
+    alert('Conta criada com sucesso!');
+  } catch (error) {
+    console.error('Erro ao registrar:', error.message);
+    alert(error.message);
+  }
+};
+</script>
+
 <template>
+
   <form>
     <div class="mb-3 pb-1">
       <i class="fa-solid fa-book-bookmark"></i>
@@ -8,34 +44,37 @@
     <h5 class="mb-3 pb-3">Crie sua conta</h5>
 
     <div>
-      <input type="text" id="registerName" class="form-control form-control-lg" />
-      <label class="form-label" for="registerName">Seu nome de usuario</label>
+      <input type="text" v-model="newUser.username" class="form-control form-control-lg" />
+      <label class="form-label">Seu nome de usuario</label>
     </div>
 
     <div>
-      <input type="email" id="registerEmail" class="form-control form-control-lg" />
-      <label class="form-label" for="registerEmail">Endereço de email</label>
+      <input type="email" v-model="newUser.email" class="form-control form-control-lg" />
+      <label class="form-label">Endereço de email</label>
     </div>
 
     <div>
-      <input type="password" id="registerPassword" class="form-control form-control-lg" />
-      <label class="form-label" for="registerPassword">Senha</label>
+      <input type="password" v-model="newUser.password" class="form-control form-control-lg" />
+      <label class="form-label">Senha</label>
     </div>
 
     <div>
-      <input type="password" id="repeatPassword" class="form-control form-control-lg" />
-      <label class="form-label" for="repeatPassword">Repita a senha</label>
+      <input type="password" v-model="newUser.repeatPassword" class="form-control form-control-lg" />
+      <label class="form-label">Repita a senha</label>
     </div>
 
     <div>
-      <button class="btn btn-dark btn-lg btn-block" type="button">Criar</button>
+      <button @click="registerUser" class="btn btn-dark btn-lg btn-block" type="button">Criar</button>
     </div>
 
-    <p>Já tem uma conta?
+    <p>
+      Já tem uma conta?
       <a href="#" @click="$emit('switchToLogin')">Login here</a>
     </p>
   </form>
+
 </template>
+
 
 <style scoped>
 form {
@@ -48,7 +87,8 @@ form {
     }
   }
 
-  p, a {
+  p,
+  a {
     color: var(--color_4);
   }
 
