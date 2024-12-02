@@ -1,4 +1,4 @@
-package br.ifpe.prateleira.inteligente.entities;
+package br.ifpe.prateleira.inteligente.examples;
 
 
 import java.util.ArrayList;
