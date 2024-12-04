@@ -10,13 +10,13 @@ public class LivrosCategorias {
 
     @ManyToOne
     @JoinColumn(name = "idLivros")
-    private Livros livro;
+    private Livro livro;
 
     @ManyToOne
     @JoinColumn(name = "idCategoria")
     private Categoria categoria;
 
-    public LivrosCategorias(Long id, Livros livro, Categoria categoria) {
+    public LivrosCategorias(Long id, Livro livro, Categoria categoria) {
         this.id = id;
         this.livro = livro;
         this.categoria = categoria;
@@ -24,8 +24,8 @@ public class LivrosCategorias {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public Livros getLivro() { return livro; }
-    public void setLivro(Livros livro) { this.livro = livro; }
+    public Livro getLivro() { return livro; }
+    public void setLivro(Livro livro) { this.livro = livro; }
     public Categoria getCategoria() { return categoria; }
     public void setCategoria(Categoria categoria) { this.categoria = categoria; }
 }
