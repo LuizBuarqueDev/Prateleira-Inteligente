@@ -6,7 +6,7 @@ import java.util.List;
 
 public class LivroDAO {
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("crud-prateleira");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("prateleiraPU");
     EntityManager em = emf.createEntityManager();
 
     public void adicionar(Livro livro) {
