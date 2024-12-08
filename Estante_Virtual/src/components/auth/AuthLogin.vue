@@ -1,3 +1,31 @@
+<script setup>
+import { ref } from 'vue';
+import { auth, signInWithEmailAndPassword } from '@/assets/js/firebase';
+
+const loginData = ref({
+  email: '',
+  password: ''
+});
+
+const loginUser = async () => {
+  try {const userCredential = await signInWithEmailAndPassword(
+      auth,
+      loginData.value.email,
+      loginData.value.password
+    );
+
+    const user = userCredential.user;
+    console.log('Usuário logado:', user);
+
+    alert('Login realizado com sucesso!');
+  } catch (error) {
+    console.error('Erro ao fazer login:', error.message);
+    alert('Email ou senha incorretos!');
+  }
+};
+
+</script>
+
 <template>
   <form>
     <div>
@@ -7,18 +35,19 @@
 
     <h5>Entre na sua conta</h5>
     <div>
-      <input type="email" id="loginEmail" class="form-control form-control-lg" />
+      <input type="email" v-model="loginData.email" class="form-control form-control-lg" />
       <label class="form-label" for="loginEmail">Endereço de email</label>
     </div>
 
     <div>
-      <input type="password" id="loginPassword" class="form-control form-control-lg" />
+      <input type="password" v-model="loginData.password" class="form-control form-control-lg" />
       <label class="form-label" for="loginPassword">Senha</label>
     </div>
 
     <div>
-      <button class="btn btn-dark btn-lg btn-block" type="button">Login</button>
+      <button @click="loginUser" class="btn btn-dark btn-lg btn-block" type="button">Login</button>
     </div>
+
 
     <a href="#!">Esqueceu sua senha ?</a>
     <p>Não tem uma conta?
@@ -27,9 +56,7 @@
   </form>
 </template>
 
-<script setup>
 
-</script>
 
 <style scoped>
 form {
@@ -58,7 +85,7 @@ form {
     color: var(--color_4);
 
     a {
-      color: var(--color_4);
+      color:var(--color_4);
     }
   }
 }
