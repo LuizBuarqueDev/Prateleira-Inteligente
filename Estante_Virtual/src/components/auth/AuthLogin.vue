@@ -2,6 +2,8 @@
 import { ref } from 'vue';
 import { auth, signInWithEmailAndPassword } from '@/assets/js/firebase';
 
+
+
 const loginData = ref({
   email: '',
   password: ''
@@ -25,7 +27,7 @@ const loginUser = async () => {
 };
 
 </script>
-
+<form @submit.prevent="loginUser"></form>
 <template>
   <form>
     <div>
@@ -55,8 +57,6 @@ const loginUser = async () => {
     </p>
   </form>
 </template>
-
-
 
 <style scoped>
 form {
