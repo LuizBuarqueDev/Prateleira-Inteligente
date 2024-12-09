@@ -1,31 +1,49 @@
 <script setup>
-import { getAuth, signOut } from 'firebase/auth';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
+import { auth } from '@/assets/js/firebase';
+import { signOut, onAuthStateChanged } from 'firebase/auth';
 
-const auth = getAuth();
 const userName = ref('');
+const isAuthenticated = ref(false);
 
+// Função para fazer logout
 const logout = async () => {
     await signOut(auth);
+    isAuthenticated.value = false;
+    userName.value = '';
 }
 
-onMounted(() => {
-    userName.value = auth.currentUser.email;
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        userName.value = user.email;
+        isAuthenticated.value = true;
+    } else {
+        isAuthenticated.value = false;
+        userName.value = '';
+    }
 });
 </script>
 
 <template>
-    <div class="dropdown">
-        <a class="btn nav-link" type="button" data-bs-toggle="dropdown">
-            <i class="fa-regular fa-user"></i> {{ userName }}
-        </a>
-        <ul class="dropdown-menu">
-            <li>
-                <button @click="logout()" class="dropdown-item">
-                    <i class="fa-solid fa-sign-out-alt"></i> Sair
-                </button>
-            </li>
-        </ul>
+    <div v-if="!isAuthenticated">
+        <router-link class="nav-link" to="/authentication">
+            <i class="fa-solid fa-right-to-bracket"></i> Entre
+        </router-link>
+    </div>
+
+    <div v-else>
+        <div class="dropdown">
+            <a class="btn nav-link" type="button" data-bs-toggle="dropdown">
+                <i class="fa-regular fa-user"></i> {{ userName }}
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <button @click="logout()" class="dropdown-item">
+                        <i class="fa-solid fa-sign-out-alt"></i> Sair
+                    </button>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
@@ -41,6 +59,11 @@ a {
         color: var(--color_white);
         background-color: var(--color_1_hover);
         transform: scale(1.1);
+    }
+
+    i {
+        margin-right: 10px;
+        font-size: 1.5em;
     }
 }
 </style>

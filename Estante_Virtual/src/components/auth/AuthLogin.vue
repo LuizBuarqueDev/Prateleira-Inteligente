@@ -1,7 +1,14 @@
 <script setup>
+<<<<<<< HEAD
 import { ref } from 'vue';
 import { auth, signInWithEmailAndPassword } from '@/assets/js/firebase';
 
+=======
+
+import { ref } from 'vue';
+import { auth } from '@/assets/js/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+>>>>>>> 42eeb8ff975fc61912ffd25e58d3c46ec48c3e69
 
 
 const loginData = ref({
@@ -18,8 +25,15 @@ const loginUser = async () => {
 
     const user = userCredential.user;
     console.log('Usuário logado:', user);
+<<<<<<< HEAD
 
     alert('Login realizado com sucesso!');
+=======
+    alert('Login realizado com sucesso!');
+
+    loginData.value.email = ''
+    loginData.value.password = ''
+>>>>>>> 42eeb8ff975fc61912ffd25e58d3c46ec48c3e69
   } catch (error) {
     console.error('Erro ao fazer login:', error.message);
     alert('Email ou senha incorretos!');
@@ -27,8 +41,13 @@ const loginUser = async () => {
 };
 
 </script>
+<<<<<<< HEAD
 <form @submit.prevent="loginUser"></form>
+=======
+
+>>>>>>> 42eeb8ff975fc61912ffd25e58d3c46ec48c3e69
 <template>
+  
   <form>
     <div>
       <i class="fa-solid fa-book-bookmark"></i>
@@ -37,7 +56,11 @@ const loginUser = async () => {
 
     <h5>Entre na sua conta</h5>
     <div>
+<<<<<<< HEAD
       <input type="email" v-model="loginData.email" class="form-control form-control-lg" />
+=======
+      <input type="email" v-model="loginData.email" class="form-control form-control-lg"/>
+>>>>>>> 42eeb8ff975fc61912ffd25e58d3c46ec48c3e69
       <label class="form-label" for="loginEmail">Endereço de email</label>
     </div>
 

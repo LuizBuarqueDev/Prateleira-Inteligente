@@ -1,24 +1,24 @@
     <script setup>
     import { useRouter } from 'vue-router';
-    
+
     const defaultImage = "/img/bookImg.png";
     const router = useRouter();
-    
+
     const props = defineProps({
       books: {
         type: Array,
         required: true,
       },
     });
-    
+
     const getBookImage = (imageLink) => {
       return imageLink && imageLink !== "N/A" ? imageLink : defaultImage;
     };
-    
+
     const goToBookDetail = (book) => {
       router.push({ name: 'BookDetail', params: { id: book.id } });
     };
-    
+
 </script>
 <template>
   <div v-if="books.length" class="book-container">

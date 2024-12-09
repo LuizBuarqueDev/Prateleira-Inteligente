@@ -1,28 +1,31 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-
+import { ref, computed, onMounted, provide } from 'vue';
 import BaseLayout from '@/components/BaseLayout.vue';
 import HeaderTemplate from '@/components/HeaderTemplate.vue';
-import BookCard from '@/components/BookCard.vue';
+import BookCard from '@/components/BooksCards.vue';
 import DAOService from '@/services/DAOService';
 import Spinner from '@/components/Spinner.vue';
 
 const bookService = new DAOService('books');
 
 const books = ref([]);
-const highlightedBooks = ref([]);
-const otherBooks = ref([]);
 const isLoading = ref(true);
+
+const searchValue = ref('');
+provide('searchValue', searchValue)
+
+
+const highlightedBooks = computed(() =>
+  books.value.filter(book =>
+    book.title.toLowerCase().includes(searchValue.value.toLowerCase())
+  )
+);
 
 const fetchBooks = async () => {
   isLoading.value = true;
   books.value = await bookService.getAll();
-
-  highlightedBooks.value = books.value.filter(book => book.isHighlighted);
-  otherBooks.value = books.value.filter(book => !book.isHighlighted);
   isLoading.value = false;
 };
-
 
 onMounted(fetchBooks);
 </script>
@@ -45,18 +48,10 @@ onMounted(fetchBooks);
       <section class="shelf">
         <BookCard :books="highlightedBooks" />
       </section>
-
-      <div class="shelf-title">
-        <i class="fa-regular fa-font-awesome"></i>
-        <span>Descubra outros livros</span>
-      </div>
-
-      <section class="shelf">
-        <BookCard :books="otherBooks" />
-      </section>
     </div>
   </BaseLayout>
 </template>
+
 
 
 <style scoped>
