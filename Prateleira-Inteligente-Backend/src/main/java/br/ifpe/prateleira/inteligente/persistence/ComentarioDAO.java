@@ -1,82 +1,83 @@
 package br.ifpe.prateleira.inteligente.persistence;
 
-import br.ifpe.prateleira.inteligente.entities.Categoria;
+import br.ifpe.prateleira.inteligente.entities.Comentario;
 
 import javax.persistence.*;
-
 import java.util.List;
 
-public class CategoriaDAO {
+public class ComentarioDAO {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("prateleiraPU");
 
-    public void adicionar(Categoria categoria) {
+    // Adicionar um comentário
+    public void adicionar(Comentario comentario) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(categoria);
+            em.persist(comentario);
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
-            System.err.println("Erro ao adicionar categoria: " + e.getMessage());
+            System.err.println("Erro ao adicionar comentário: " + e.getMessage());
         } finally {
             em.close();
         }
     }
 
-    public Categoria buscarPorId(Long id) {
+    // Buscar comentário por ID
+    public Comentario buscarPorId(Long idComentario) {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.find(Categoria.class, id);
+            return em.find(Comentario.class, idComentario);
         } finally {
             em.close();
         }
     }
 
-    public List<Categoria> listarTodas() {
+    // Listar todos os comentários
+    public List<Comentario> listarTodos() {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.createQuery("FROM Categoria", Categoria.class).getResultList();
+            return em.createQuery("FROM Comentario", Comentario.class).getResultList();
         } finally {
             em.close();
         }
     }
 
-    public void atualizar(Categoria categoria) {
+    // Atualizar um comentário
+    public void atualizar(Comentario comentario) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.merge(categoria);
+            em.merge(comentario);
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
-            System.err.println("Erro ao atualizar categoria: " + e.getMessage());
+            System.err.println("Erro ao atualizar comentário: " + e.getMessage());
         } finally {
             em.close();
         }
     }
 
-    public void deletar(Long id) {
+    // Deletar um comentário
+    public void deletar(Long idComentario) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            Categoria categoria = em.find(Categoria.class, id);
-            if (categoria != null) {
-                em.remove(categoria);
+            Comentario comentario = em.find(Comentario.class, idComentario);
+            if (comentario != null) {
+                em.remove(comentario);
             }
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
-            System.err.println("Erro ao deletar categoria: " + e.getMessage());
+            System.err.println("Erro ao deletar comentário: " + e.getMessage());
         } finally {
             em.close();
         }
     }
 
+    // Fechar o EntityManagerFactory
     public static void fechar() {
         emf.close();
     }
-
-
-
-
 }

@@ -22,6 +22,9 @@ public class LivrosCategorias {
         this.categoria = categoria;
     }
 
+    public LivrosCategorias() {
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public Livro getLivro() { return livro; }
