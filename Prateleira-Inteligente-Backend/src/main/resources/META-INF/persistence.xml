@@ -1,7 +1,7 @@
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
     <persistence-unit name="prateleiraPU">
-        <class>br.com.AulaJPA.Pessoa</class>
-        <class>br.com.AulaJPA.Endereco</class>
+        <class>br.ifpe.prateleira.inteligente.entities.Usuario</class>
+        <class>br.ifpe.prateleira.inteligente.entities.Estante</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:testdb"/>
@@ -9,6 +9,8 @@
             <property name="javax.persistence.jdbc.password" value=""/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>

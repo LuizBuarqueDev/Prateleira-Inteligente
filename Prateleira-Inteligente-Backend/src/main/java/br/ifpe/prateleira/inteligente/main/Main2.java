@@ -1,5 +1,6 @@
 package br.ifpe.prateleira.inteligente.main;
 
+import br.ifpe.prateleira.inteligente.persistence.EstanteDAO;
 import br.ifpe.prateleira.inteligente.persistence.UsuarioDAO;
 import br.ifpe.prateleira.inteligente.entities.Estante;
 import br.ifpe.prateleira.inteligente.entities.Usuario;
@@ -7,12 +8,14 @@ import br.ifpe.prateleira.inteligente.entities.Usuario;
 public class Main2 {
 
     public static void main(String[] args) {
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-
         Estante estante = new Estante("Estante de Livros");
+        EstanteDAO estanteDAO = new EstanteDAO();
+        estanteDAO.adicionar(estante);
 
         Usuario usuario = new Usuario(estante, "Maria");
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
         usuarioDAO.adicionar(usuario);
+
 
         Long usuarioId = usuario.getIdUsuario();
         Usuario usuarioBuscado = usuarioDAO.buscarPorId(usuarioId);
@@ -22,7 +25,5 @@ public class Main2 {
         } else {
             System.out.println("Usuário não encontrado!");
         }
-
-        UsuarioDAO.fechar();
     }
 }

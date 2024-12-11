@@ -1,16 +1,16 @@
 package br.ifpe.prateleira.inteligente.persistence;
 
 import br.ifpe.prateleira.inteligente.entities.Estante;
+import br.ifpe.prateleira.inteligente.ultil.JPAUtil;
 
 import javax.persistence.*;
 import java.util.List;
 
 public class EstanteDAO {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("prateleiraPU");
 
     // Adicionar uma estante
     public void adicionar(Estante estante) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(estante);
@@ -25,7 +25,8 @@ public class EstanteDAO {
 
     // Buscar estante por ID
     public Estante buscarPorId(Long idEstante) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             return em.find(Estante.class, idEstante);
         } finally {
@@ -35,7 +36,8 @@ public class EstanteDAO {
 
     // Listar todas as estantes
     public List<Estante> listarTodos() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             return em.createQuery("FROM Estante", Estante.class).getResultList();
         } finally {
@@ -45,7 +47,8 @@ public class EstanteDAO {
 
     // Atualizar uma estante
     public void atualizar(Estante estante) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             em.getTransaction().begin();
             em.merge(estante);
@@ -60,7 +63,8 @@ public class EstanteDAO {
 
     // Deletar uma estante
     public void deletar(Long idEstante) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             em.getTransaction().begin();
             Estante estante = em.find(Estante.class, idEstante);
@@ -74,10 +78,5 @@ public class EstanteDAO {
         } finally {
             em.close();
         }
-    }
-
-    // Fechar o EntityManagerFactory
-    public static void fechar() {
-        emf.close();
     }
 }
