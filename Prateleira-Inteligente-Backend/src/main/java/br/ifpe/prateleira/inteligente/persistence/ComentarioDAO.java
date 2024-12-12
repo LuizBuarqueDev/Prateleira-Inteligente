@@ -8,7 +8,6 @@ import java.util.List;
 public class ComentarioDAO {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("prateleiraPU");
 
-    // Adicionar um comentário
     public void adicionar(Comentario comentario) {
         EntityManager em = emf.createEntityManager();
         try {
