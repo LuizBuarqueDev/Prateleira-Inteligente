@@ -1,15 +1,15 @@
 package br.ifpe.prateleira.inteligente.persistence;
 
 import br.ifpe.prateleira.inteligente.entities.Comentario;
+import br.ifpe.prateleira.inteligente.ultil.JPAUtil;
 
 import javax.persistence.*;
 import java.util.List;
 
 public class ComentarioDAO {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("prateleiraPU");
-
     public void adicionar(Comentario comentario) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             em.getTransaction().begin();
             em.persist(comentario);
@@ -22,9 +22,9 @@ public class ComentarioDAO {
         }
     }
 
-    // Buscar comentário por ID
     public Comentario buscarPorId(Long idComentario) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             return em.find(Comentario.class, idComentario);
         } finally {
@@ -32,9 +32,9 @@ public class ComentarioDAO {
         }
     }
 
-    // Listar todos os comentários
     public List<Comentario> listarTodos() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             return em.createQuery("FROM Comentario", Comentario.class).getResultList();
         } finally {
@@ -42,9 +42,9 @@ public class ComentarioDAO {
         }
     }
 
-    // Atualizar um comentário
     public void atualizar(Comentario comentario) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             em.getTransaction().begin();
             em.merge(comentario);
@@ -57,9 +57,9 @@ public class ComentarioDAO {
         }
     }
 
-    // Deletar um comentário
     public void deletar(Long idComentario) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             em.getTransaction().begin();
             Comentario comentario = em.find(Comentario.class, idComentario);
@@ -73,10 +73,5 @@ public class ComentarioDAO {
         } finally {
             em.close();
         }
-    }
-
-    // Fechar o EntityManagerFactory
-    public static void fechar() {
-        emf.close();
     }
 }

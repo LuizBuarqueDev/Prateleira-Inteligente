@@ -7,11 +7,9 @@ import javax.persistence.*;
 import java.util.List;
 
 public class UsuarioDAO {
-
-
-    // Adicionar um usuário
     public void adicionar(Usuario usuario) {
         EntityManager em = JPAUtil.getEntityManager();
+
         try {
             em.getTransaction().begin();
             em.persist(usuario);
@@ -24,7 +22,6 @@ public class UsuarioDAO {
         }
     }
 
-    // Buscar usuário por ID
     public Usuario buscarPorId(Long idUsuario) {
         EntityManager em = JPAUtil.getEntityManager();
 
@@ -35,7 +32,6 @@ public class UsuarioDAO {
         }
     }
 
-    // Listar todos os usuários
     public List<Usuario> listarTodos() {
         EntityManager em = JPAUtil.getEntityManager();
 
@@ -46,7 +42,6 @@ public class UsuarioDAO {
         }
     }
 
-    // Atualizar um usuário
     public void atualizar(Usuario usuario) {
         EntityManager em = JPAUtil.getEntityManager();
 
@@ -62,7 +57,6 @@ public class UsuarioDAO {
         }
     }
 
-    // Deletar um usuário
     public void deletar(Long idUsuario) {
         EntityManager em = JPAUtil.getEntityManager();
 

@@ -8,9 +8,9 @@ import java.util.List;
 
 public class EstanteDAO {
 
-    // Adicionar uma estante
     public void adicionar(Estante estante) {
         EntityManager em = JPAUtil.getEntityManager();
+
         try {
             em.getTransaction().begin();
             em.persist(estante);
@@ -23,7 +23,6 @@ public class EstanteDAO {
         }
     }
 
-    // Buscar estante por ID
     public Estante buscarPorId(Long idEstante) {
         EntityManager em = JPAUtil.getEntityManager();
 
@@ -34,7 +33,6 @@ public class EstanteDAO {
         }
     }
 
-    // Listar todas as estantes
     public List<Estante> listarTodos() {
         EntityManager em = JPAUtil.getEntityManager();
 
@@ -45,7 +43,6 @@ public class EstanteDAO {
         }
     }
 
-    // Atualizar uma estante
     public void atualizar(Estante estante) {
         EntityManager em = JPAUtil.getEntityManager();
 
@@ -61,7 +58,6 @@ public class EstanteDAO {
         }
     }
 
-    // Deletar uma estante
     public void deletar(Long idEstante) {
         EntityManager em = JPAUtil.getEntityManager();
 
