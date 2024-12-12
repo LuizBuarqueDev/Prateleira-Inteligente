@@ -2,10 +2,11 @@ package br.ifpe.prateleira.inteligente.persistence;
 
 import br.ifpe.prateleira.inteligente.entities.LivrosCategorias;
 import javax.persistence.*;
+import java.util.List;
 
 public class LivrosCategoriasDAO {
     // verificar erros depois
-    // private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("prateleiraPU");
+     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("prateleiraPU");
 
     public void adicionar(LivrosCategorias livrosCategorias) {
         EntityManager em = emf.createEntityManager();
@@ -20,6 +21,15 @@ public class LivrosCategoriasDAO {
             em.close();
         }
 
+    }
+
+    public List<LivrosCategorias> listarTodos() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery("FROM LivrosCategorias", LivrosCategorias.class).getResultList();
+        } finally {
+            em.close();
+        }
     }
 
 
