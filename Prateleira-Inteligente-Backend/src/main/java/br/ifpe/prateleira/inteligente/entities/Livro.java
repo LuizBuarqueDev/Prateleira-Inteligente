@@ -2,10 +2,13 @@ package br.ifpe.prateleira.inteligente.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name= "Livros")
+@Table(name = "Livros")
 public class Livro {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,21 +19,18 @@ public class Livro {
     private String descricao;
     private String editora;
 
-    @ManyToOne
-    @JoinColumn(name = "idEstante")
-    private Estante estante;
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL)
+    private List<EstanteLivro> estanteLivros = new ArrayList<>();
 
-    public Livro() {
-    }
+    public Livro() {}
 
-    public Livro(Long id, String titulo, String autor, Date anoPublicacao, String descricao, String editora, Estante estante) {
+    public Livro(Long id, String titulo, String autor, Date anoPublicacao, String descricao, String editora) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.anoPublicacao = anoPublicacao;
         this.descricao = descricao;
         this.editora = editora;
-        this.estante = estante;
     }
 
     public Long getId() { return id; }
@@ -45,6 +45,7 @@ public class Livro {
     public void setDescricao(String descricao) { this.descricao = descricao; }
     public String getEditora() { return editora; }
     public void setEditora(String editora) { this.editora = editora; }
-    public Estante getEstante() { return estante; }
-    public void setEstante(Estante estante) { this.estante = estante; }
+
+    public List<EstanteLivro> getEstanteLivros() { return estanteLivros; }
+    public void setEstanteLivros(List<EstanteLivro> estanteLivros) { this.estanteLivros = estanteLivros; }
 }

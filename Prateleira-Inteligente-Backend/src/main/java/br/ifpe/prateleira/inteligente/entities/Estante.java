@@ -18,10 +18,9 @@ public class Estante {
     private Usuario usuario;
 
     @OneToMany(mappedBy = "estante", cascade = CascadeType.ALL)
-    private List<Livro> livros = new ArrayList<>();
+    private List<EstanteLivro> estanteLivros = new ArrayList<>();
 
-    public Estante() {
-    }
+    public Estante() {}
 
     public Estante(String descricao) {
         this.descricao = descricao;
@@ -51,11 +50,11 @@ public class Estante {
         this.usuario = usuario;
     }
 
-    public List<Livro> getLivros() {
-        return livros;
+    public List<EstanteLivro> getEstanteLivros() {
+        return estanteLivros;
     }
 
-    public void setLivros(List<Livro> livros) {
-        this.livros = livros;
+    public void setEstanteLivros(List<EstanteLivro> estanteLivros) {
+        this.estanteLivros = estanteLivros;
     }
 }
