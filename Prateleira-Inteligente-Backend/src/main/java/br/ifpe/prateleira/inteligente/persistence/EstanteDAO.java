@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.util.List;
 
 public class EstanteDAO {
-
     public void adicionar(Estante estante) {
         EntityManager em = JPAUtil.getEntityManager();
 

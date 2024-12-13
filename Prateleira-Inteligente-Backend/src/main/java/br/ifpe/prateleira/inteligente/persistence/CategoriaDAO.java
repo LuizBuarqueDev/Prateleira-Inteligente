@@ -1,16 +1,16 @@
 package br.ifpe.prateleira.inteligente.persistence;
 
 import br.ifpe.prateleira.inteligente.entities.Categoria;
+import br.ifpe.prateleira.inteligente.ultil.JPAUtil;
 
 import javax.persistence.*;
 
 import java.util.List;
 
 public class CategoriaDAO {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("prateleiraPU");
-
     public void adicionar(Categoria categoria) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             em.getTransaction().begin();
             em.persist(categoria);
@@ -24,7 +24,8 @@ public class CategoriaDAO {
     }
 
     public Categoria buscarPorId(Long id) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             return em.find(Categoria.class, id);
         } finally {
@@ -33,7 +34,8 @@ public class CategoriaDAO {
     }
 
     public List<Categoria> listarTodas() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             return em.createQuery("FROM Categoria", Categoria.class).getResultList();
         } finally {
@@ -42,7 +44,8 @@ public class CategoriaDAO {
     }
 
     public void atualizar(Categoria categoria) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             em.getTransaction().begin();
             em.merge(categoria);
@@ -56,7 +59,8 @@ public class CategoriaDAO {
     }
 
     public void deletar(Long id) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             em.getTransaction().begin();
             Categoria categoria = em.find(Categoria.class, id);
@@ -71,12 +75,4 @@ public class CategoriaDAO {
             em.close();
         }
     }
-
-    public static void fechar() {
-        emf.close();
-    }
-
-
-
-
 }

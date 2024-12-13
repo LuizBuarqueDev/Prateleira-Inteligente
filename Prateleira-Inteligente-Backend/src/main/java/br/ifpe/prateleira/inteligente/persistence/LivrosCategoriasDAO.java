@@ -1,15 +1,16 @@
 package br.ifpe.prateleira.inteligente.persistence;
 
 import br.ifpe.prateleira.inteligente.entities.LivrosCategorias;
+import br.ifpe.prateleira.inteligente.ultil.JPAUtil;
+
 import javax.persistence.*;
 import java.util.List;
 
 public class LivrosCategoriasDAO {
-    // verificar erros depois
-     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("prateleiraPU");
 
     public void adicionar(LivrosCategorias livrosCategorias) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             em.getTransaction().begin();
             em.persist(livrosCategorias);
@@ -24,7 +25,8 @@ public class LivrosCategoriasDAO {
     }
 
     public List<LivrosCategorias> listarTodos() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             return em.createQuery("FROM LivrosCategorias", LivrosCategorias.class).getResultList();
         } finally {
@@ -33,7 +35,8 @@ public class LivrosCategoriasDAO {
     }
 
     public LivrosCategorias buscarPorId(Long id) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             return em.find(LivrosCategorias.class, id);
         } finally {
@@ -42,7 +45,8 @@ public class LivrosCategoriasDAO {
     }
 
     public void remover(Long id) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
+
         try {
             em.getTransaction().begin();
             LivrosCategorias lc = em.find(LivrosCategorias.class, id);
