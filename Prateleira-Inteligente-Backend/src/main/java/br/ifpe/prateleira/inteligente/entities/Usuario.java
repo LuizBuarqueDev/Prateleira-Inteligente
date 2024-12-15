@@ -16,8 +16,8 @@ public class Usuario {
     @JoinColumn(name = "idEstante", unique = true)
     private Estante estante;
 
-    public Usuario() {
-    }
+
+    public Usuario() {}
 
     public Usuario(Estante estante, String nome) {
         this.estante = estante;

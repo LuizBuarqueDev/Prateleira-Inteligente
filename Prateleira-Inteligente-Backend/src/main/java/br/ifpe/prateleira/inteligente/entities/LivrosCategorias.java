@@ -16,14 +16,14 @@ public class LivrosCategorias {
     @JoinColumn(name = "idCategoria")
     private Categoria categoria;
 
-    public LivrosCategorias(Long id, Livro livro, Categoria categoria) {
-        this.id = id;
+
+    public LivrosCategorias() {}
+
+    public LivrosCategorias(Livro livro, Categoria categoria) {
         this.livro = livro;
         this.categoria = categoria;
     }
 
-    public LivrosCategorias() {
-    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

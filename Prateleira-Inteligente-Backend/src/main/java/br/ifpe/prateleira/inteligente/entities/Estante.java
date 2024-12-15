@@ -20,11 +20,14 @@ public class Estante {
     @OneToMany(mappedBy = "estante", cascade = CascadeType.ALL)
     private List<EstanteLivro> estanteLivros = new ArrayList<>();
 
-    public Estante() {}
+
+    public Estante() {
+    }
 
     public Estante(String descricao) {
         this.descricao = descricao;
     }
+
 
     public Long getIdEstante() {
         return idEstante;

@@ -18,12 +18,14 @@ public class EstanteLivro {
     @JoinColumn(name = "idLivro")
     private Livro livro;
 
+
     public EstanteLivro() {}
 
     public EstanteLivro(Estante estante, Livro livro) {
         this.estante = estante;
         this.livro = livro;
     }
+
 
     public Long getId() {
         return id;

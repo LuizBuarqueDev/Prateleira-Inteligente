@@ -24,6 +24,7 @@ public class Comentario {
     @Temporal(TemporalType.TIMESTAMP)
     private Date data;
 
+
     public Comentario() {
     }
 
@@ -33,6 +34,7 @@ public class Comentario {
         this.texto = texto;
         this.usuario = usuario;
     }
+
 
     public Date getData() {
         return data;

@@ -1,84 +1,94 @@
 package br.ifpe.prateleira.inteligente.main;
 
 import br.ifpe.prateleira.inteligente.entities.*;
-import br.ifpe.prateleira.inteligente.persistence.CategoriaDAO;
-import br.ifpe.prateleira.inteligente.ultil.JPAUtil;
+import br.ifpe.prateleira.inteligente.persistence.*;
 
-import javax.persistence.EntityManager;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main2 {
     public static void main(String[] args) {
-        // Configurando EntityManager
-        EntityManager em = JPAUtil.getEntityManager();
+        // Criando DAOs
+        CategoriaDAO categoriaDAO = new CategoriaDAO();
+        LivroDAO livroDAO = new LivroDAO();
+        EstanteDAO estanteDAO = new EstanteDAO();
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        ComentarioDAO comentarioDAO = new ComentarioDAO();
+        LivrosCategoriasDAO livrosCategoriasDAO = new LivrosCategoriasDAO();
+        EstanteLivroDAO estanteLivroDAO = new EstanteLivroDAO();
 
-        try {
-            em.getTransaction().begin();
 
-            // Criando Categoria
-            Categoria categoria1 = new Categoria(null, "Ficção Científica");
-            Categoria categoria2 = new Categoria(null, "Romance");
+            // Criando Categorias
+            Categoria categoria1 = new Categoria("Ficção Científica");
+            Categoria categoria2 = new Categoria("Romance");
+            categoriaDAO.adicionar(categoria1);
+            categoriaDAO.adicionar(categoria2);
 
-            em.persist(categoria1);
-            em.persist(categoria2);
+            // Criando Livros
+            Livro livro1 = new Livro("Duna", "Frank Herbert", Date.valueOf("1965-08-01"), "Clássico da ficção científica", "Editora Aleph");
+            Livro livro2 = new Livro("Orgulho e Preconceito", "Jane Austen", Date.valueOf("1813-01-28"), "Um romance clássico", "Editora Penguin");
+            livroDAO.adicionar(livro1);
+            livroDAO.adicionar(livro2);
 
-            // Criando Livro
-            Livro livro1 = new Livro(null, "Duna", "Frank Herbert", Date.valueOf("1965-08-01"), "Clássico da ficção científica", "Editora Aleph");
-            Livro livro2 = new Livro(null, "Orgulho e Preconceito", "Jane Austen", Date.valueOf("1813-01-28"), "Um romance clássico", "Editora Penguin");
-
-            em.persist(livro1);
-            em.persist(livro2);
-
-            // Associando Livro e Categoria
-            LivrosCategorias livrosCategorias1 = new LivrosCategorias(null, livro1, categoria1);
-            LivrosCategorias livrosCategorias2 = new LivrosCategorias(null, livro2, categoria2);
-
-            em.persist(livrosCategorias1);
-            em.persist(livrosCategorias2);
+            // Associando Livros e Categorias
+            LivrosCategorias livrosCategorias1 = new LivrosCategorias(livro1, categoria1);
+            LivrosCategorias livrosCategorias2 = new LivrosCategorias(livro2, categoria2);
+            livrosCategoriasDAO.adicionar(livrosCategorias1);
+            livrosCategoriasDAO.adicionar(livrosCategorias2);
 
             // Criando Estante
             Estante estante1 = new Estante("Estante de Ficção");
-            em.persist(estante1);
+            estanteDAO.adicionar(estante1);
 
-            // Associando Estante e Livro
+            // Associando Estante e Livros
             EstanteLivro estanteLivro1 = new EstanteLivro(estante1, livro1);
             EstanteLivro estanteLivro2 = new EstanteLivro(estante1, livro2);
-
-            em.persist(estanteLivro1);
-            em.persist(estanteLivro2);
+            estanteLivroDAO.adicionar(estanteLivro1);
+            estanteLivroDAO.adicionar(estanteLivro2);
 
             // Criando Usuario
             Usuario usuario1 = new Usuario(estante1, "João da Silva");
-            em.persist(usuario1);
-
-            // Atualizando relação bidirecional
-            estante1.setUsuario(usuario1);
-            em.merge(estante1);
+            usuarioDAO.adicionar(usuario1);
 
             // Criando Comentários
             Comentario comentario1 = new Comentario(new java.util.Date(), livro1, "Um clássico incrível!", usuario1);
             Comentario comentario2 = new Comentario(new java.util.Date(), livro2, "Leitura obrigatória para todos!", usuario1);
-
-            em.persist(comentario1);
-            em.persist(comentario2);
-
-            em.getTransaction().commit();
+            comentarioDAO.adicionar(comentario1);
+            comentarioDAO.adicionar(comentario2);
 
             // Listando categorias usando CategoriaDAO
-            CategoriaDAO categoriaDAO = new CategoriaDAO();
-            List<Categoria> categorias = categoriaDAO.listarTodas();
-
             System.out.println("Categorias disponíveis:");
+            List<Categoria> categorias = categoriaDAO.listarTodas();
             for (Categoria categoria : categorias) {
                 System.out.println("- " + categoria.getNome());
             }
 
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-        } finally {
-            em.close();
-        }
+            // Listando livros
+            System.out.println("\nLivros disponíveis:");
+            List<Livro> livros = livroDAO.listarTodos();
+            for (Livro livro : livros) {
+                System.out.println("- " + livro.getTitulo() + " por " + livro.getAutor());
+            }
+
+            // Listando estantes
+            System.out.println("\nEstantes disponíveis:");
+            List<Estante> estantes = estanteDAO.listarTodos();
+            for (Estante estante : estantes) {
+                System.out.println("- " + estante.getDescricao());
+            }
+
+            // Listando usuários
+            System.out.println("\nUsuários disponíveis:");
+            List<Usuario> usuarios = usuarioDAO.listarTodos();
+            for (Usuario usuario : usuarios) {
+                System.out.println("- " + usuario.getNome());
+            }
+
+            // Listando comentários
+            System.out.println("\nComentários disponíveis:");
+            List<Comentario> comentarios = comentarioDAO.listarTodos();
+            for (Comentario comentario : comentarios) {
+                System.out.println("- [" + comentario.getData() + "] " + comentario.getTexto());
+            }
     }
 }
