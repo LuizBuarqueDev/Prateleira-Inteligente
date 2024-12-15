@@ -3,7 +3,7 @@
         <class>br.ifpe.prateleira.inteligente.entities.Categoria</class>
         <class>br.ifpe.prateleira.inteligente.entities.Comentario</class>
         <class>br.ifpe.prateleira.inteligente.entities.Estante</class>
-        <class>br.ifpe.prateleira.inteligente.persistence.EstanteLivroDAO</class>
+        <class>br.ifpe.prateleira.inteligente.entities.EstanteLivro</class>
         <class>br.ifpe.prateleira.inteligente.entities.Livro</class>
         <class>br.ifpe.prateleira.inteligente.entities.LivrosCategorias</class>
         <class>br.ifpe.prateleira.inteligente.entities.Usuario</class>
@@ -17,7 +17,6 @@
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.use_sql_comments" value="true" />
-
         </properties>
     </persistence-unit>
 </persistence>
