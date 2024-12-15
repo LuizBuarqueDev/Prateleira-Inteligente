@@ -25,13 +25,12 @@ public class Usuario {
 
     public Usuario() {}
 
-    public Estante getEstante() {
-        return estante;
+    public Usuario(String nome, Estante estante, List<Comentario> comentarios) {
+        this.nome = nome;
+        this.estante = estante;
+        this.comentarios = comentarios;
     }
 
-    public void setEstante(Estante estante) {
-        this.estante = estante;
-    }
 
     public Long getIdUsuario() {
         return idUsuario;
@@ -47,5 +46,21 @@ public class Usuario {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Estante getEstante() {
+        return estante;
+    }
+
+    public void setEstante(Estante estante) {
+        this.estante = estante;
+    }
+
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
     }
 }

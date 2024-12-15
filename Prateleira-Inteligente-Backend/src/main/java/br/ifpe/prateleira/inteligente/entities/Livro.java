@@ -29,6 +29,19 @@ public class Livro {
     private List<Comentario> comentarios = new ArrayList<>();
 
 
+    public Livro() {}
+
+    public Livro(String titulo, String autor, Date anoPublicacao, String descricao, String editora, List<EstanteLivro> estanteLivros, List<LivrosCategorias> livrosCategorias, List<Comentario> comentarios) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.anoPublicacao = anoPublicacao;
+        this.descricao = descricao;
+        this.editora = editora;
+        this.estanteLivros = estanteLivros;
+        this.livrosCategorias = livrosCategorias;
+        this.comentarios = comentarios;
+    }
+
     public Date getAnoPublicacao() {
         return anoPublicacao;
     }

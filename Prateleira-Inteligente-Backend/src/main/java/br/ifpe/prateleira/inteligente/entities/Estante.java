@@ -21,7 +21,12 @@ public class Estante {
     private List<EstanteLivro> estanteLivros = new ArrayList<>();
 
 
-    public Estante() {
+    public Estante() {}
+
+    public Estante(String descricao, List<EstanteLivro> estanteLivros, Usuario usuario) {
+        this.descricao = descricao;
+        this.estanteLivros = estanteLivros;
+        this.usuario = usuario;
     }
 
     public Estante(String descricao) {

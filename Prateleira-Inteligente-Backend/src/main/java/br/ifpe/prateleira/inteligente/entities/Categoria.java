@@ -18,6 +18,11 @@ public class Categoria {
 
     public Categoria() {}
 
+    public Categoria(List<LivrosCategorias> livrosCategorias, String nome) {
+        this.livrosCategorias = livrosCategorias;
+        this.nome = nome;
+    }
+
     public Categoria(String nome) {
         this.nome = nome;
     }
