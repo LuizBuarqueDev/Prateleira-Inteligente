@@ -1,6 +1,8 @@
 package br.ifpe.prateleira.inteligente.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Usuarios")
@@ -17,12 +19,11 @@ public class Usuario {
     private Estante estante;
 
 
-    public Usuario() {}
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comentario> comentarios = new ArrayList<>();
 
-    public Usuario(Estante estante, String nome) {
-        this.estante = estante;
-        this.nome = nome;
-    }
+
+    public Usuario() {}
 
     public Estante getEstante() {
         return estante;

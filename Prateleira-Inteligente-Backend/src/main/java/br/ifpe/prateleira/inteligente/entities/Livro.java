@@ -19,35 +19,22 @@ public class Livro {
     private String descricao;
     private String editora;
 
-    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EstanteLivro> estanteLivros = new ArrayList<>();
 
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LivrosCategorias> livrosCategorias = new ArrayList<>();
 
-    public Livro() {}
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comentario> comentarios = new ArrayList<>();
 
-    public Livro(String titulo, String autor, Date anoPublicacao, String descricao, String editora) {
-        this.titulo = titulo;
-        this.autor = autor;
+
+    public Date getAnoPublicacao() {
+        return anoPublicacao;
+    }
+
+    public void setAnoPublicacao(Date anoPublicacao) {
         this.anoPublicacao = anoPublicacao;
-        this.descricao = descricao;
-        this.editora = editora;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
     }
 
     public String getAutor() {
@@ -58,12 +45,12 @@ public class Livro {
         this.autor = autor;
     }
 
-    public java.sql.Date getAnoPublicacao() {
-        return anoPublicacao;
+    public List<Comentario> getComentarios() {
+        return comentarios;
     }
 
-    public void setAnoPublicacao(java.sql.Date anoPublicacao) {
-        this.anoPublicacao = anoPublicacao;
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
     }
 
     public String getDescricao() {
@@ -88,5 +75,29 @@ public class Livro {
 
     public void setEstanteLivros(List<EstanteLivro> estanteLivros) {
         this.estanteLivros = estanteLivros;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<LivrosCategorias> getLivrosCategorias() {
+        return livrosCategorias;
+    }
+
+    public void setLivrosCategorias(List<LivrosCategorias> livrosCategorias) {
+        this.livrosCategorias = livrosCategorias;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 }

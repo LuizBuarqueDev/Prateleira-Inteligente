@@ -1,6 +1,8 @@
 package br.ifpe.prateleira.inteligente.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Categoria")
@@ -11,14 +13,14 @@ public class Categoria {
 
     private String nome;
 
+    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LivrosCategorias> livrosCategorias = new ArrayList<>();
 
-    public Categoria() {
-    }
+    public Categoria() {}
 
     public Categoria(String nome) {
         this.nome = nome;
     }
-
 
     public Long getId() {
         return id;
@@ -34,5 +36,13 @@ public class Categoria {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public List<LivrosCategorias> getLivrosCategorias() {
+        return livrosCategorias;
+    }
+
+    public void setLivrosCategorias(List<LivrosCategorias> livrosCategorias) {
+        this.livrosCategorias = livrosCategorias;
     }
 }

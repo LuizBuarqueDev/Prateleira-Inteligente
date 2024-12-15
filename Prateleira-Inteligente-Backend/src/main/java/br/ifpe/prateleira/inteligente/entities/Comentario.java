@@ -25,15 +25,7 @@ public class Comentario {
     private Date data;
 
 
-    public Comentario() {
-    }
-
-    public Comentario(Date data, Livro livro, String texto, Usuario usuario) {
-        this.data = data;
-        this.livro = livro;
-        this.texto = texto;
-        this.usuario = usuario;
-    }
+    public Comentario() {}
 
 
     public Date getData() {
