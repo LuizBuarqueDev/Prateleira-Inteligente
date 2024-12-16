@@ -113,4 +113,7 @@ public class Livro {
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
+
+    public void setEstante(Estante estante1) {
+    }
 }

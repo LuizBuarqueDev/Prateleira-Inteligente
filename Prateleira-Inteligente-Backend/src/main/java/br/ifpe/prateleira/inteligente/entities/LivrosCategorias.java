@@ -24,6 +24,9 @@ public class LivrosCategorias {
         this.categoria = categoria;
     }
 
+    public LivrosCategorias(Object o, Livro livro1, Categoria romance) {
+    }
+
     public Long getId() {
         return id;
     }
