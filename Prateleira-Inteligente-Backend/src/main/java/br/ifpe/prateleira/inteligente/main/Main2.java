@@ -26,8 +26,8 @@ public class Main2 {
         usuarioDAO.adicionar(usuario2);
 
         // Criar e adicionar livros
-        Livro livro1 = new Livro("Java Avançado", "Autor X", Date.valueOf(LocalDate.of(2022, 1, 15)), "Livro sobre Java", "Editora Y", null, null, new ArrayList<Comentario>());
-        Livro livro2 = new Livro("Spring Framework", "Autor Y", Date.valueOf(LocalDate.of(2021, 8, 10)), "Livro sobre Spring", "Editora Z", null, null, new ArrayList<Comentario>());
+        Livro livro1 = new Livro("Java Avançado", "Autor X", Date.valueOf(LocalDate.of(2022, 1, 15)), "Livro sobre Java", "Editora Y", null, null, new ArrayList<>());
+        Livro livro2 = new Livro("Spring Framework", "Autor Y", Date.valueOf(LocalDate.of(2021, 8, 10)), "Livro sobre Spring", "Editora Z", null, null, new ArrayList<>());
         livroDAO.adicionar(livro1);
         livroDAO.adicionar(livro2);
 
