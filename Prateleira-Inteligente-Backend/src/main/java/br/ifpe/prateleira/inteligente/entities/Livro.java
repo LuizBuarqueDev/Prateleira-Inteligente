@@ -19,13 +19,13 @@ public class Livro {
     private String descricao;
     private String editora;
 
-    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL)
     private List<EstanteLivro> estanteLivros = new ArrayList<>();
 
-    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL)
     private List<LivrosCategorias> livrosCategorias = new ArrayList<>();
 
-    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comentario> comentarios = new ArrayList<>();
 
 

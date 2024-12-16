@@ -19,7 +19,7 @@ public class Usuario {
     private Estante estante;
 
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comentario> comentarios = new ArrayList<>();
 
 
