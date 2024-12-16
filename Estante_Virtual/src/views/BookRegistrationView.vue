@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 import BaseLayout from '@/components/BaseLayout.vue';
 
 import DAOService from '@/services/DAOService';
@@ -7,31 +7,33 @@ import DAOService from '@/services/DAOService';
 const bookService = new DAOService('books');
 
 const fileInput = ref(null);
-const imagePreview = ref('/img/bookImg.png')
+const imagePreview = ref('/img/bookImg.png');
 
 const book = ref({
     title: '',
-    category: '',
+    authors: [],
+    categories: [],
     description: '',
     publisher: '',
-    numPages: '',
-    publicationYear: '',
+    page_count: null,
+    published_date: null,
     language: '',
-    cover: imagePreview.value
+    image_link: imagePreview.value // Valor padrão da imagem
 });
-const addBook =  async () =>   {
+
+const addBook = async () => {
     const id = await bookService.insert(book.value);
-    alert('Livro Cadastrado')
-    console.log(id)
-}
+    alert('Livro Cadastrado');
+    console.log(book.value);
+    console.log(id);
+};
 
 const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            imagePreview.value = e.target.result;
-            book.value.cover = e.target.result
+            book.value.image_link = e.target.result; // Atualiza a imagem
         };
         reader.readAsDataURL(file);
     }
@@ -39,12 +41,12 @@ const handleFileChange = (event) => {
 
 const triggerFileInput = () => {
     fileInput.value.click();
-}
+};
 
 const clickUploadButton = () => {
-    console.log(book.value)
-    addBook()
-}
+    console.log(book.value);
+    addBook();
+};
 </script>
 
 <template>
@@ -52,7 +54,7 @@ const clickUploadButton = () => {
         <section class="container">
             <h2 class="mb-4"><i class="fa-solid fa-paperclip me-3"></i>Cadastrar livros</h2>
             <div class="upload-div">
-                <img :src="imagePreview" class="imgdefault" alt="Capa do Livro" @click="triggerFileInput">
+                <img :src="book.image_link" class="imgdefault" alt="Capa do Livro" @click="triggerFileInput">
 
                 <input class="input-upload" ref="fileInput" type="file" name="capa-upload"
                     accept="image/png, image/jpeg" @change="handleFileChange">
@@ -64,7 +66,20 @@ const clickUploadButton = () => {
                         <input type="text" v-model="book.title" class="form-control" placeholder="Título">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" v-model="book.category" placeholder="Categoria(s)">
+                        <input
+                            type="text"
+                            placeholder="Adicionar Autor (separe com vírgulas)"
+                            class="form-control"
+                            @blur="book.authors = $event.target.value.split(',').map(a => a.trim())"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <input
+                            type="text"
+                            placeholder="Adicionar Categoria (separe com vírgulas)"
+                            class="form-control"
+                            @blur="book.categories = $event.target.value.split(',').map(c => c.trim())"
+                        />
                     </div>
                     <div class="form-group">
                         <textarea class="form-control" v-model="book.description" placeholder="Descrição"
@@ -74,9 +89,9 @@ const clickUploadButton = () => {
                         <input type="text" v-model="book.publisher" class="form-control" placeholder="Editora">
                     </div>
                     <div class="form-group d-flex">
-                        <input type="number" v-model="book.numPages" class="form-control me-5"
-                            placeholder="Número de Paginas">
-                        <input type="number" v-model="book.publicationYear" class="form-control"
+                        <input type="number" v-model="book.page_count" class="form-control me-5"
+                            placeholder="Número de Páginas">
+                        <input type="number" v-model="book.published_date" class="form-control"
                             placeholder="Ano de Publicação">
                     </div>
                     <div class="form-group">
@@ -88,6 +103,7 @@ const clickUploadButton = () => {
         </section>
     </BaseLayout>
 </template>
+
 <style scoped>
 section {
     margin: 30px;

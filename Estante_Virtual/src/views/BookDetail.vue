@@ -16,42 +16,58 @@ const defaultImage = "/img/bookImg.png";
 
 const bookData = ref({});
 const isBookInShelf = ref(false); // Indica se o livro está na prateleira
+const userRating = ref(0); // Nota do livro
 
 const fetchBookData = async (bookId) => {
-    bookData.value = await bookService.get(bookId);
+  bookData.value = await bookService.get(bookId);
 };
 
 const checkBookInShelf = async () => {
   if (!auth.currentUser) return;
 
-    // Busca apenas os IDs dos livros do usuário
-    const userBookIds = (await userBookService.search('uid', auth.currentUser.uid)).map(entry => entry.book);
-    isBookInShelf.value = userBookIds.includes(route.params.id);
+  // Busca apenas os IDs dos livros do usuário
+  const userBookIds = (await userBookService.search('uid', auth.currentUser.uid)).map(entry => entry.book);
+  isBookInShelf.value = userBookIds.includes(route.params.id);
+
+  // Se o livro estiver na prateleira, carrega a nota do livro
+  if (isBookInShelf.value) {
+    const userBookEntry = await userBookService.search('uid', auth.currentUser.uid, 'book', route.params.id);
+    userRating.value = userBookEntry[0]?.rating || 0; // Caso exista uma avaliação, usa ela
+  }
 };
 
 const addBookToShelf = async () => {
   if (!auth.currentUser) return;
 
-  try {
-    await userBookService.insert({
-      uid: auth.currentUser.uid,
-      book: route.params.id
-    });
-    isBookInShelf.value = true;
-  } catch (error) {
-    console.error("Erro ao adicionar o livro à prateleira:", error);
-  }
+  await userBookService.insert({
+    uid: auth.currentUser.uid,
+    rating: userRating.value,
+    book: route.params.id
+  });
+
+  isBookInShelf.value = true;
 };
 
 const removeBookFromShelf = async () => {
   if (!auth.currentUser) return;
+  const userBooksEntries = await userBookService.search('uid', auth.currentUser.uid);
+  const bookEntry = userBooksEntries.find(entry => entry.book === route.params.id);
+
+  if (bookEntry) {
+    await userBookService.delete(bookEntry.id);
+    isBookInShelf.value = false;
+  }
+};
+
+const updateRating = async () => {
+  if (auth.currentUser && isBookInShelf.value) {
     const userBooksEntries = await userBookService.search('uid', auth.currentUser.uid);
     const bookEntry = userBooksEntries.find(entry => entry.book === route.params.id);
 
     if (bookEntry) {
-      await userBookService.delete(bookEntry.id);
-      isBookInShelf.value = false;
+      await userBookService.update(bookEntry.id, { rating: userRating.value });
     }
+  }
 };
 
 onMounted(async () => {
@@ -65,13 +81,27 @@ onMounted(async () => {
     <section class="row book-detail">
       <aside class="col-md-4">
         <img :src="bookData.image_link || defaultImage" alt="Capa do livro" class="book-image" />
-        <div class="mt-4">
+
+        <div class="mt-4 ">
+          <div v-if="isBookInShelf">
+            <select v-model="userRating" @change="updateRating">
+              <option v-for="rating in [0, 1, 2, 3, 4, 5]" :key="rating" :value="rating">{{ rating }}</option>
+            </select>
+
+            <!-- Renderiza as estrelas preenchidas -->
+            <i v-for="n in userRating" :key="'filled-' + n" class="fa-solid fa-star" style="color: #FFD43B;"></i>
+
+            <!-- Renderiza as estrelas vazias -->
+            <i v-for="n in 5 - userRating" :key="'empty-' + n" class="fa-regular fa-star" style="color: #FFD43B;"></i>
+          </div>
           <button @click="isBookInShelf ? removeBookFromShelf() : addBookToShelf()" type="button"
             class="btn custom-btn">
             {{ isBookInShelf ? 'Remover da Prateleira' : 'Adicionar à Prateleira' }}
           </button>
         </div>
+      
       </aside>
+
       <div class="col-md-8">
         <h2>{{ bookData.title || 'Título não disponível' }}</h2>
         <p><strong>Autor(es):</strong> {{ bookData.authors?.join(', ') || 'Não informado' }}</p>
@@ -82,6 +112,7 @@ onMounted(async () => {
         <p><strong>Editora:</strong> {{ bookData.publisher || 'Não informado' }}</p>
         <p><strong>Idioma:</strong> {{ bookData.language || 'Não informado' }}</p>
       </div>
+
     </section>
   </BaseLayout>
 </template>
