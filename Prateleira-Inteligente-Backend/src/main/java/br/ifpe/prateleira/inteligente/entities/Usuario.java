@@ -14,31 +14,25 @@ public class Usuario {
 
     private String nome;
 
-    @OneToOne
-    @JoinColumn(name = "idEstante", unique = true)
-    private Estante estante;
-
+    @OneToMany(mappedBy = "estante", cascade = CascadeType.ALL)
+    private List<UsuarioLivro> livros = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comentario> comentarios = new ArrayList<>();
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<UsuarioLivro> usuarioLivros = new ArrayList<>();
+
 
     public Usuario() {}
 
-    public Usuario(String nome, Estante estante, List<Comentario> comentarios) {
+    public Usuario(String nome, List<UsuarioLivro> livros, List<Comentario> comentarios, List<UsuarioLivro> usuarioLivros) {
         this.nome = nome;
-        this.estante = estante;
+        this.livros = livros;
         this.comentarios = comentarios;
+        this.usuarioLivros = usuarioLivros;
     }
 
-
-    public Long getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Long idUsuario) {
-        this.idUsuario = idUsuario;
-    }
 
     public String getNome() {
         return nome;
@@ -48,12 +42,12 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public Estante getEstante() {
-        return estante;
+    public List<UsuarioLivro> getLivros() {
+        return livros;
     }
 
-    public void setEstante(Estante estante) {
-        this.estante = estante;
+    public void setLivros(List<UsuarioLivro> livros) {
+        this.livros = livros;
     }
 
     public List<Comentario> getComentarios() {
@@ -62,5 +56,13 @@ public class Usuario {
 
     public void setComentarios(List<Comentario> comentarios) {
         this.comentarios = comentarios;
+    }
+
+    public List<UsuarioLivro> getUsuarioLivros() {
+        return usuarioLivros;
+    }
+
+    public void setUsuarioLivros(List<UsuarioLivro> usuarioLivros) {
+        this.usuarioLivros = usuarioLivros;
     }
 }

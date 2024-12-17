@@ -1,6 +1,5 @@
 package br.ifpe.prateleira.inteligente.persistence;
 
-import br.ifpe.prateleira.inteligente.entities.Estante;
 import br.ifpe.prateleira.inteligente.ultil.JPAUtil;
 
 import javax.persistence.*;

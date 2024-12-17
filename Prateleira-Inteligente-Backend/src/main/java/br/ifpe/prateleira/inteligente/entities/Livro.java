@@ -114,6 +114,4 @@ public class Livro {
         this.titulo = titulo;
     }
 
-    public void setEstante(Estante estante1) {
-    }
 }

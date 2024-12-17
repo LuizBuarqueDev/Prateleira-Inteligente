@@ -34,29 +34,28 @@ public class Main {
             livroDAO.adicionar(livro2);
             livroDAO.adicionar(livro3);
 
-            LivrosCategorias lc1 = new LivrosCategorias(null, livro1, romance);
-            LivrosCategorias lc2 = new LivrosCategorias(null, livro2, ficcao);
-            LivrosCategorias lc3 = new LivrosCategorias(null, livro3, fantasia);
-            LivrosCategorias lc4 = new LivrosCategorias(null, livro2, fantasia);
+            LivrosCategorias lc1 = new LivrosCategorias(livro1, romance);
+            LivrosCategorias lc2 = new LivrosCategorias(livro2, ficcao);
+            LivrosCategorias lc3 = new LivrosCategorias(livro3, fantasia);
+            LivrosCategorias lc4 = new LivrosCategorias(livro2, fantasia);
             livrosCategoriasDAO.adicionar(lc1);
             livrosCategoriasDAO.adicionar(lc2);
             livrosCategoriasDAO.adicionar(lc3);
             livrosCategoriasDAO.adicionar(lc4);
 
-            Usuario usuario1 = new Usuario("João da Silva", null, new ArrayList<>());
-            Usuario usuario2 = new Usuario("Maria Oliveira", null, new ArrayList<>());
+            Usuario usuario1 = new Usuario("João da Silva", null, new ArrayList<>(),new ArrayList<>());
+            Usuario usuario2 = new Usuario("Maria Oliveira", null, new ArrayList<>(), new ArrayList<>());
             usuarioDAO.adicionar(usuario1);
             usuarioDAO.adicionar(usuario2);
 
-            Estante estante1 = new Estante("Estante do João");
-            Estante estante2 = new Estante("Estante da Maria");
-            usuario1.setEstante(estante1);
-            usuario2.setEstante(estante2);
 
+            UsuarioLivro usuarioLivro1 = new UsuarioLivro(usuario1, livro1);
+            UsuarioLivro usuarioLivro2 = new UsuarioLivro(usuario2,livro2);
+            UsuarioLivro usuarioLivro3 = new UsuarioLivro(usuario2,livro3);
+            usuario1.getUsuarioLivros().add(usuarioLivro1);
+            usuario2.getUsuarioLivros().add(usuarioLivro2);
+            usuario2.getUsuarioLivros().add(usuarioLivro3);
 
-            livro1.setEstante(estante1);
-            livro2.setEstante(estante2);
-            livro3.setEstante(estante1);
             livroDAO.atualizar(livro1);
             livroDAO.atualizar(livro2);
             livroDAO.atualizar(livro3);
@@ -98,7 +97,6 @@ public class Main {
         if (usuarios != null) {
             for (Usuario usuario : usuarios) {
                 System.out.println("Usuário: " + usuario.getNome());
-                System.out.println("  - Estante: " + (usuario.getEstante() != null ? usuario.getEstante().getDescricao() : "Nenhuma"));
             }
         } else {
             System.out.println("Nenhum usuário encontrado.");
