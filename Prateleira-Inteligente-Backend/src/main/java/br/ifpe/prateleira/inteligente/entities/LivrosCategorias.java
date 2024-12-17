@@ -10,11 +10,11 @@ public class LivrosCategorias {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "idLivros", nullable = false)
+    @JoinColumn(name = "idLivros")
     private Livro livro;
 
     @ManyToOne
-    @JoinColumn(name = "idCategoria", nullable = false)
+    @JoinColumn(name = "idCategoria")
     private Categoria categoria;
 
     public LivrosCategorias() {}

@@ -1,6 +1,8 @@
 package br.ifpe.prateleira.inteligente.persistence;
 
 import br.ifpe.prateleira.inteligente.entities.UsuarioLivro;
+import br.ifpe.prateleira.inteligente.entities.Usuario;
+
 import br.ifpe.prateleira.inteligente.ultil.JPAUtil;
 
 import javax.persistence.EntityManager;
@@ -60,5 +62,19 @@ public class UsuarioLivroDAO {
         } catch (Exception e) {
             em.getTransaction().rollback();
         }
+
     }
+
+    public List<UsuarioLivro> listarPorUsuario(Usuario usuario) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery("SELECT ul FROM UsuarioLivro ul WHERE ul.usuario = :usuario", UsuarioLivro.class)
+                    .setParameter("usuario", usuario)
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
 }

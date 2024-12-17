@@ -1,8 +1,9 @@
 package br.ifpe.prateleira.inteligente.persistence;
 
+import br.ifpe.prateleira.inteligente.entities.Livro;
 import br.ifpe.prateleira.inteligente.entities.LivrosCategorias;
 import br.ifpe.prateleira.inteligente.ultil.JPAUtil;
-import br.ifpe.prateleira.inteligente.entities.*;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -66,4 +67,8 @@ public class LivrosCategoriasDAO {
             em.close();
         }
     }
+
+
+
+
 }

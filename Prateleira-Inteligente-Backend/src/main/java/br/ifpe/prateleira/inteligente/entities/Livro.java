@@ -19,10 +19,10 @@ public class Livro {
     private String descricao;
     private String editora;
 
-    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<UsuarioLivro> usuarioLivro = new ArrayList<>();
 
-    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<LivrosCategorias> livrosCategorias = new ArrayList<>();
 
     @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

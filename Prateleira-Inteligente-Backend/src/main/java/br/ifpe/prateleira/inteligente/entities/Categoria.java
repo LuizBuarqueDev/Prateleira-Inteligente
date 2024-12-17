@@ -13,7 +13,7 @@ public class Categoria {
 
     private String nome;
 
-    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<LivrosCategorias> livrosCategorias = new ArrayList<>();
 
 

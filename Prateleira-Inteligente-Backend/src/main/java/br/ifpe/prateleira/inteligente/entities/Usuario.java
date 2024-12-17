@@ -17,7 +17,7 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comentario> comentarios = new ArrayList<>();
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<UsuarioLivro> usuarioLivros = new ArrayList<>();
 
 
