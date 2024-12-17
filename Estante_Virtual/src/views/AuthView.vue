@@ -1,3 +1,14 @@
+<script setup>
+import { ref } from 'vue';
+import AuthLogin from '@/components/auth/AuthLogin.vue';
+import AuthRegister from '@/components/auth/AuthRegister.vue';
+import BaseLayout from '@/components/BaseLayout.vue';
+
+const isLogin = ref(true);
+const toggleAuth = () => (isLogin.value = !isLogin.value);
+</script>
+
+
 <template>
     <BaseLayout>
         <section class="container py-5">
@@ -22,15 +33,6 @@
     </BaseLayout>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import AuthLogin from '@/components/auth/AuthLogin.vue';
-import AuthRegister from '@/components/auth/AuthRegister.vue';
-import BaseLayout from '@/components/BaseLayout.vue';
-
-const isLogin = ref(true);
-const toggleAuth = () => (isLogin.value = !isLogin.value);
-</script>
 
 <style scoped>
 section {

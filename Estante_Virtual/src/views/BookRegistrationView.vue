@@ -28,21 +28,6 @@ const addBook = async () => {
     console.log(id);
 };
 
-const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            book.value.image_link = e.target.result; // Atualiza a imagem
-        };
-        reader.readAsDataURL(file);
-    }
-};
-
-const triggerFileInput = () => {
-    fileInput.value.click();
-};
-
 const clickUploadButton = () => {
     console.log(book.value);
     addBook();
@@ -54,10 +39,7 @@ const clickUploadButton = () => {
         <section class="container">
             <h2 class="mb-4"><i class="fa-solid fa-paperclip me-3"></i>Cadastrar livros</h2>
             <div class="upload-div">
-                <img :src="book.image_link" class="imgdefault" alt="Capa do Livro" @click="triggerFileInput">
-
-                <input class="input-upload" ref="fileInput" type="file" name="capa-upload"
-                    accept="image/png, image/jpeg" @change="handleFileChange">
+                <img :src="book.image_link" class="imgdefault" alt="Capa do Livro">
             </div>
 
             <div class="form-div">
