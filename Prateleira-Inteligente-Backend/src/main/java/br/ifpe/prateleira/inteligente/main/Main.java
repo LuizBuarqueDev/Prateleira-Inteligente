@@ -3,13 +3,13 @@ package br.ifpe.prateleira.inteligente.main;
 import br.ifpe.prateleira.inteligente.entities.*;
 import br.ifpe.prateleira.inteligente.persistence.*;
 
-import java.time.LocalDate;
+
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-
     public static void main(String[] args) {
         try {
             UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -20,7 +20,6 @@ public class Main {
             Categoria romance = new Categoria(null, "Romance");
             Categoria ficcao = new Categoria(null, "Ficção Científica");
             Categoria fantasia = new Categoria(null, "Fantasia");
-
             categoriaDAO.adicionar(romance);
             categoriaDAO.adicionar(ficcao);
             categoriaDAO.adicionar(fantasia);
@@ -31,7 +30,6 @@ public class Main {
                     Date.valueOf(LocalDate.of(1965, 8, 1)), "O início da saga", "Aleph", null, null, new ArrayList<>());
             Livro livro3 = new Livro("O Hobbit", "J.R.R. Tolkien",
                     Date.valueOf(LocalDate.of(1937, 9, 21)), "A aventura de Bilbo", "HarperCollins", null, null, new ArrayList<>());
-
             livroDAO.adicionar(livro1);
             livroDAO.adicionar(livro2);
             livroDAO.adicionar(livro3);
@@ -40,22 +38,20 @@ public class Main {
             LivrosCategorias lc2 = new LivrosCategorias(livro2, ficcao);
             LivrosCategorias lc3 = new LivrosCategorias(livro3, fantasia);
             LivrosCategorias lc4 = new LivrosCategorias(livro2, fantasia);
-
             livrosCategoriasDAO.adicionar(lc1);
             livrosCategoriasDAO.adicionar(lc2);
             livrosCategoriasDAO.adicionar(lc3);
             livrosCategoriasDAO.adicionar(lc4);
 
-            Usuario usuario1 = new Usuario("João da Silva", new ArrayList<>(), new ArrayList<>());
+            Usuario usuario1 = new Usuario("João da Silva", new ArrayList<>(),new ArrayList<>());
             Usuario usuario2 = new Usuario("Maria Oliveira", new ArrayList<>(), new ArrayList<>());
-
             usuarioDAO.adicionar(usuario1);
             usuarioDAO.adicionar(usuario2);
 
-            UsuarioLivro usuarioLivro1 = new UsuarioLivro(usuario1, livro1);
-            UsuarioLivro usuarioLivro2 = new UsuarioLivro(usuario2, livro2);
-            UsuarioLivro usuarioLivro3 = new UsuarioLivro(usuario2, livro3);
 
+            UsuarioLivro usuarioLivro1 = new UsuarioLivro(usuario1, livro1);
+            UsuarioLivro usuarioLivro2 = new UsuarioLivro(usuario2,livro2);
+            UsuarioLivro usuarioLivro3 = new UsuarioLivro(usuario2,livro3);
             usuario1.getUsuarioLivros().add(usuarioLivro1);
             usuario2.getUsuarioLivros().add(usuarioLivro2);
             usuario2.getUsuarioLivros().add(usuarioLivro3);
@@ -63,6 +59,7 @@ public class Main {
             livroDAO.atualizar(livro1);
             livroDAO.atualizar(livro2);
             livroDAO.atualizar(livro3);
+
 
             exibirLivrosPorCategoria(livroDAO, livrosCategoriasDAO);
             exibirUsuariosEEstantes(usuarioDAO);
@@ -93,19 +90,13 @@ public class Main {
         }
     }
 
+
     private static void exibirUsuariosEEstantes(UsuarioDAO usuarioDAO) {
-        System.out.println("Usuários e seus livros:");
+        System.out.println("\nUsuários e suas Estantes:");
         List<Usuario> usuarios = usuarioDAO.listarTodos();
-        if (usuarios != null && !usuarios.isEmpty()) {
+        if (usuarios != null) {
             for (Usuario usuario : usuarios) {
                 System.out.println("Usuário: " + usuario.getNome());
-                if (usuario.getUsuarioLivros() != null && !usuario.getUsuarioLivros().isEmpty()) {
-                    for (UsuarioLivro usuarioLivro : usuario.getUsuarioLivros()) {
-                        System.out.println("  - Livro: " + usuarioLivro.getLivro().getTitulo());
-                    }
-                } else {
-                    System.out.println("  - Nenhum livro na estante.");
-                }
             }
         } else {
             System.out.println("Nenhum usuário encontrado.");
