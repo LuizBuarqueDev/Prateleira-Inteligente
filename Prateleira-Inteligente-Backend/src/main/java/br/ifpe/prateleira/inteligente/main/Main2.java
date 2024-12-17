@@ -20,21 +20,23 @@ public class Main2 {
         ComentarioDAO comentarioDAO = new ComentarioDAO();
 
         // Criar e adicionar usuários
-        Usuario usuario1 = new Usuario("João da Silva", new ArrayList<>(),null);
-        Usuario usuario2 = new Usuario("Maria Oliveira", new ArrayList<>(),null);
+        Usuario usuario1 = new Usuario("João da Silva", new ArrayList<>(), null);
+        Usuario usuario2 = new Usuario("Maria Oliveira", new ArrayList<>(), null);
         usuarioDAO.adicionar(usuario1);
         usuarioDAO.adicionar(usuario2);
 
         // Criar e adicionar livros
-        Livro livro1 = new Livro("Java Avançado", "Autor X", Date.valueOf(LocalDate.of(2022, 1, 15)), "Livro sobre Java", "Editora Y", null, null, new ArrayList<>());
-        Livro livro2 = new Livro("Spring Framework", "Autor Y", Date.valueOf(LocalDate.of(2021, 8, 10)), "Livro sobre Spring", "Editora Z", null, null, new ArrayList<>());
+        Livro livro1 = new Livro("Java", "Autor X", Date.valueOf(LocalDate.of(2022, 1, 15)), "Livro sobre Java", "Editora x", null, null, new ArrayList<>());
+        Livro livro2 = new Livro("Spring", "Autor Y", Date.valueOf(LocalDate.of(2021, 8, 10)), "Livro sobre Spring", "Editora y", null, null, new ArrayList<>());
+        Livro livro3 = new Livro("Vue3", "Autor Z", Date.valueOf(LocalDate.of(2021, 8, 10)), "Livro sobre Java", "Editora Z", null, null, null);
         livroDAO.adicionar(livro1);
         livroDAO.adicionar(livro2);
+        livroDAO.adicionar(livro3);
 
         // Criar e adicionar comentários
         Comentario comentario1 = new Comentario(new java.util.Date(), livro1, "Livro muito bom!", usuario1);
-        Comentario comentario2 = new Comentario(new java.util.Date(), livro1, "Excelente para aprender Java.", usuario2);
-        Comentario comentario3 = new Comentario(new java.util.Date(), livro2, "Ótimo para desenvolvedores Spring.", usuario1);
+        Comentario comentario2 = new Comentario(new java.util.Date(), livro1, "Excelente", usuario2);
+        Comentario comentario3 = new Comentario(new java.util.Date(), livro2, "Ótimo para desenvolvedores.", usuario1);
 
         comentarioDAO.adicionar(comentario1);
         comentarioDAO.adicionar(comentario2);
@@ -68,6 +70,13 @@ public class Main2 {
             for (Comentario comentario : usuario.getComentarios()) {
                 System.out.println("  - Comentário: " + comentario.getTexto() + " [Livro: " + comentario.getLivro().getTitulo() + "]");
             }
+        }
+
+        // Deletar livro
+        livroDAO.deletar(livro3.getId());
+        System.out.println("Livros restantes:");
+        for (Livro livro : livroDAO.listarTodos()) {
+            System.out.println(livro.getTitulo());
         }
     }
 }
