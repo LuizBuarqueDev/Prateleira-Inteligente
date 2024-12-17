@@ -43,8 +43,8 @@ public class Main {
             livrosCategoriasDAO.adicionar(lc3);
             livrosCategoriasDAO.adicionar(lc4);
 
-            Usuario usuario1 = new Usuario("João da Silva", null, new ArrayList<>(),new ArrayList<>());
-            Usuario usuario2 = new Usuario("Maria Oliveira", null, new ArrayList<>(), new ArrayList<>());
+            Usuario usuario1 = new Usuario("João da Silva", new ArrayList<>(),new ArrayList<>());
+            Usuario usuario2 = new Usuario("Maria Oliveira", new ArrayList<>(), new ArrayList<>());
             usuarioDAO.adicionar(usuario1);
             usuarioDAO.adicionar(usuario2);
 

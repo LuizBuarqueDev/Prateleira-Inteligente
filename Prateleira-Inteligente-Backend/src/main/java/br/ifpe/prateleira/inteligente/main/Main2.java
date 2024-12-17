@@ -20,8 +20,8 @@ public class Main2 {
         ComentarioDAO comentarioDAO = new ComentarioDAO();
 
         // Criar e adicionar usuários
-        Usuario usuario1 = new Usuario("João da Silva", null, new ArrayList<>());
-        Usuario usuario2 = new Usuario("Maria Oliveira", null, new ArrayList<>());
+        Usuario usuario1 = new Usuario("João da Silva", new ArrayList<>(),null);
+        Usuario usuario2 = new Usuario("Maria Oliveira", new ArrayList<>(),null);
         usuarioDAO.adicionar(usuario1);
         usuarioDAO.adicionar(usuario2);
 

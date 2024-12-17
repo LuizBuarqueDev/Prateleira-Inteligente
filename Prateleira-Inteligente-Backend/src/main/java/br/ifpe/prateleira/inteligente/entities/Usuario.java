@@ -14,25 +14,28 @@ public class Usuario {
 
     private String nome;
 
-    @OneToMany(mappedBy = "estante", cascade = CascadeType.ALL)
-    private List<UsuarioLivro> livros = new ArrayList<>();
-
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comentario> comentarios = new ArrayList<>();
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<UsuarioLivro> usuarioLivros = new ArrayList<>();
 
 
     public Usuario() {}
 
-    public Usuario(String nome, List<UsuarioLivro> livros, List<Comentario> comentarios, List<UsuarioLivro> usuarioLivros) {
+    public Usuario(String nome, List<Comentario> comentarios, List<UsuarioLivro> usuarioLivros) {
         this.nome = nome;
-        this.livros = livros;
         this.comentarios = comentarios;
         this.usuarioLivros = usuarioLivros;
     }
 
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
     public String getNome() {
         return nome;
@@ -40,14 +43,6 @@ public class Usuario {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public List<UsuarioLivro> getLivros() {
-        return livros;
-    }
-
-    public void setLivros(List<UsuarioLivro> livros) {
-        this.livros = livros;
     }
 
     public List<Comentario> getComentarios() {

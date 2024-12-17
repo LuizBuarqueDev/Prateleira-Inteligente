@@ -20,7 +20,7 @@ public class Livro {
     private String editora;
 
     @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL)
-    private List<EstanteLivro> estanteLivros = new ArrayList<>();
+    private List<UsuarioLivro> usuarioLivro = new ArrayList<>();
 
     @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL)
     private List<LivrosCategorias> livrosCategorias = new ArrayList<>();
@@ -31,23 +31,23 @@ public class Livro {
 
     public Livro() {}
 
-    public Livro(String titulo, String autor, Date anoPublicacao, String descricao, String editora, List<EstanteLivro> estanteLivros, List<LivrosCategorias> livrosCategorias, List<Comentario> comentarios) {
+    public Livro(String titulo, String autor, Date anoPublicacao, String descricao, String editora, List<UsuarioLivro> usuarioLivro, List<LivrosCategorias> livrosCategorias, List<Comentario> comentarios) {
         this.titulo = titulo;
         this.autor = autor;
         this.anoPublicacao = anoPublicacao;
         this.descricao = descricao;
         this.editora = editora;
-        this.estanteLivros = estanteLivros;
+        this.usuarioLivro = usuarioLivro;
         this.livrosCategorias = livrosCategorias;
         this.comentarios = comentarios;
     }
 
-    public Date getAnoPublicacao() {
-        return anoPublicacao;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setAnoPublicacao(Date anoPublicacao) {
-        this.anoPublicacao = anoPublicacao;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     public String getAutor() {
@@ -58,12 +58,12 @@ public class Livro {
         this.autor = autor;
     }
 
-    public List<Comentario> getComentarios() {
-        return comentarios;
+    public Date getAnoPublicacao() {
+        return anoPublicacao;
     }
 
-    public void setComentarios(List<Comentario> comentarios) {
-        this.comentarios = comentarios;
+    public void setAnoPublicacao(Date anoPublicacao) {
+        this.anoPublicacao = anoPublicacao;
     }
 
     public String getDescricao() {
@@ -82,20 +82,12 @@ public class Livro {
         this.editora = editora;
     }
 
-    public List<EstanteLivro> getEstanteLivros() {
-        return estanteLivros;
+    public List<UsuarioLivro> getUsuarioLivro() {
+        return usuarioLivro;
     }
 
-    public void setEstanteLivros(List<EstanteLivro> estanteLivros) {
-        this.estanteLivros = estanteLivros;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setUsuarioLivro(List<UsuarioLivro> usuarioLivro) {
+        this.usuarioLivro = usuarioLivro;
     }
 
     public List<LivrosCategorias> getLivrosCategorias() {
@@ -106,12 +98,11 @@ public class Livro {
         this.livrosCategorias = livrosCategorias;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public List<Comentario> getComentarios() {
+        return comentarios;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
     }
-
 }

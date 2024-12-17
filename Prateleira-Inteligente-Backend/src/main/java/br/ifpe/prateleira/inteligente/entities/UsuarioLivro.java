@@ -1,9 +1,9 @@
 package br.ifpe.prateleira.inteligente.entities;
 
 import javax.persistence.*;
-import java.util.List;
 
     @Entity
+    @Table(name = "UsarioLivro")
 public class UsuarioLivro {
 
     @Id
@@ -11,7 +11,7 @@ public class UsuarioLivro {
     private Long idUsuarioLivro;
 
         @ManyToOne
-        @JoinColumn(name = "idUsario")
+        @JoinColumn(name = "idUsuario")
         private Usuario usuario;
 
         @ManyToOne

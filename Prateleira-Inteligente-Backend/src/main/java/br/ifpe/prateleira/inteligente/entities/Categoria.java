@@ -16,12 +16,14 @@ public class Categoria {
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     private List<LivrosCategorias> livrosCategorias = new ArrayList<>();
 
+
     public Categoria() {}
 
     public Categoria(List<LivrosCategorias> livrosCategorias, String nome) {
         this.livrosCategorias = livrosCategorias;
         this.nome = nome;
     }
+
 
     public Long getId() {
         return id;
