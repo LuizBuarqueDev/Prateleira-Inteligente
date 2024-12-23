@@ -1,0 +1,21 @@
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+    <persistence-unit name="prateleiraPU">
+        <class>br.ifpe.prateleira.inteligente.entities.Categoria</class>
+        <class>br.ifpe.prateleira.inteligente.entities.Comentario</class>
+        <class>br.ifpe.prateleira.inteligente.entities.Livro</class>
+        <class>br.ifpe.prateleira.inteligente.entities.UsuarioLivro</class>
+        <class>br.ifpe.prateleira.inteligente.entities.LivrosCategorias</class>
+        <class>br.ifpe.prateleira.inteligente.entities.Usuario</class>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/prateleira" />
+            <property name="javax.persistence.jdbc.user" value="postgres" />
+            <property name="javax.persistence.jdbc.password" value="sa" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.format_sql" value="false" />
+            <property name="hibernate.use_sql_comments" value="false" />
+        </properties>
+    </persistence-unit>
+</persistence>
