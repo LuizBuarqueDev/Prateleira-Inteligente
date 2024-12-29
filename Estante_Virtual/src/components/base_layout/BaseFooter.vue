@@ -24,6 +24,7 @@
 
 <style scoped>
 footer {
+    margin-top: 100px;
     padding: 100px;
     text-align: center;
     color: var(--color_white);
