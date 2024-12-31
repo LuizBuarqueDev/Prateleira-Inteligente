@@ -5,6 +5,7 @@ import { auth } from '@/assets/js/firebase';
 
 import BaseLayout from '@/components/BaseLayout.vue';
 import DAOService from '@/services/DAOService';
+import Comments from '@/components/Comments.vue';
 
 // DAOs
 const bookService = new DAOService('books');
@@ -14,6 +15,7 @@ const route = useRoute();
 
 const defaultImage = "/img/bookImg.png";
 
+const idBook = ref('');
 const bookData = ref({});
 const isBookInShelf = ref(false); // Indica se o livro está na prateleira
 const userRating = ref(0); // Nota do livro
@@ -71,13 +73,15 @@ const updateRating = async () => {
 };
 
 onMounted(async () => {
-  const bookId = route.params.id;
-  await Promise.all([fetchBookData(bookId), checkBookInShelf()]);
+  idBook.value = route.params.id;
+  await Promise.all([fetchBookData(idBook.value), checkBookInShelf()]);
+  console.log("Pai: ", idBook)
 });
 </script>
 
 <template>
   <BaseLayout>
+
     <section class="row book-detail">
       <aside class="col-md-4">
         <img :src="bookData.image_link || defaultImage" alt="Capa do livro" class="book-image" />
@@ -114,6 +118,9 @@ onMounted(async () => {
       </div>
 
     </section>
+
+    <Comments :bookId="idBook"/>
+    
   </BaseLayout>
 </template>
 
