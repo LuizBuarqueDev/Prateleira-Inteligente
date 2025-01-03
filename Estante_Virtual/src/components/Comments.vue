@@ -7,8 +7,9 @@ import DAOService from '@/services/DAOService';
 
 const isAuthenticated = ref(false);
 const userComment = ref({
+  userName: '',
+  userUID: '',
   message: '',
-  user: '',
   date: '',
   idBook: ''
 });
@@ -26,7 +27,8 @@ const props = defineProps({
 const setUserComment = (user) => {
   if (user) {
     isAuthenticated.value = true;
-    userComment.value.user = user.email;
+    userComment.value.userName = user.email;
+    userComment.value.userUID = user.uid
   } else {
     isAuthenticated.value = false;
   }
@@ -39,7 +41,9 @@ const postComment = async () => {
   userComment.value.idBook = props.bookId;
 
   await commentsService.insert(userComment.value);
-  userComment.value.message = ''; 
+  console.log(userComment.value)
+
+  userComment.value.message = '';
   fetchCommentsList();
   alert("Comentário publicado com sucesso!");
 };
@@ -71,7 +75,7 @@ watch(() => props.bookId, fetchCommentsList);
 
         <div v-for="comment in commentsList" :key="comment.id" class="comment-item">
             <div class="d-flex justify-content-between">
-                <span><strong>{{ comment.user }}</strong></span>
+                <span><strong>{{ comment.userName }}</strong></span>
                 <span class="text-muted">{{ comment.date }}</span>
             </div>
             <div class="comment-body">
