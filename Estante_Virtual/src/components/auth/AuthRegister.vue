@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue';
-import { auth } from '@/assets/js/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+
+import AuthService from '@/services/AuthService';
+
 
 const newUser = ref({
   email: '',
@@ -16,20 +17,8 @@ const registerUser = async () => {
   }
 
   try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      newUser.value.email,
-      newUser.value.password
-    );
-
-    const user = userCredential.user;
-    console.log('Usuário registrado:', user);
-
+    AuthService.createUser(newUser.value.email,newUser.value.password);
     alert('Conta criada com sucesso!');
-
-    newUser.value.email = '';
-    newUser.value.password = '';
-    newUser.value.repeatPassword = '';
     
   } catch (error) {
     console.error('Erro ao registrar:', error.message);
@@ -37,6 +26,8 @@ const registerUser = async () => {
   }
 };
 </script>
+
+
 
 <template>
 
@@ -74,6 +65,7 @@ const registerUser = async () => {
   </form>
 
 </template>
+
 
 
 <style scoped>

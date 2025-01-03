@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
-import { auth } from '@/assets/js/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+
+import AuthService from '@/services/AuthService';
 
 
 const loginData = ref({
@@ -10,25 +10,12 @@ const loginData = ref({
 });
 
 const loginUser = async () => {
-  try {const userCredential = await signInWithEmailAndPassword(
-      auth,
-      loginData.value.email,
-      loginData.value.password
-    );
-
-    const user = userCredential.user;
-    console.log('Usuário logado:', user);
-    alert('Login realizado com sucesso!');
-
-    loginData.value.email = ''
-    loginData.value.password = ''
-  } catch (error) {
-    console.error('Erro ao fazer login:', error.message);
-    alert('Email ou senha incorretos!');
-  }
+  AuthService.login(loginData.value.email, loginData.value.password);
 };
 
 </script>
+
+
 
 <template>
   
@@ -59,6 +46,8 @@ const loginUser = async () => {
     </p>
   </form>
 </template>
+
+
 
 <style scoped>
 form {
