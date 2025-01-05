@@ -1,5 +1,7 @@
 import { ref } from 'vue';
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+
+import router from '@/router';
 
 
 class AuthService {
@@ -21,9 +23,10 @@ class AuthService {
     async login(email, password) {
         try {
             const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+            router.push('/');
             return userCredential.user;
         } catch (error) {
-            console.error('Erro ao realizar login: ', error.message);
+            alert('Erro ao realizar login: ', error.message);
             throw error;
         }
     }
@@ -31,9 +34,23 @@ class AuthService {
     async createUser(email, password) {
         try {
             const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+            router.push('/');
             return userCredential;
         } catch (error) {
-            console.error('Erro ao criar usuário:', error.message);
+            alert('Erro ao criar usuário:', error.message);
+            throw error;
+        }
+    }
+
+    async logout() {
+        try {
+            await signOut(this.auth);
+            this.isAuthenticated.value = false;
+            this.currentUser.value = null;
+            router.push('/');
+
+        } catch (error) {
+            alert('Erro ao realizar logout: ', error.message);
             throw error;
         }
     }
