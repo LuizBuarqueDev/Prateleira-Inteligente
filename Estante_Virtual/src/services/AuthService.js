@@ -1,12 +1,13 @@
 import { ref } from 'vue';
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import {onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 
 import router from '@/router';
+import { auth } from '@/assets/js/firebase';
 
 
 class AuthService {
     constructor() {
-        this.auth = getAuth();
+        this.auth = auth;
         this.isAuthenticated = ref(false);
         this.currentUser = ref(null);
 
