@@ -9,13 +9,56 @@ const loginData = ref({
   password: ''
 });
 
-const loginUser = async () => {
-  AuthService.login(loginData.value.email, loginData.value.password);
+const errors = ref({
+  email: '',
+  password: ''
+});
+
+const validateEmail = (email) => {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
 };
 
+const validatePassword = (password) => {
+  return password.length >= 6;
+};
+
+const validateForm = () => {
+  let isValid = true;
+
+  if (!loginData.value.email) {
+    errors.value.email = ' | Email é obrigatório';
+    isValid = false;
+  } else if (!validateEmail(loginData.value.email)) {
+    errors.value.email = ' | Email inválido';
+    isValid = false;
+  } else {
+    errors.value.email = '';
+  }
+
+  if (!loginData.value.password) {
+    errors.value.password = ' | Senha é obrigatória';
+    isValid = false;
+  } else if (!validatePassword(loginData.value.password)) {
+    errors.value.password = ' | Senha deve ter pelo menos 6 caracteres';
+    isValid = false;
+  } else {
+    errors.value.password = '';
+  }
+
+  return isValid;
+};
+
+const loginUser = async () => {
+  if (!validateForm()) return;
+
+try {
+  await AuthService.login(loginData.value.email, loginData.value.password);
+} catch (error) {
+  alert(' | Erro ao realizar login: ' + error.message);
+}
+};
 </script>
-
-
 
 <template>
   
@@ -29,11 +72,14 @@ const loginUser = async () => {
     <div>
       <input type="email" v-model="loginData.email" class="form-control form-control-lg"/>
       <label class="form-label" for="loginEmail">Endereço de email</label>
+      <span class="text-danger">{{ errors.email }}</span>
+
     </div>
 
     <div>
       <input type="password" v-model="loginData.password" class="form-control form-control-lg" />
       <label class="form-label" for="loginPassword">Senha</label>
+      <span class="text-danger">{{ errors.password }}</span>
     </div>
 
     <div>
