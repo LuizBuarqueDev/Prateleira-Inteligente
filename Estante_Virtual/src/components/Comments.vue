@@ -1,12 +1,11 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 
 import AuthService from '@/services/AuthService';
 import DAOService from '@/services/DAOService';
 
-
-const isAuthenticated = AuthService.isAuthenticated;
-const currentUser = AuthService.currentUser;
+const currentUser = computed(() => AuthService.currentUser.value);
+const isAuthenticated = computed(() => AuthService.isAuthenticated.value);
 
 const userComment = ref({
   userName: '',
@@ -50,6 +49,11 @@ const postComment = async () => {
 
 const fetchCommentsList = async () => {
   commentsList.value = await commentsService.search('idBook', props.bookId);
+
+    // Ordenando os comentários do mais recente para o mais antigo
+    commentsList.value = comments.sort((a, b) => {
+    return new Date(b.date) - new Date(a.date); // Comparação de datas
+  });
 };
 
 onMounted(() => {
@@ -57,7 +61,15 @@ onMounted(() => {
   setUserComment();
 });
 
-watch(() => props.bookId, fetchCommentsList);
+// Atualiza os dados quando ele muda
+watch(() => props.bookId, async () => {
+  await fetchCommentsList();
+});
+
+// Atualiza os dados quando ele muda
+watch(currentUser, () => {
+  setUserComment();
+});
 </script>
 
 
@@ -68,7 +80,8 @@ watch(() => props.bookId, fetchCommentsList);
     <hr>
 
     <div v-show="isAuthenticated" class="comment-input">
-      <textarea class="form-control input-text" v-model="userComment.message" rows="5" placeholder="Deixe seu comentário..."></textarea>
+      <textarea class="form-control input-text" v-model="userComment.message" rows="5"
+        placeholder="Deixe seu comentário..."></textarea>
 
       <div class="d-flex justify-content-end mt-2">
         <button @click="postComment" type="button" class="btn btn-secondary m-1">Comentar</button>
@@ -103,6 +116,7 @@ watch(() => props.bookId, fetchCommentsList);
   margin-top: 30px;
   border: 2px dotted gray;
   border-radius: 8px;
+
   div {
     margin: 10px;
   }

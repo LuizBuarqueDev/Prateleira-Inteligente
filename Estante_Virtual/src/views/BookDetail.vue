@@ -91,7 +91,6 @@ const updateRating = async () => {
 onMounted(async () => {
   idBook.value = route.params.id;
   await Promise.all([fetchBookData(idBook.value), checkBookInShelf(), calculateAverageRating()]);
-  console.log("Pai: ", idBook)////
 });
 </script>
 
