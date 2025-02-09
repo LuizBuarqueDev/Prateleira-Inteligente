@@ -20,12 +20,80 @@ const book = ref({
     language: '',
     image_link: imagePreview.value // Valor padrão da imagem
 });
+const errors = ref({
+  title: '',
+  authors: '',
+  description: '',
+  publisher: '',
+  language: '',
+  categories: ''
+})
+
+const validateForm = () => {
+  let isValid = true;
+  const lettersOnly = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
+
+  if (!book.value.title) {
+        errors.value.title = 'Título é obrigatório';
+        isValid = false;
+    } else {
+        errors.value.title = '';
+    }
+
+  if (book.value.authors.length === 0) {
+    errors.value.authors = 'Pelo menos um autor é obrigatório';
+    isValid = false;
+  } else if (!book.value.authors.every(author => lettersOnly.test(author))) {
+    errors.value.authors = 'Autor deve conter apenas letras';
+    isValid = false;
+  } else {
+    errors.value.authors = '';
+  }
+
+
+  if (!book.value.description) {
+    errors.value.description = 'Descrição é obrigatória';
+    isValid = false;
+  } else {
+    errors.value.description = '';
+  }
+
+  if (book.value.publisher && !lettersOnly.test(book.value.publisher)) {
+    errors.value.publisher = 'Editora deve conter apenas letras';
+    isValid = false;
+  } else {
+    errors.value.publisher = '';
+  }
+
+  if (book.value.language && !lettersOnly.test(book.value.language)) {
+    errors.value.language = 'Idioma deve conter apenas letras';
+    isValid = false;
+  } else {
+    errors.value.language = '';
+  }
+
+  if (book.value.categories.length > 0 && !book.value.categories.every(category => lettersOnly.test(category))) {
+    errors.value.categories = 'Categoria deve conter apenas letras';
+    isValid = false;
+  } else {
+    errors.value.categories = '';
+  }
+
+
+  return isValid;
+};
 
 const addBook = async () => {
+    if (!validateForm()) return;
+
+  try {
     const id = await bookService.insert(book.value);
     alert('Livro Cadastrado');
     console.log(book.value);
     console.log(id);
+  } catch (error) {
+    alert('Erro ao cadastrar livro: ' + error.message);
+  }
 };
 
 const clickUploadButton = () => {
@@ -46,6 +114,7 @@ const clickUploadButton = () => {
                 <form class="mt-5">
                     <div class="form-group">
                         <input type="text" v-model="book.title" class="form-control" placeholder="Título">
+                        <span class="text-danger">{{ errors.title }}</span>
                     </div>
                     <div class="form-group">
                         <input
@@ -54,6 +123,7 @@ const clickUploadButton = () => {
                             class="form-control"
                             @blur="book.authors = $event.target.value.split(',').map(a => a.trim())"
                         />
+                        <span class="text-danger">{{ errors.authors }}</span>
                     </div>
                     <div class="form-group">
                         <input
@@ -66,6 +136,7 @@ const clickUploadButton = () => {
                     <div class="form-group">
                         <textarea class="form-control" v-model="book.description" placeholder="Descrição"
                             rows="4"></textarea>
+                            <span class="text-danger">{{ errors.description }}</span>
                     </div>
                     <div class="form-group">
                         <input type="text" v-model="book.publisher" class="form-control" placeholder="Editora">
