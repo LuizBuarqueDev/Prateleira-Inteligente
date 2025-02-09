@@ -36,6 +36,16 @@ const setUserComment = () => {
 const postComment = async () => {
   if (!userComment.value.message.trim()) return;
 
+  if (!userComment.value.message.trim()) {
+    alert("O campo de mensagem não pode estar vazio.");
+    return;
+  }
+
+  if (userComment.value.message.length > 700) {
+    alert("O comentário deve ter no máximo 700 caracteres.");
+    return;
+  }
+
   userComment.value.date = new Date().toLocaleString('pt-BR');
   userComment.value.idBook = props.bookId;
 
@@ -82,6 +92,9 @@ watch(currentUser, () => {
     <div v-show="isAuthenticated" class="comment-input">
       <textarea class="form-control input-text" v-model="userComment.message" rows="5"
         placeholder="Deixe seu comentário..."></textarea>
+        <span class="text-danger" v-if="userComment.message.length > 700">
+        O comentário deve ter no máximo 700 caracteres.
+      </span>
 
       <div class="d-flex justify-content-end mt-2">
         <button @click="postComment" type="button" class="btn btn-secondary m-1">Comentar</button>
