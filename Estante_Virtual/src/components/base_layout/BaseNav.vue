@@ -30,7 +30,7 @@ import UserTag from '../UserTag.vue';
               <i class="fa-regular fa-bookmark"></i>Minha estante
             </router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item d-flex align-items-center">
             <UserTag />
           </li>
         </ul>
@@ -40,6 +40,11 @@ import UserTag from '../UserTag.vue';
 </template>
 
 <style scoped>
+@media (max-width: 768px) { /* Define o ponto de corte para telas menores */
+  .custom-nav img {
+    display: none; /* Esconde a imagem */
+  }
+}
 
 .custom-nav {
   background-color: var(--color_1);
