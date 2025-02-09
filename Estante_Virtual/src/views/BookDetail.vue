@@ -57,6 +57,11 @@ const addBookToShelf = async () => {
     return
   } ;
 
+  if (userRating.value < 0 || userRating.value > 5) {
+    alert("A avaliação deve ser entre 0 e 5");
+    return;
+  }
+
   await userBookService.insert({
     uid: auth.currentUser.uid,
     rating: userRating.value,
@@ -82,6 +87,11 @@ const removeBookFromShelf = async () => {
 
 const updateRating = async () => {
   if (auth.currentUser && isBookInShelf.value) {
+
+    if (userRating.value < 0 || userRating.value > 5) {
+      alert("A avaliação deve ser entre 0 e 5");
+      return;
+    }
     const userBooksEntries = await userBookService.search('uid', auth.currentUser.uid);
     const bookEntry = userBooksEntries.find(entry => entry.book === route.params.id);
 
