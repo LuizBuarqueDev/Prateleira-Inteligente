@@ -52,7 +52,10 @@ const calculateAverageRating = async () => {
 };
 
 const addBookToShelf = async () => {
-  if (!auth.currentUser) return;
+  if (!auth.currentUser) {
+    alert("É preciso estar logado para adicionar os livros a estante")
+    return
+  } ;
 
   await userBookService.insert({
     uid: auth.currentUser.uid,
@@ -62,10 +65,11 @@ const addBookToShelf = async () => {
 
   isBookInShelf.value = true;
   calculateAverageRating();
+  alert("Livro adicionado a estante")
 };
 
 const removeBookFromShelf = async () => {
-  if (!auth.currentUser) return;
+  if (!auth.currentUser)  return;
   const userBooksEntries = await userBookService.search('uid', auth.currentUser.uid);
   const bookEntry = userBooksEntries.find(entry => entry.book === route.params.id);
 

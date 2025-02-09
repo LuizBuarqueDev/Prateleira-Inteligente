@@ -113,7 +113,7 @@ watch(currentUser, () => {
 }
 
 .comment-item {
-  margin-top: 30px;
+  margin-top: 15px;
   border: 2px dotted gray;
   border-radius: 8px;
 
