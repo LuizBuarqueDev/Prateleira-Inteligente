@@ -1,13 +1,11 @@
 <script setup>
 import { ref } from 'vue';
 import BaseLayout from '@/components/BaseLayout.vue';
-
 import DAOService from '@/services/DAOService';
+import router from '@/router';
 
 const bookService = new DAOService('books');
-
-const fileInput = ref(null);
-const imagePreview = ref('/img/bookImg.png');
+const imagePreview = '/img/bookImg.png';
 
 const book = ref({
     title: '',
@@ -18,87 +16,111 @@ const book = ref({
     page_count: null,
     published_date: null,
     language: '',
-    image_link: imagePreview.value // Valor padrão da imagem
+    image_link: imagePreview // Valor padrão da imagem
 });
+
 const errors = ref({
-  title: '',
-  authors: '',
-  description: '',
-  publisher: '',
-  language: '',
-  categories: ''
-})
+    title: '',
+    authors: '',
+    description: '',
+    publisher: '',
+    language: '',
+    categories: '',
+    page_count: '',
+    published_date: ''
+});
 
 const validateForm = () => {
-  let isValid = true;
-  const lettersOnly = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
+    let isValid = true;
+    const lettersOnly = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
 
-  if (!book.value.title) {
+    if (!book.value.title) {
         errors.value.title = 'Título é obrigatório';
         isValid = false;
     } else {
         errors.value.title = '';
     }
 
-  if (book.value.authors.length === 0) {
-    errors.value.authors = 'Pelo menos um autor é obrigatório';
-    isValid = false;
-  } else if (!book.value.authors.every(author => lettersOnly.test(author))) {
-    errors.value.authors = 'Autor deve conter apenas letras';
-    isValid = false;
-  } else {
-    errors.value.authors = '';
-  }
+    if (book.value.authors.length === 0) {
+        errors.value.authors = 'Pelo menos um autor é obrigatório';
+        isValid = false;
+    } else if (!book.value.authors.every(author => lettersOnly.test(author))) {
+        errors.value.authors = 'Autor deve conter apenas letras';
+        isValid = false;
+    } else {
+        errors.value.authors = '';
+    }
 
+    if (!book.value.description) {
+        errors.value.description = 'Descrição é obrigatória';
+        isValid = false;
+    } else {
+        errors.value.description = '';
+    }
 
-  if (!book.value.description) {
-    errors.value.description = 'Descrição é obrigatória';
-    isValid = false;
-  } else {
-    errors.value.description = '';
-  }
+    if (book.value.publisher && !lettersOnly.test(book.value.publisher)) {
+        errors.value.publisher = 'Editora deve conter apenas letras';
+        isValid = false;
+    } else {
+        errors.value.publisher = '';
+    }
 
-  if (book.value.publisher && !lettersOnly.test(book.value.publisher)) {
-    errors.value.publisher = 'Editora deve conter apenas letras';
-    isValid = false;
-  } else {
-    errors.value.publisher = '';
-  }
+    if (book.value.language && !lettersOnly.test(book.value.language)) {
+        errors.value.language = 'Idioma deve conter apenas letras';
+        isValid = false;
+    } else {
+        errors.value.language = '';
+    }
 
-  if (book.value.language && !lettersOnly.test(book.value.language)) {
-    errors.value.language = 'Idioma deve conter apenas letras';
-    isValid = false;
-  } else {
-    errors.value.language = '';
-  }
+    if (book.value.categories.length > 0 && !book.value.categories.every(category => lettersOnly.test(category))) {
+        errors.value.categories = 'Categoria deve conter apenas letras';
+        isValid = false;
+    } else {
+        errors.value.categories = '';
+    }
 
-  if (book.value.categories.length > 0 && !book.value.categories.every(category => lettersOnly.test(category))) {
-    errors.value.categories = 'Categoria deve conter apenas letras';
-    isValid = false;
-  } else {
-    errors.value.categories = '';
-  }
+    if (book.value.page_count !== null && book.value.page_count <= 0) {
+        errors.value.page_count = 'Número de páginas deve ser maior que zero';
+        isValid = false;
+    } else {
+        errors.value.page_count = '';
+    }
 
+    if (book.value.published_date !== null && (book.value.published_date < 1000 || book.value.published_date > new Date().getFullYear())) {
+        errors.value.published_date = 'Ano de publicação inválido';
+        isValid = false;
+    } else {
+        errors.value.published_date = '';
+    }
 
-  return isValid;
+    return isValid;
 };
 
 const addBook = async () => {
     if (!validateForm()) return;
 
-  try {
-    const id = await bookService.insert(book.value);
-    alert('Livro Cadastrado');
-    console.log(book.value);
-    console.log(id);
-  } catch (error) {
-    alert('Erro ao cadastrar livro: ' + error.message);
-  }
+    try {
+        const id = await bookService.insert(book.value);
+        alert('Livro Cadastrado');
+        console.log(book.value);
+        console.log(id);
+        router.back();
+    } catch (error) {
+        alert('Erro ao cadastrar livro: ' + error.message);
+    }
 };
 
 const clickUploadButton = () => {
-    console.log(book.value);
     addBook();
+};
+
+const changeImage = () => {
+    const url = prompt('Digite a URL da imagem da capa:');
+    if (url && url.startsWith('http')) {
+        book.value.image_link = url;
+    } else {
+        book.value.image_link = imagePreview;
+    }
 };
 </script>
 
@@ -107,7 +129,7 @@ const clickUploadButton = () => {
         <section class="container">
             <h2 class="mb-4"><i class="fa-solid fa-paperclip me-3"></i>Cadastrar livros</h2>
             <div class="upload-div">
-                <img :src="book.image_link" class="imgdefault" alt="Capa do Livro">
+                <img :src="book.image_link" class="imgdefault" alt="Capa do Livro" @click="changeImage">
             </div>
 
             <div class="form-div">
@@ -134,18 +156,17 @@ const clickUploadButton = () => {
                         />
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" v-model="book.description" placeholder="Descrição"
-                            rows="4"></textarea>
-                            <span class="text-danger">{{ errors.description }}</span>
+                        <textarea class="form-control" v-model="book.description" placeholder="Descrição" rows="4"></textarea>
+                        <span class="text-danger">{{ errors.description }}</span>
                     </div>
                     <div class="form-group">
                         <input type="text" v-model="book.publisher" class="form-control" placeholder="Editora">
                     </div>
                     <div class="form-group d-flex">
-                        <input type="number" v-model="book.page_count" class="form-control me-5"
-                            placeholder="Número de Páginas">
-                        <input type="number" v-model="book.published_date" class="form-control"
-                            placeholder="Ano de Publicação">
+                        <input type="number" v-model="book.page_count" class="form-control me-5" placeholder="Número de Páginas">
+                        <span class="text-danger">{{ errors.page_count }}</span>
+                        <input type="number" v-model="book.published_date" class="form-control" placeholder="Ano de Publicação">
+                        <span class="text-danger">{{ errors.published_date }}</span>
                     </div>
                     <div class="form-group">
                         <input type="text" v-model="book.language" class="form-control" placeholder="Idioma">
@@ -156,6 +177,7 @@ const clickUploadButton = () => {
         </section>
     </BaseLayout>
 </template>
+
 
 <style scoped>
 section {
