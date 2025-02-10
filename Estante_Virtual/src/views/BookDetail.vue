@@ -55,7 +55,7 @@ const addBookToShelf = async () => {
   if (!auth.currentUser) {
     alert("É preciso estar logado para adicionar os livros a estante")
     return
-  } ;
+  };
 
   if (userRating.value < 0 || userRating.value > 5) {
     alert("A avaliação deve ser entre 0 e 5");
@@ -74,7 +74,7 @@ const addBookToShelf = async () => {
 };
 
 const removeBookFromShelf = async () => {
-  if (!auth.currentUser)  return;
+  if (!auth.currentUser) return;
   const userBooksEntries = await userBookService.search('uid', auth.currentUser.uid);
   const bookEntry = userBooksEntries.find(entry => entry.book === route.params.id);
 
@@ -112,7 +112,7 @@ onMounted(async () => {
   <BaseLayout>
 
     <section class="row book-detail">
-      <aside class="col-md-4">
+      <aside class="col-12 col-sm-4">
         <img :src="bookData.image_link || defaultImage" alt="Capa do livro" class="book-image" />
 
         <div class="mt-4 ">
@@ -132,10 +132,11 @@ onMounted(async () => {
             {{ isBookInShelf ? 'Remover da Prateleira' : 'Adicionar à Prateleira' }}
           </button>
         </div>
-      
+
       </aside>
 
-      <div class="col-md-8">
+
+      <div class="col-12 col-sm-8">
         <h2>{{ bookData.title || 'Título não disponível' }}</h2>
         <p><strong>Autor(es):</strong> {{ bookData.authors?.join(', ') || 'Não informado' }}</p>
         <p><strong>Categoria(s):</strong> {{ bookData.categories?.join(', ') || 'Não informado' }}</p>
@@ -149,14 +150,30 @@ onMounted(async () => {
 
     </section>
 
-    <Comments :bookId="idBook"/>
-    
+    <Comments :bookId="idBook" />
+
   </BaseLayout>
 </template>
 
 <style scoped>
 .book-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
   margin: 50px;
+
+  div {
+    flex: 2;
+  }
+
+  aside {
+    flex: 1;
+    min-width: 300px;
+  }
+
+  div {
+    max-width: 600px;
+  }
 }
 
 .custom-btn {
@@ -166,8 +183,8 @@ onMounted(async () => {
 }
 
 .book-image {
-  height: 500px;
-  width: 350px;
+  height: 400px;
+  width: 300px;
   border-radius: 8px;
   border: 2px solid red;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
