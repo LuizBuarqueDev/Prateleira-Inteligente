@@ -85,8 +85,6 @@ try {
     <div>
       <button @click="loginUser" class="btn btn-dark btn-lg btn-block" type="button">Login</button>
     </div>
-
-    <a href="#!">Esqueceu sua senha ?</a>
     <p>Não tem uma conta?
       <a href="#" @click="$emit('switchToRegister')">Registre-se aqui</a>
     </p>
