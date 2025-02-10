@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { auth } from '@/assets/js/firebase';
 
@@ -104,8 +104,12 @@ const updateRating = async () => {
 
 onMounted(async () => {
   idBook.value = route.params.id;
-  await Promise.all([fetchBookData(idBook.value), checkBookInShelf(), calculateAverageRating()]);
+  await fetchBookData(idBook.value);
+  await checkBookInShelf();
+  await calculateAverageRating();
 });
+
+
 </script>
 
 <template>
@@ -157,23 +161,7 @@ onMounted(async () => {
 
 <style scoped>
 .book-detail {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
   margin: 50px;
-
-  div {
-    flex: 2;
-  }
-
-  aside {
-    flex: 1;
-    min-width: 300px;
-  }
-
-  div {
-    max-width: 600px;
-  }
 }
 
 .custom-btn {
@@ -183,8 +171,8 @@ onMounted(async () => {
 }
 
 .book-image {
-  height: 400px;
-  width: 300px;
+  height: 500px;
+  width: 350px;
   border-radius: 8px;
   border: 2px solid red;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
