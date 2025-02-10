@@ -40,11 +40,6 @@ import UserTag from '../UserTag.vue';
 </template>
 
 <style scoped>
-@media (max-width: 768px) { /* Define o ponto de corte para telas menores */
-  .custom-nav img {
-    display: none; /* Esconde a imagem */
-  }
-}
 
 .custom-nav {
   background-color: var(--color_1);
