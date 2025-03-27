@@ -42,7 +42,7 @@
 
   .book-item {
     position: relative;
-    margin: 25px;
+    margin: 15px;
     border: 2px solid red;
     border-radius: 8px;
     overflow: hidden;

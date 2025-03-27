@@ -1,27 +1,17 @@
 <script setup>
-import { ref } from 'vue';
-import { auth } from '@/assets/js/firebase';
-import { signOut, onAuthStateChanged } from 'firebase/auth';
+import AuthService from '@/services/AuthService';
+import { computed } from 'vue';
 
-const userName = ref('');
-const isAuthenticated = ref(false);
+const userName = computed(() => AuthService.currentUser.value?.email || '');
+const isAuthenticated = computed(() => AuthService.isAuthenticated.value);
 
-// Função para fazer logout
 const logout = async () => {
-    await signOut(auth);
-    isAuthenticated.value = false;
-    userName.value = '';
-}
-
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        userName.value = user.email;
-        isAuthenticated.value = true;
-    } else {
-        isAuthenticated.value = false;
-        userName.value = '';
+    try {
+        await AuthService.logout();
+    } catch (error) {
+        console.error('Erro ao realizar logout:', error.message);
     }
-});
+};
 </script>
 
 <template>
@@ -38,7 +28,7 @@ onAuthStateChanged(auth, (user) => {
             </a>
             <ul class="dropdown-menu">
                 <li>
-                    <button @click="logout()" class="dropdown-item">
+                    <button @click="logout" class="dropdown-item">
                         <i class="fa-solid fa-sign-out-alt"></i> Sair
                     </button>
                 </li>

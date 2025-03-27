@@ -1,19 +1,13 @@
 <script setup>
-import { auth } from '@/assets/js/firebase';
 import { ref } from 'vue';
-import { onAuthStateChanged } from 'firebase/auth';
+import { RouterLink } from 'vue-router';
 
-const isAuthenticated = ref(false);
+import AuthService from '@/services/AuthService';
 
 
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        isAuthenticated.value = true;
-    } else {
-        isAuthenticated.value = false;
-    }
-});
+const isAuthenticated = ref(AuthService.isAuthenticated);
 </script>
+
 
 
 <template>
@@ -24,15 +18,16 @@ onAuthStateChanged(auth, (user) => {
             Faça seu login ou cadastre-se gratuitamente para começar agora mesmo a organizar seus livros.
         </p>
 
-        <router-link to="/authentication" class="btn btn-primary btn-entrar" role="button">
+        <RouterLink to="/authentication" class="btn btn-primary btn-entrar" role="button">
             Entre!
-        </router-link>
+        </RouterLink>
 
-        <router-link to="/authentication" class="btn btn-primary btn-cadastrar" role="button">
+        <RouterLink to="/authentication" class="btn btn-primary btn-cadastrar" role="button">
             Cadastre-se >>
-        </router-link>
+        </RouterLink>
     </header>
 </template>
+
 
 
 <style scoped>

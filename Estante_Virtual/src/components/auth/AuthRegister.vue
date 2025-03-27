@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue';
-import { auth } from '@/assets/js/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+
+import AuthService from '@/services/AuthService';
+
 
 const newUser = ref({
   email: '',
@@ -9,34 +10,66 @@ const newUser = ref({
   repeatPassword: ''
 });
 
-const registerUser = async () => {
-  if (newUser.value.password !== newUser.value.repeatPassword) {
-    alert('As senhas não coincidem!');
-    return;
+const errors = ref({
+  email: '',
+  password: '',
+  repeatPassword: ''
+});
+
+const validateEmail = (email) => {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+};
+
+const validatePassword = (password) => {
+  return password.length >= 6;
+};
+
+const validateForm = () => {
+  let isValid = true;
+
+  if (!newUser.value.email) {
+    errors.value.email = ' | Email é obrigatório';
+    isValid = false;
+  } else if (!validateEmail(newUser.value.email)) {
+    errors.value.email = ' | Email inválido';
+    isValid = false;
+  } else {
+    errors.value.email = '';
   }
 
+  if (!newUser.value.password) {
+    errors.value.password = ' | Senha é obrigatória';
+    isValid = false;
+  } else if (!validatePassword(newUser.value.password)) {
+    errors.value.password = ' | A senha deve ter pelo menos 6 caracteres';
+    isValid = false;
+  } else {
+    errors.value.password = '';
+  }
+
+  if (newUser.value.password !== newUser.value.repeatPassword) {
+    errors.value.repeatPassword = '  | As senhas não coincidem';
+    isValid = false;
+  } else {
+    errors.value.repeatPassword = '';
+  }
+
+  return isValid;
+};
+
+const registerUser = async () => {
+  if (!validateForm()) return;
+
   try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      newUser.value.email,
-      newUser.value.password
-    );
-
-    const user = userCredential.user;
-    console.log('Usuário registrado:', user);
-
+    await AuthService.createUser(newUser.value.email, newUser.value.password);
     alert('Conta criada com sucesso!');
-
-    newUser.value.email = '';
-    newUser.value.password = '';
-    newUser.value.repeatPassword = '';
-    
   } catch (error) {
-    console.error('Erro ao registrar:', error.message);
-    alert(error.message);
+    alert('Erro ao registrar: ' + error.message);
   }
 };
 </script>
+
 
 <template>
 
@@ -51,16 +84,19 @@ const registerUser = async () => {
     <div>
       <input type="email" v-model="newUser.email" class="form-control form-control-lg" />
       <label class="form-label">Endereço de email</label>
+      <span class="text-danger">{{ errors.email }}</span>
     </div>
 
     <div>
       <input type="password" v-model="newUser.password" class="form-control form-control-lg" />
       <label class="form-label">Senha</label>
+      <span class="text-danger">{{ errors.password }}</span>
     </div>
 
     <div>
       <input type="password" v-model="newUser.repeatPassword" class="form-control form-control-lg" />
       <label class="form-label">Repita a senha</label>
+      <span class="text-danger">{{ errors.repeatPassword }}</span>
     </div>
 
     <div>
@@ -74,7 +110,6 @@ const registerUser = async () => {
   </form>
 
 </template>
-
 
 <style scoped>
 form {

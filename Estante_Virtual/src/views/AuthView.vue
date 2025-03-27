@@ -1,22 +1,15 @@
 <script setup>
 import { ref } from 'vue';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '@/assets/js/firebase';
 
 import AuthLogin from '@/components/auth/AuthLogin.vue';
 import AuthRegister from '@/components/auth/AuthRegister.vue';
 import BaseLayout from '@/components/BaseLayout.vue';
-import router from '@/router';
+
 
 const isLogin = ref(true);
 const toggleAuth = () => (isLogin.value = !isLogin.value);
-
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        router.push('/')
-    }
-});
 </script>
+
 
 
 <template>
@@ -42,6 +35,7 @@ onAuthStateChanged(auth, (user) => {
         </section>
     </BaseLayout>
 </template>
+
 
 
 <style scoped>

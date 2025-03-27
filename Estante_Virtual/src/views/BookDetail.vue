@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { auth } from '@/assets/js/firebase';
 
@@ -19,6 +19,7 @@ const idBook = ref('');
 const bookData = ref({});
 const isBookInShelf = ref(false); // Indica se o livro está na prateleira
 const userRating = ref(0); // Nota do livro
+const averageRating = ref(0);
 
 const fetchBookData = async (bookId) => {
   bookData.value = await bookService.get(bookId);
@@ -38,8 +39,28 @@ const checkBookInShelf = async () => {
   }
 };
 
+const calculateAverageRating = async () => {
+  const userBooksEntries = await userBookService.search('book', route.params.id);
+  const ratings = userBooksEntries.map(entry => entry.rating).filter(rating => rating > 0);
+
+  if (ratings.length > 0) {
+    const sum = ratings.reduce((acc, rating) => acc + rating, 0);
+    averageRating.value = (sum / ratings.length).toFixed(2);
+  } else {
+    averageRating.value = 0;
+  }
+};
+
 const addBookToShelf = async () => {
-  if (!auth.currentUser) return;
+  if (!auth.currentUser) {
+    alert("É preciso estar logado para adicionar os livros a estante")
+    return
+  };
+
+  if (userRating.value < 0 || userRating.value > 5) {
+    alert("A avaliação deve ser entre 0 e 5");
+    return;
+  }
 
   await userBookService.insert({
     uid: auth.currentUser.uid,
@@ -48,6 +69,8 @@ const addBookToShelf = async () => {
   });
 
   isBookInShelf.value = true;
+  calculateAverageRating();
+  alert("Livro adicionado a estante")
 };
 
 const removeBookFromShelf = async () => {
@@ -58,32 +81,42 @@ const removeBookFromShelf = async () => {
   if (bookEntry) {
     await userBookService.delete(bookEntry.id);
     isBookInShelf.value = false;
+    calculateAverageRating();
   }
 };
 
 const updateRating = async () => {
   if (auth.currentUser && isBookInShelf.value) {
+
+    if (userRating.value < 0 || userRating.value > 5) {
+      alert("A avaliação deve ser entre 0 e 5");
+      return;
+    }
     const userBooksEntries = await userBookService.search('uid', auth.currentUser.uid);
     const bookEntry = userBooksEntries.find(entry => entry.book === route.params.id);
 
     if (bookEntry) {
       await userBookService.update(bookEntry.id, { rating: userRating.value });
+      calculateAverageRating();
     }
   }
 };
 
 onMounted(async () => {
   idBook.value = route.params.id;
-  await Promise.all([fetchBookData(idBook.value), checkBookInShelf()]);
-  console.log("Pai: ", idBook)
+  await fetchBookData(idBook.value);
+  await checkBookInShelf();
+  await calculateAverageRating();
 });
+
+
 </script>
 
 <template>
   <BaseLayout>
 
     <section class="row book-detail">
-      <aside class="col-md-4">
+      <aside class="col-12 col-sm-4">
         <img :src="bookData.image_link || defaultImage" alt="Capa do livro" class="book-image" />
 
         <div class="mt-4 ">
@@ -103,10 +136,11 @@ onMounted(async () => {
             {{ isBookInShelf ? 'Remover da Prateleira' : 'Adicionar à Prateleira' }}
           </button>
         </div>
-      
+
       </aside>
 
-      <div class="col-md-8">
+
+      <div class="col-12 col-sm-8">
         <h2>{{ bookData.title || 'Título não disponível' }}</h2>
         <p><strong>Autor(es):</strong> {{ bookData.authors?.join(', ') || 'Não informado' }}</p>
         <p><strong>Categoria(s):</strong> {{ bookData.categories?.join(', ') || 'Não informado' }}</p>
@@ -115,12 +149,13 @@ onMounted(async () => {
         <p><strong>Data de Publicação:</strong> {{ bookData.published_date || 'Não informado' }}</p>
         <p><strong>Editora:</strong> {{ bookData.publisher || 'Não informado' }}</p>
         <p><strong>Idioma:</strong> {{ bookData.language || 'Não informado' }}</p>
+        <p><strong>Média das Notas:</strong> {{ averageRating }}</p>
       </div>
 
     </section>
 
-    <Comments :bookId="idBook"/>
-    
+    <Comments :bookId="idBook" />
+
   </BaseLayout>
 </template>
 
