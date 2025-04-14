@@ -33,7 +33,7 @@ public class UsuarioService  implements IService<Usuario>{
     @Override
     @Transactional(readOnly = true)
     public Usuario getById(Long id) {
-        return null;
+        return usuarioRepository.findById(id).orElse(null);
     }
 
     @Override

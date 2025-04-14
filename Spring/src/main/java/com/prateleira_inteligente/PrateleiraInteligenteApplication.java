@@ -42,11 +42,14 @@ public class PrateleiraInteligenteApplication implements CommandLineRunner {
 
         usuarioService.save(usuario1);
 
+        /*
         Avaliacao avaliacao1 = new Avaliacao();
         avaliacao1.setUsuario(usuario1);
         avaliacao1.setLivro(livro1);
         avaliacao1.setNota(10.0);
 
+
         avaliacaoService.save(avaliacao1);
+        */
     }
 }

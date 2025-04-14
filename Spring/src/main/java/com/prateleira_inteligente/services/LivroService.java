@@ -33,7 +33,7 @@ public class LivroService implements IService<Livro> {
     @Override
     @Transactional(readOnly = true)
     public Livro getById(Long id) {
-        return null;
+        return livroRepository.findById(id).orElse(null);
     }
 
     @Override
