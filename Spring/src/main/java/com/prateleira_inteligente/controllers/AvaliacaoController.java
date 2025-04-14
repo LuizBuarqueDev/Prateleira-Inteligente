@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/avaliacao")
-public class AvaliacaoController extends AbsGenericController<Avaliacao, AvaliacaoDTO> {
+// Léo disse que essa linha não deveria existir, pode ter no service, mas no controller não
+//public class AvaliacaoController extends AbsGenericController<Avaliacao, AvaliacaoDTO> {
 
     public AvaliacaoController(IService<Avaliacao> service, IMapper<Avaliacao, AvaliacaoDTO> mapper) {
         super(service, mapper);
