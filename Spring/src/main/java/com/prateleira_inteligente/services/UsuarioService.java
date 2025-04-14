@@ -20,7 +20,7 @@ public class UsuarioService  implements IService<Usuario>{
     @Override
     @Transactional
     public Usuario save(Usuario usuario){
-        return null;
+        return usuarioRepository.save(usuario);
     }
 
     @Override

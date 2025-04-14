@@ -20,7 +20,7 @@ public class LivroService implements IService<Livro> {
     @Override
     @Transactional
     public Livro save(Livro livro) {
-        return null;
+        return livroRepository.save(livro);
     }
 
     @Override
