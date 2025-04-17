@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "prateleiras")
-public class Prateleira extends BaseEntity {
+@Table(name = "usuario_livro")
+public class UsuarioLivro extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -21,7 +21,4 @@ public class Prateleira extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     private String observacoes;
-
-    @OneToOne(mappedBy = "prateleira", cascade = CascadeType.ALL)
-    private Avaliacao avaliacao;
 }

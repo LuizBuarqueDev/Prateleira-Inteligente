@@ -39,6 +39,7 @@ public class LivroService implements IService<Livro> {
     @Override
     @Transactional
     public void delete(Long id) {
+        livroRepository.deleteById(id);
     }
 
     @Override

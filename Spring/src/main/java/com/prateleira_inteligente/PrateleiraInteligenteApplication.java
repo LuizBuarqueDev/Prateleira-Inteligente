@@ -3,6 +3,7 @@ package com.prateleira_inteligente;
 import com.prateleira_inteligente.entities.Avaliacao;
 import com.prateleira_inteligente.entities.Livro;
 import com.prateleira_inteligente.entities.Usuario;
+import com.prateleira_inteligente.entities.UsuarioLivro;
 import com.prateleira_inteligente.services.AvaliacaoService;
 import com.prateleira_inteligente.services.LivroService;
 import com.prateleira_inteligente.services.UsuarioService;
@@ -27,7 +28,6 @@ public class PrateleiraInteligenteApplication implements CommandLineRunner {
     }
 
     @Override
-    @Transactional
     public void run(String... args) {
         Livro livro1 = new Livro();
         livro1.setTitulo("Java para Iniciantes");
@@ -35,21 +35,23 @@ public class PrateleiraInteligenteApplication implements CommandLineRunner {
         livro1.setDescricao("Um guia completo para aprender Java.");
         livro1.setEditora("McGraw-Hill");
 
-        livroService.save(livro1);
+        livroService.save(livro1); // salva sem relacionamento ainda
 
         Usuario usuario1 = new Usuario();
         usuario1.setNome("João Silva");
 
-        usuarioService.save(usuario1);
+        usuarioService.save(usuario1); // salva o usuário
 
-        /*
-        Avaliacao avaliacao1 = new Avaliacao();
-        avaliacao1.setUsuario(usuario1);
-        avaliacao1.setLivro(livro1);
-        avaliacao1.setNota(10.0);
+        // Agora criamos o relacionamento:
+        UsuarioLivro usuarioLivro = new UsuarioLivro();
+        usuarioLivro.setUsuario(usuario1);
+        usuarioLivro.setLivro(livro1);
 
+        // Adiciona o relacionamento nas duas pontas (opcional, mas bom pra consistência)
+        livro1.getUsuariosLivros().add(usuarioLivro);
+        usuario1.getUsuarioLivros().add(usuarioLivro);
 
-        avaliacaoService.save(avaliacao1);
-        */
+        // Re-salva o livro com o relacionamento (se Cascade.ALL ou Cascade.PERSIST estiver no Livro -> UsuarioLivro)
+        livroService.save(livro1);
     }
 }
