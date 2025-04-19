@@ -2,6 +2,7 @@ package com.prateleira_inteligente.services;
 
 
 import com.prateleira_inteligente.entities.Livro;
+import com.prateleira_inteligente.entities.UsuarioLivro;
 import com.prateleira_inteligente.repositories.LivroRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,14 +27,40 @@ public class LivroService implements IService<Livro> {
     @Override
     @Transactional
     //TODO: Implementar o update
-    public Livro update(Long id, Livro livro) {
-        return null;
+    public Livro update(Long id, Livro livroAtualizado) {
+        Livro livroExistente = getById(id);
+
+        // Atualiza campos básicos
+        livroExistente.setTitulo(livroAtualizado.getTitulo());
+        livroExistente.setAnoPublicacao(livroAtualizado.getAnoPublicacao());
+        livroExistente.setDescricao(livroAtualizado.getDescricao());
+        livroExistente.setEditora(livroAtualizado.getEditora());
+
+        // Atualiza o autor
+        livroExistente.setAutor(livroAtualizado.getAutor());
+
+        // Atualiza categorias (remove antigas e adiciona novas)
+        livroExistente.getCategorias().clear();
+        if (livroAtualizado.getCategorias() != null) {
+            livroExistente.getCategorias().addAll(livroAtualizado.getCategorias());
+        }
+
+        // Atualiza usuariosLivros
+        livroExistente.getUsuariosLivros().clear();
+        if (livroAtualizado.getUsuariosLivros() != null) {
+            for (UsuarioLivro usuarioLivro : livroAtualizado.getUsuariosLivros()) {
+                usuarioLivro.setLivro(livroExistente); // garante referência reversa correta
+                livroExistente.getUsuariosLivros().add(usuarioLivro);
+            }
+        }
+
+        return livroRepository.save(livroExistente);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Livro getById(Long id) {
-        return livroRepository.findById(id).orElse(null);
+        return livroRepository.findById(id).orElseThrow(()-> new RuntimeException("Livro não encontrado: " + id));
     }
 
     @Override
