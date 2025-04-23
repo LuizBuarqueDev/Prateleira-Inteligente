@@ -13,6 +13,7 @@ import java.util.List;
 public class Livro extends BaseEntity {
 
     private String titulo;
+    private String capa;
     private LocalDate anoPublicacao;
     private String descricao;
     private String editora;

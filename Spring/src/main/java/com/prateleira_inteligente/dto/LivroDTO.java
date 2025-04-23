@@ -10,6 +10,7 @@ import java.util.List;
 public class LivroDTO {
     private Long id;
     private String titulo;
+    private String capa;
     private LocalDate anoPublicacao;
     private String descricao;
     private String editora;

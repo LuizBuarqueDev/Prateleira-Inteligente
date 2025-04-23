@@ -27,6 +27,7 @@ public class LivroMapper implements IMapper<Livro, LivroDTO> {
         return LivroDTO.builder()
                 .id(livro.getId())
                 .titulo(livro.getTitulo())
+                .capa(livro.getCapa())
                 .anoPublicacao(livro.getAnoPublicacao())
                 .descricao(livro.getDescricao())
                 .editora(livro.getEditora())
@@ -39,6 +40,7 @@ public class LivroMapper implements IMapper<Livro, LivroDTO> {
     @Override
     public Livro toEntity(LivroDTO dto) {
         Livro livro = new Livro();
+        livro.setCapa(dto.getCapa());
         livro.setId(dto.getId());
         livro.setTitulo(dto.getTitulo());
         livro.setAnoPublicacao(dto.getAnoPublicacao());
