@@ -39,7 +39,7 @@ onMounted(fetchUserBooks);
                 </button>
             </RouterLink>
             <section class="book-grid d-flex">
-                <BooksCards :books="userBooks" />
+                <BooksCards :livros="userBooks" />
             </section>
         </div>
     </BaseLayout>
