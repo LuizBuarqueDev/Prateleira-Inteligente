@@ -3,25 +3,15 @@ import { ref } from 'vue';
 import BaseLayout from '@/components/BaseLayout.vue';
 import livroService from '@/services/LivroService';
 import router from '@/router';
+import { modelLivro } from '@/models/modelLivro';
 
-const imagePreview = '/img/bookImg.png';
+const livro = ref(modelLivro());
 
-const book = ref({
-    titulo: '',
-    idAutor: null,
-    idCategorias: null,
-    descricao: '',
-    editora: '',
-    anoPublicacao: null,
-    idUsuarios: [],
-    image_link: imagePreview
-});
-
-const addBook = async () => {
+const addLivro = async () => {
     try {
-        await livroService.create(book.value);
+        await livroService.create(livro.value);
         alert('Livro Cadastrado');
-        console.log(book.value);
+        console.log(livro.value);
         router.back();
     } catch (error) {
         alert('Erro ao cadastrar livro: ' + error.message);
@@ -29,15 +19,15 @@ const addBook = async () => {
 };
 
 const clickUploadButton = () => {
-    addBook();
+    addLivro();
 };
 
 const changeImage = () => {
     const url = prompt('Digite a URL da imagem da capa:');
     if (url && url.startsWith('http')) {
-        book.value.image_link = url;
+        livro.value.capa = url;
     } else {
-        book.value.image_link = imagePreview;
+        livro.value.capa = '/img/bookImg.png';
     }
 };
 </script>
@@ -47,40 +37,40 @@ const changeImage = () => {
         <section class="container">
             <h2 class="mb-4"><i class="fa-solid fa-paperclip me-3"></i>Cadastrar livros</h2>
             <div class="upload-div">
-                <img :src="book.image_link" class="imgdefault" alt="Capa do Livro" @click="changeImage">
+                <img :src="livro.capa" class="imgdefault" alt="Capa do Livro" @click="changeImage">
             </div>
 
             <div class="form-div">
                 <form class="mt-5">
                     <div class="form-group">
-                        <input type="text" v-model="book.titulo" class="form-control" placeholder="Título">
+                        <input type="text" v-model="livro.titulo" class="form-control" placeholder="Título">
                     </div>
 
                     <div class="form-group">
-                        <input type="number" v-model="book.anoPublicacao" class="form-control" placeholder="Ano de Publicação">
+                        <input type="number" v-model="livro.anoPublicacao" class="form-control" placeholder="Ano de Publicação">
                     </div>
 
                     <div class="form-group">
-                        <textarea class="form-control" v-model="book.descricao" placeholder="Descrição" rows="4"></textarea>
+                        <textarea class="form-control" v-model="livro.descricao" placeholder="Descrição" rows="4"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <input type="text" v-model="book.editora" class="form-control" placeholder="Editora">
+                        <input type="text" v-model="livro.editora" class="form-control" placeholder="Editora">
                     </div>
 
                     <div class="form-group">
-                        <input type="text" v-model="book.idAutor" class="form-control" placeholder="ID do Autor">
+                        <input type="text" v-model="livro.idAutor" class="form-control" placeholder="ID do Autor">
                     </div>
 
                     <div class="form-group">
-                        <input type="text" v-model="book.idCategorias" class="form-control" placeholder="ID da Categoria">
+                        <input type="text" v-model="livro.idCategorias" class="form-control" placeholder="ID da Categoria">
                     </div>
 
                     <div class="form-group">
                         <input type="text"
                             placeholder="IDs dos Usuários (separe por vírgula)"
                             class="form-control"
-                            @blur="book.idUsuarios = $event.target.value.split(',').map(id => id.trim())"
+                            @blur="livro.idUsuarios = $event.target.value.split(',').map(id => id.trim())"
                         />
                     </div>
 
