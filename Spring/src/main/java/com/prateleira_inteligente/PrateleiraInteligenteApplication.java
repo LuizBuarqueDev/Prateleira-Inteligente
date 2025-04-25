@@ -3,7 +3,6 @@ package com.prateleira_inteligente;
 
 import com.prateleira_inteligente.entities.Livro;
 import com.prateleira_inteligente.entities.Usuario;
-import com.prateleira_inteligente.services.AvaliacaoService;
 import com.prateleira_inteligente.services.LivroService;
 import com.prateleira_inteligente.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ public class PrateleiraInteligenteApplication implements CommandLineRunner {
 
     private final LivroService livroService;
     private final UsuarioService usuarioService;
-    private final AvaliacaoService avaliacaoService;
+
 
     public static void main(String[] args) {
         SpringApplication.run(PrateleiraInteligenteApplication.class, args);
