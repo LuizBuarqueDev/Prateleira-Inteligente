@@ -3,31 +3,30 @@ import { ref, computed, onMounted, provide } from 'vue';
 import BaseLayout from '@/components/BaseLayout.vue';
 import HeaderTemplate from '@/components/HeaderTemplate.vue';
 import BookCard from '@/components/BooksCards.vue';
-import DAOService from '@/services/DAOService';
 import Spinner from '@/components/Spinner.vue';
 
-const bookService = new DAOService('books');
+import livroService from '@/services/LivroService';
 
-const books = ref([]);
+const livros = ref([]);
 const isLoading = ref(true);
 
 const searchValue = ref('');
-provide('searchValue', searchValue)
+provide('searchValue', searchValue);
 
-
-const highlightedBooks = computed(() =>
-  books.value.filter(book =>
-    book.title.toLowerCase().includes(searchValue.value.toLowerCase())
+const livrosFiltrados = computed(() =>
+  livros.value.filter(livro =>
+    livro.titulo?.toLowerCase().includes(searchValue.value.toLowerCase())
   )
 );
 
-const fetchBooks = async () => {
+const fetchLivros = async () => {
   isLoading.value = true;
-  books.value = await bookService.getAll();
+  const response = await livroService.findAll();
+  livros.value = response.data; // Certifique-se que o axios está retornando os dados aqui
   isLoading.value = false;
 };
 
-onMounted(fetchBooks);
+onMounted(fetchLivros);
 </script>
 
 
@@ -46,12 +45,11 @@ onMounted(fetchBooks);
       </div>
 
       <section class="shelf">
-        <BookCard :books="highlightedBooks" />
+        <BookCard :livros="livrosFiltrados" />
       </section>
     </div>
   </BaseLayout>
 </template>
-
 
 
 <style scoped>

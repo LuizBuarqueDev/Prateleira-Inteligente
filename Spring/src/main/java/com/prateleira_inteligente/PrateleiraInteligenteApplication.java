@@ -31,6 +31,7 @@ public class PrateleiraInteligenteApplication implements CommandLineRunner {
         livro1.setTitulo("Java para Iniciantes");
         livro1.setAnoPublicacao(LocalDate.of(2020,1,1));
         livro1.setDescricao("Um guia completo para aprender Java.");
+        livro1.setCapa("https://wallpapers.com/images/hd/weird-profile-pictures-idfvjaormuvjp8fy.jpg");
         livro1.setEditora("McGraw-Hill");
 
         livroService.save(livro1);

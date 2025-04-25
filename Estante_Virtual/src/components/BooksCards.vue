@@ -1,30 +1,30 @@
-    <script setup>
-    import { useRouter } from 'vue-router';
+<script setup>
+import { useRouter } from 'vue-router';
 
-    const defaultImage = "/img/bookImg.png";
-    const router = useRouter();
+const router = useRouter();
 
-    const props = defineProps({
-      books: {
-        type: Array,
-        required: true,
-      },
-    });
+const props = defineProps({
+  livros: {
+    type: Array,
+    required: true,
+  },
+});
 
-    const getBookImage = (imageLink) => {
-      return imageLink && imageLink !== "N/A" ? imageLink : defaultImage;
-    };
-
-    const goToBookDetail = (book) => {
-      router.push({ name: 'BookDetail', params: { id: book.id } });
-    };
-
+const goToLivroDetail = (livro) => {
+  router.push({ name: 'BookDetail', params: { id: livro.id } });
+};
 </script>
+
 <template>
-  <div v-if="books.length" class="book-container">
-    <div v-for="book in books" :key="book.id" class="book-item" @click="goToBookDetail(book)">
-      <span class="title">{{ book.title || 'Título não disponível' }}</span>
-      <img :src="getBookImage(book.image_link)" alt="Capa do livro" />
+  <div v-if="livros.length" class="book-container">
+    <div
+      v-for="livro in livros"
+      :key="livro.id"
+      class="book-item"
+      @click="goToLivroDetail(livro)"
+    >
+      <span class="title">{{ livro.titulo || 'Título não disponível' }}</span>
+      <img :src="livro.capa" alt="Capa do livro" />
     </div>
   </div>
 
@@ -33,47 +33,51 @@
   </div>
 </template>
 
-
 <style scoped>
 .book-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
 
-  .book-item {
-    position: relative;
-    margin: 15px;
-    border: 2px solid red;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.74);
+.book-item {
+  position: relative;
+  margin: 15px;
+  border: 2px solid red;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.74);
+  cursor: pointer; /* 👈 garante que o cursor mostre que é clicável */
+}
 
-    img {
-      width: 180px;
-      height: 250px;
-      transition: 0.3s;
-    }
+.book-item img {
+  width: 180px;
+  height: 250px;
+  transition: 0.3s;
+  display: block;
+}
 
-    &:hover .title {
-      opacity: 1;
-    }
+.book-item:hover .title {
+  opacity: 1;
+}
 
-    &:hover img {
-      filter: brightness(40%) blur(2px);
-    }
-  }
+.book-item:hover img {
+  filter: brightness(40%) blur(2px);
+}
 
-  .title {
-    font-size: 1.2em;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--color_white);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 1;
-  }
+.title {
+  font-size: 1.2em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color_white);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2; /* 👈 garante que o texto fique acima da imagem */
+  text-align: center;
+  width: 100%;
+  padding: 0 10px;
 }
 
 .no-books-found {
