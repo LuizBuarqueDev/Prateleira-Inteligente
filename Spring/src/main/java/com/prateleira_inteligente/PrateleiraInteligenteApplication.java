@@ -18,6 +18,7 @@ public class PrateleiraInteligenteApplication implements CommandLineRunner {
 
     private final LivroService livroService;
     private final UsuarioService usuarioService;
+    private final Mock mock;
 
 
     public static void main(String[] args) {
@@ -51,6 +52,6 @@ public class PrateleiraInteligenteApplication implements CommandLineRunner {
 
         livroService.save(livro1);
 
-        Mock.mocking();
+        mock.mocking();
     }
 }
