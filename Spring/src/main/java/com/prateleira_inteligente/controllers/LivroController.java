@@ -14,41 +14,36 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/livro")
 @RequiredArgsConstructor
-public class LivroController implements IController<LivroDTO, Long> {
+public class LivroController {
 
     private final IService<Livro> service;
     private final IMapper<Livro, LivroDTO> mapper;
 
     @PostMapping("/create")
-    @Override
     public ResponseEntity<LivroDTO> create(@RequestBody LivroDTO dto) {
         Livro entity = service.save(mapper.toEntity(dto));
         return ResponseEntity.ok(mapper.toDTO(entity));
     }
 
     @GetMapping("/{id}")
-    @Override
     public ResponseEntity<LivroDTO> findById(@PathVariable Long id) {
         Livro entity = service.getById(id);
         return ResponseEntity.ok(mapper.toDTO(entity));
     }
 
     @PutMapping("/update/{id}")
-    @Override
     public ResponseEntity<LivroDTO> update(@PathVariable Long id, @RequestBody LivroDTO dto) {
         Livro updatedEntity = service.update(id, mapper.toEntity(dto));
         return ResponseEntity.ok(mapper.toDTO(updatedEntity));
     }
 
     @DeleteMapping("/delete/{id}")
-    @Override
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/findByIds")
-    @Override
     public ResponseEntity<List<LivroDTO>> findAllByIds(@RequestParam List<Long> ids) {
         List<LivroDTO> dtos = service.findAllById(ids)
                 .stream()
@@ -58,7 +53,6 @@ public class LivroController implements IController<LivroDTO, Long> {
     }
 
     @GetMapping
-    @Override
     public ResponseEntity<List<LivroDTO>> findAll() {
         List<LivroDTO> dtos = service.findAll()
                 .stream()
