@@ -27,5 +27,11 @@ export default {
 
   findAll() {
     return api.get(LIVRO_ENDPOINT);
+  },
+
+  search(termo) {
+        return api.get(`${LIVRO_ENDPOINT}/buscar`, {
+      params: { busca: termo }
+    });
   }
 };

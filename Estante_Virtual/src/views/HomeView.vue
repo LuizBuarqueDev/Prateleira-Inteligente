@@ -1,5 +1,6 @@
 <script setup>
-import { ref, computed, onMounted, provide } from 'vue';
+import { ref, computed, onMounted, provide, watch } from 'vue';
+
 import BaseLayout from '@/components/BaseLayout.vue';
 import HeaderTemplate from '@/components/HeaderTemplate.vue';
 import BookCard from '@/components/BooksCards.vue';
@@ -21,10 +22,23 @@ const livrosFiltrados = computed(() =>
 
 const fetchLivros = async () => {
   isLoading.value = true;
-  const response = await livroService.findAll();
-  livros.value = response.data; // Certifique-se que o axios está retornando os dados aqui
-  isLoading.value = false;
+
+  try {
+    if (searchValue.value.trim()) {
+      const response = await livroService.search(searchValue.value);
+      livros.value = response.data;
+    } else {
+      const response = await livroService.findAll();
+      livros.value = response.data;
+    }
+  } catch (error) {
+    console.error('Erro ao buscar livros:', error);
+  } finally {
+    isLoading.value = false;
+  }
 };
+
+watch(searchValue, fetchLivros);
 
 onMounted(fetchLivros);
 </script>
@@ -45,7 +59,7 @@ onMounted(fetchLivros);
       </div>
 
       <section class="shelf">
-        <BookCard :livros="livrosFiltrados" />
+        <BookCard :livros="livros" />
       </section>
     </div>
   </BaseLayout>
