@@ -50,5 +50,7 @@ public class PrateleiraInteligenteApplication implements CommandLineRunner {
 */
 
         livroService.save(livro1);
+
+        Mock.mocking();
     }
 }

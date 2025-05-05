@@ -80,4 +80,9 @@ public class LivroService implements IService<Livro> {
     public List<Livro> findAllById(List<Long> ids) {
         return livroRepository.findAllById(ids);
     }
+
+    @Transactional(readOnly = true)
+    public List<Livro> buscar (String busca) {
+        return livroRepository.findByTermo(busca);
+    }
 }
