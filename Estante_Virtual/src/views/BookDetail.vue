@@ -5,6 +5,7 @@ import livroService from '@/services/LivroService';
 import { modelLivro } from '@/models/modelLivro';
 
 import BaseLayout from '@/components/BaseLayout.vue';
+import EditBook from '@/components/EditBook.vue';
 
 const livro = ref(modelLivro());
 
@@ -29,6 +30,7 @@ onMounted(async () => {
   <BaseLayout>
     <section class="row book-detail">
       <aside class="col-12 col-sm-4">
+        <EditBook/>
         <img :src="livro.capa" alt="Capa do livro" class="book-image" />
       </aside>
 
