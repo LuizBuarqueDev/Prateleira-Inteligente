@@ -29,9 +29,9 @@ onMounted(async () => {
 <template>
   <BaseLayout>
     <section class="row book-detail">
-      <aside class="col-12 col-sm-4">
-        <EditBook/>
+      <aside class="col-12 col-sm-4 d-flex">
         <img :src="livro.capa" alt="Capa do livro" class="book-image" />
+        <EditBook/>
       </aside>
 
       <div class="col-12 col-sm-8">

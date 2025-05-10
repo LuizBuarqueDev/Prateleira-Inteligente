@@ -10,10 +10,8 @@
 
 <style scoped>
 .edit-bar {
-  display: inline-flex;
-  align-items: center;
-  margin-left: auto;
-
+  display: flex;
+  flex-direction: column;
   i {
     padding: 10px;
 
