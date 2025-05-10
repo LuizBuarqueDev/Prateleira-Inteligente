@@ -7,18 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/prateleira")
 @RequiredArgsConstructor
 public class PrateleiraController {
 
     private final PrateleiraService prateleiraService;
-
-    @PostMapping
-    public ResponseEntity<PrateleiraDTO> adicionarLivro(@RequestBody PrateleiraDTO dto) {
-        return ResponseEntity.ok(prateleiraService.adicionarLivro(dto));
-    }
 
     @DeleteMapping("/{idUsuario}/{idLivro}")
     public ResponseEntity<Void> removerLivro(
@@ -40,5 +34,10 @@ public class PrateleiraController {
         return prateleiraService.buscarLivroNaPrateleira(idUsuario, idLivro)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @PostMapping
+    public ResponseEntity<PrateleiraDTO> adicionarLivro(@RequestBody PrateleiraDTO dto) {
+
+        return ResponseEntity.ok(prateleiraService.adicionarLivro(dto));
     }
 }
