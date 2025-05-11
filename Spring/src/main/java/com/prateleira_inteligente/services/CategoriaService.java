@@ -17,7 +17,7 @@ public class CategoriaService implements IService<Categoria> {
     @Override
     @Transactional
     public Categoria save(Categoria categoria) {
-        return null;
+        return categoriaRepository.save(categoria);
     }
 
     @Override
@@ -49,4 +49,9 @@ public class CategoriaService implements IService<Categoria> {
     public List<Categoria> findAllById(List<Long> ids) {
         return categoriaRepository.findAllById(ids);
     }
+
+    public Categoria findByNome(String nome) {
+        return categoriaRepository.findByNome(nome);
+    }
+
 }
