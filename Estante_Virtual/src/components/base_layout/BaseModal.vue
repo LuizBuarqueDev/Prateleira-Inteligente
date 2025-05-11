@@ -1,6 +1,6 @@
 <template>
-  <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75" @click.self="onClose">
-    <div :class="modalSize" class="bg-white rounded-xl shadow-xl p-6 relative max-h-full overflow-y-auto">
+  <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 " @click.self="onClose">
+    <div :class="modalSize" class="custom-modal bg-white rounded-xl shadow-xl p-6 relative max-h-full overflow-y-auto rounded p-5">
       <slot />
     </div>
   </div>
@@ -56,8 +56,7 @@ console.log('Modal aberto?', props.isOpen)
   max-width: 800px;
 }
 
-/* Opções de hover no botão de fechar */
-button:hover {
-  cursor: pointer;
+.custom-modal{
+   border: 1px solid red;
 }
 </style>

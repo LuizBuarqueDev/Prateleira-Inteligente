@@ -114,19 +114,21 @@ const salvarEdicao = () => {
   <BaseModal :isOpen="showModal" :onClose="() => showModal = false" :size="modalSize">
     <!-- Modal de Edição com INPUTS -->
     <template v-if="modalContent === 'edit'">
-      <h2 class="text-xl font-bold mb-4">Editar Livro</h2>
+      <h2 class="text-xl font-bold mb-4">
+        <i class="fa-solid fa-pen-to-square"></i>
+        Editar Livro
+      </h2>
       <form class="grid gap-4">
         <input v-model="livroEditavel.titulo" type="text" placeholder="Título" class="input" />
         <input v-model="idAutor" type="text" placeholder="Autor" class="input" />
         <input v-model="idCategorias" type="text" placeholder="Categoria" class="input" />
         <textarea v-model="livroEditavel.descricao" placeholder="Descrição" class="input" rows="4"></textarea>
-        <input v-model="livroEditavel.pagina_count" type="number" placeholder="Nº Páginas" class="input" />
         <input v-model="livroEditavel.anoPublicacao" type="text" placeholder="Ano de Publicação (YYYY-MM-DD)"
           class="input" />
         <input v-model="livroEditavel.editora" type="text" placeholder="Editora" class="input" />
 
-        <div class="flex justify-end gap-2">
-          <button type="button" class="btn btn-primary" @click="salvarEdicao"
+        <div class="d-flex justify-content-between mt-3">
+          <button type="button" class="btn btn-danger" @click="salvarEdicao"
             :disabled="!isTituloValido || !isDataValida">Salvar</button>
           <button type="button" class="btn btn-secondary" @click="showModal = false">Cancelar</button>
         </div>
@@ -149,44 +151,23 @@ const salvarEdicao = () => {
 .edit-bar {
   display: flex;
   flex-direction: column;
-}
 
-.edit-bar i {
-  padding: 10px;
-  cursor: pointer;
-}
+  i {
+    padding: 10px;
+    cursor: pointer;
+  }
 
-.edit-bar i:hover {
-  transform: scale(1.3);
-  color: #bb0000;
+  i:hover {
+    transform: scale(1.3);
+    color: #bb0000;
+  }
 }
 
 .input {
+  margin: 5px;
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
-}
-
-.btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background-color: #007bff;
-  color: white;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  color: white;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  color: white;
 }
 </style>
