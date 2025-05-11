@@ -85,4 +85,9 @@ public class LivroService implements IService<Livro> {
     public List<Livro> buscar (String busca) {
         return livroRepository.findByTermo(busca);
     }
+
+    @Transactional(readOnly = true)
+    public List<Livro> findByCategoriaId(Long categoriaId) {
+        return livroRepository.findByCategoriaId(categoriaId);
+    }
 }

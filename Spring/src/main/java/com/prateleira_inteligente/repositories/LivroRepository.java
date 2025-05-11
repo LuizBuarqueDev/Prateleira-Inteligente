@@ -17,4 +17,6 @@ public interface LivroRepository extends JpaRepository<Livro,Long> {
             "OR LOWER(c.nome) LIKE %:termo% " +
             "OR LOWER(a.nome) LIKE %:termo%")
     List<Livro> findByTermo(String termo);
+    @Query("SELECT l FROM Livro l JOIN l.categorias c WHERE c.id = :categoriaId")
+    List<Livro> findByCategoriaId(Long categoriaId);
 }

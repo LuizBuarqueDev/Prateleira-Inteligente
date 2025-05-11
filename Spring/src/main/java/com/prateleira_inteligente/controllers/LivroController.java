@@ -71,4 +71,13 @@ public class LivroController {
             .collect(Collectors.toList());
     return ResponseEntity.ok(dtos);
     }
+
+    @GetMapping("/categoria/{categoriaId}")
+    public ResponseEntity<List<LivroDTO>> findByCategoriaId(@PathVariable Long categoriaId) {
+        List<LivroDTO> dtos = service.findByCategoriaId(categoriaId)
+                .stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
+    }
 }
