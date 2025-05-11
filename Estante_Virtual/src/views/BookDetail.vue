@@ -2,36 +2,77 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import livroService from '@/services/LivroService';
+import PrateleiraService from '@/services/PrateleiraService';
 import { modelLivro } from '@/models/modelLivro';
-
+import AuthService from '@/services/AuthService';
 import BaseLayout from '@/components/BaseLayout.vue';
 import EditBook from '@/components/EditBook.vue';
 
 const livro = ref(modelLivro());
-
 const route = useRoute();
-const defaultImage = '/img/bookImg.png';
+const estaNaEstante = ref(false);
 
-const fetchLivroData = async (livroId) => {
+const verificarSeEstaNaEstante = async () => {
+  if (AuthService.currentUser.value) {
+    try {
+      const userId = AuthService.currentUser.value.uid;
+      const response = await PrateleiraService.buscarLivroNaPrateleira(userId, route.params.id);
+      estaNaEstante.value = response.data !== null;
+    } catch (error) {
+      console.error('Erro ao verificar estante:', error);
+    }
+  }
+};
+
+const toggleEstante = async () => {
+  if (!AuthService.currentUser.value) {
+    alert('Você precisa estar logado para esta ação');
+    return;
+  }
+
+  const userId = AuthService.currentUser.value.uid;
+  const livroId = route.params.id;
+
   try {
-    const response = await livroService.findById(livroId);
-    livro.value = response.data;
+    if (estaNaEstante.value) {
+      await PrateleiraService.removerLivro(userId, livroId);
+    } else {
+      await PrateleiraService.adicionarLivro({
+        idUsuario: userId,
+        idLivro: livroId
+      });
+    }
+    estaNaEstante.value = !estaNaEstante.value;
   } catch (error) {
-    console.error('Erro ao carregar os dados do livro:', error);
+    console.error('Erro ao atualizar estante:', error);
+    alert('Ocorreu um erro ao atualizar sua estante');
   }
 };
 
 onMounted(async () => {
-  await fetchLivroData(route.params.id);
+  try {
+    const response = await livroService.findById(route.params.id);
+    livro.value = response.data;
+    await verificarSeEstaNaEstante();
+  } catch (error) {
+    console.error('Erro ao carregar livro:', error);
+  }
 });
 </script>
 
 <template>
   <BaseLayout>
     <section class="row book-detail">
-      <aside class="col-12 col-sm-4 d-flex">
+      <aside class="col-12 col-sm-4 d-flex flex-column align-items-center">
         <img :src="livro.capa" alt="Capa do livro" class="book-image" />
-        <EditBook :livro="livro" />
+        <button
+            @click="toggleEstante"
+            class="btn btn-estante mt-3"
+            :class="estaNaEstante ? 'btn-danger' : 'btn-primary'"
+        >
+          {{ estaNaEstante ? 'Remover da Estante' : 'Adicionar à Estante' }}
+        </button>
+        <EditBook :livro="livro" class="mt-3" />
       </aside>
 
       <div class="col-12 col-sm-8">
