@@ -1,9 +1,6 @@
 <template>
   <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75" @click.self="onClose">
     <div :class="modalSize" class="bg-white rounded-xl shadow-xl p-6 relative max-h-full overflow-y-auto">
-      <button class="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-2xl" @click="onClose">
-        &times;
-      </button>
       <slot />
     </div>
   </div>
@@ -24,6 +21,8 @@ const modalSize = {
   md: 'max-w-md w-full',
   lg: 'max-w-2xl w-full'
 }[props.size]
+
+console.log('Modal aberto?', props.isOpen)
 </script>
 
 <style scoped>

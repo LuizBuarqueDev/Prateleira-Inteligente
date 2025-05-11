@@ -31,7 +31,7 @@ onMounted(async () => {
     <section class="row book-detail">
       <aside class="col-12 col-sm-4 d-flex">
         <img :src="livro.capa" alt="Capa do livro" class="book-image" />
-        <EditBook/>
+        <EditBook :livro="livro" />
       </aside>
 
       <div class="col-12 col-sm-8">
