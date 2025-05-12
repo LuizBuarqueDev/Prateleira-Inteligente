@@ -4,33 +4,24 @@ import { useRoute } from 'vue-router';
 import livroService from '@/services/LivroService';
 import PrateleiraService from '@/services/PrateleiraService';
 import { modelLivro } from '@/models/modelLivro';
-import AuthService from '@/services/AuthService';
 import BaseLayout from '@/components/BaseLayout.vue';
 import EditBook from '@/components/EditBook.vue';
 
 const livro = ref(modelLivro());
 const route = useRoute();
 const estaNaEstante = ref(false);
+const userId = "1"; // ID do usuário fixo
 
 const verificarSeEstaNaEstante = async () => {
-  if (AuthService.currentUser.value) {
-    try {
-      const userId = AuthService.currentUser.value.uid;
-      const response = await PrateleiraService.buscarLivroNaPrateleira(userId, route.params.id);
-      estaNaEstante.value = response.data !== null;
-    } catch (error) {
-      console.error('Erro ao verificar estante:', error);
-    }
+  try {
+    const response = await PrateleiraService.buscarLivroNaPrateleira(userId, route.params.id);
+    estaNaEstante.value = response.data !== null;
+  } catch (error) {
+    console.error('Erro ao verificar estante:', error);
   }
 };
 
 const toggleEstante = async () => {
-  if (!AuthService.currentUser.value) {
-    alert('Você precisa estar logado para esta ação');
-    return;
-  }
-
-  const userId = AuthService.currentUser.value.uid;
   const livroId = route.params.id;
 
   try {
@@ -59,6 +50,7 @@ onMounted(async () => {
   }
 });
 </script>
+
 
 <template>
   <BaseLayout>

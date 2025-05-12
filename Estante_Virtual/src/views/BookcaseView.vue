@@ -2,29 +2,25 @@
 import { ref, onMounted } from 'vue';
 import PrateleiraService from '@/services/PrateleiraService';
 import livroService from '@/services/LivroService';
-import AuthService from '@/services/AuthService';
 import BaseLayout from '@/components/BaseLayout.vue';
 import BooksCards from '@/components/BooksCards.vue';
 import Spinner from '@/components/Spinner.vue';
 
 const userBooks = ref([]);
 const isLoading = ref(true);
+const userId = "1"; // ID fixo
 
 const fetchUserBooks = async () => {
   try {
     isLoading.value = true;
+    const response = await PrateleiraService.listarLivrosPorUsuario(userId);
 
-    if (AuthService.currentUser.value) {
-      const userId = AuthService.currentUser.value.uid;
-      const response = await PrateleiraService.listarLivrosPorUsuario(userId);
-
-      if (response.data && response.data.length > 0) {
-        const bookIds = response.data.map(item => item.idLivro);
-        const livrosResponse = await livroService.findAllByIds(bookIds);
-        userBooks.value = livrosResponse.data;
-      } else {
-        userBooks.value = [];
-      }
+    if (response.data && response.data.length > 0) {
+      const bookIds = response.data.map(item => item.idLivro);
+      const livrosResponse = await livroService.findAllByIds(bookIds);
+      userBooks.value = livrosResponse.data;
+    } else {
+      userBooks.value = [];
     }
   } catch (error) {
     console.error('Erro ao carregar estante:', error);
@@ -38,6 +34,7 @@ onMounted(() => {
   fetchUserBooks();
 });
 </script>
+
 
 <template>
   <BaseLayout>
@@ -94,5 +91,5 @@ onMounted(() => {
     padding: 50px;
     font-size: 1.2em;
     color: var(--color_4);
-  }
+  }}
 </style>
