@@ -2,6 +2,7 @@
 import { ref, computed, watch } from 'vue'
 import BaseModal from './base_layout/BaseModal.vue'
 import LivroService from '@/services/LivroService'
+import router from '@/router'
 
 // Recebe o livro como prop
 const props = defineProps({
@@ -91,7 +92,9 @@ const openDeleteModal = () => {
 }
 
 const confirmDelete = () => {
-  console.log('Livro excluído!');
+  LivroService.delete(livroEditavel.value.id);
+  router.push('/');
+  alert('Livro excluído!');
   showModal.value = false
 }
 
