@@ -31,18 +31,24 @@ public class LivroMapper implements IMapper<Livro, LivroDTO> {
                 .anoPublicacao(livro.getAnoPublicacao())
                 .descricao(livro.getDescricao())
                 .editora(livro.getEditora())
-                .idAutor(getAutorId(livro))
-                .idCategorias(getCategoriaIds(livro))
-                .idUsuarios(getUsuarioIds(livro))
+                .idAutor(livro.getAutor() != null ? livro.getAutor().getId() : null)
+                .idCategorias(livro.getCategorias() != null ? livro.getCategorias().
+                        stream()
+                        .map(Categoria::getId)
+                        .collect(Collectors.toList()) : null)
+
+                .idUsuarios(livro.getUsuariosLivros() != null ? livro.getUsuariosLivros()
+                        .stream()
+                        .map(ul -> ul.getUsuario().getId()).collect(Collectors.toList()) : null)
                 .build();
     }
 
     @Override
     public Livro toEntity(LivroDTO dto) {
         Livro livro = new Livro();
-        livro.setCapa(dto.getCapa());
         livro.setId(dto.getId());
         livro.setTitulo(dto.getTitulo());
+        livro.setCapa(dto.getCapa());
         livro.setAnoPublicacao(dto.getAnoPublicacao());
         livro.setDescricao(dto.getDescricao());
         livro.setEditora(dto.getEditora());
@@ -52,38 +58,15 @@ public class LivroMapper implements IMapper<Livro, LivroDTO> {
         }
 
         if (dto.getIdCategorias() != null) {
-            List<Categoria> categorias = categoriaService.findAllById(dto.getIdCategorias());
-            livro.setCategorias(categorias);
+            livro.setCategorias(categoriaService.findAllById(dto.getIdCategorias()));
         }
 
         if (dto.getIdUsuarios() != null) {
-            List<Usuario> usuarios = dto.getIdUsuarios().stream()
-                    .map(usuarioService::getById)
-                    .collect(Collectors.toList());
+            List<Usuario> usuarios = usuarioService.findAllById(dto.getIdUsuarios());
             livro.setUsuariosLivros(mapUsuariosParaUsuarioLivro(usuarios, livro));
         }
 
         return livro;
-    }
-
-    private Long getAutorId(Livro livro) {
-        return livro.getAutor() != null ? livro.getAutor().getId() : null;
-    }
-
-    private List<Long> getCategoriaIds(Livro livro) {
-        return livro.getCategorias() != null
-                ? livro.getCategorias().stream()
-                .map(Categoria::getId)
-                .collect(Collectors.toList())
-                : null;
-    }
-
-    private List<Long> getUsuarioIds(Livro livro) {
-        return livro.getUsuariosLivros() != null
-                ? livro.getUsuariosLivros().stream()
-                .map(usuarioLivro -> usuarioLivro.getUsuario().getId())
-                .collect(Collectors.toList())
-                : null;
     }
 
     private List<UsuarioLivro> mapUsuariosParaUsuarioLivro(List<Usuario> usuarios, Livro livro) {
