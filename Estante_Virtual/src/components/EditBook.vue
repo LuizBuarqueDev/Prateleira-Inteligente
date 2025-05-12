@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import BaseModal from './base_layout/BaseModal.vue'
+import LivroService from '@/services/LivroService'
 
 // Recebe o livro como prop
 const props = defineProps({
@@ -11,9 +12,8 @@ const props = defineProps({
 })
 
 const showModal = ref(false)
-const modalContent = ref('')
-const modalSize = ref('md')
-
+const modalContent = ref('');
+const modalSize = ref('md');
 // Cópia reativa do livro recebido (para edição sem afetar o original diretamente)
 const livroEditavel = ref({ ...props.livro })
 
@@ -91,17 +91,27 @@ const openDeleteModal = () => {
 }
 
 const confirmDelete = () => {
-  console.log('Livro excluído!')
+  console.log('Livro excluído!');
   showModal.value = false
 }
 
-const salvarEdicao = () => {
-  // Validar e armazenar a data antes de salvar
-  if (livroEditavel.value.anoPublicacao) {
-    livroEditavel.value.anoPublicacao = validarData(livroEditavel.value.anoPublicacao)
+const emit = defineEmits(['livroAtualizado']);
+
+const salvarEdicao = async () => {
+  try {
+    livroEditavel.value.idAutor = Number(idAutor.value); // ← Corrige aqui
+    livroEditavel.value.idCategorias = [Number(idCategorias.value)]; // ← Certifique-se que isso é um array de números
+
+    if (livroEditavel.value.anoPublicacao) {
+      livroEditavel.value.anoPublicacao = validarData(livroEditavel.value.anoPublicacao);
+    }
+
+    await LivroService.update(livroEditavel.value.id, livroEditavel.value);
+    emit('livroAtualizado', livroEditavel.value);
+    showModal.value = false;
+  } catch (error) {
+    console.error('Erro ao atualizar:', error);
   }
-  console.log('Livro atualizado:', livroEditavel.value)
-  showModal.value = false
 }
 </script>
 
@@ -140,8 +150,10 @@ const salvarEdicao = () => {
       <div class="text-center">
         <h2 class="text-xl font-bold mb-4 text-red-600">Confirmar Exclusão</h2>
         <p class="mb-4">Tem certeza que deseja excluir o livro <strong>{{ livroEditavel.titulo }}</strong>?</p>
-        <button class="btn btn-danger" @click="confirmDelete">Confirmar</button>
-        <button class="btn btn-secondary ml-2" @click="showModal = false">Cancelar</button>
+        <div class="d-flex justify-content-between mt-5">
+          <button class="btn btn-danger" @click="confirmDelete">Confirmar</button>
+          <button class="btn btn-secondary ml-2" @click="showModal = false">Cancelar</button>
+        </div>
       </div>
     </template>
   </BaseModal>

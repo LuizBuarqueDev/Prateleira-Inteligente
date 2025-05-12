@@ -49,10 +49,14 @@ const toggleEstante = async () => {
   }
 };
 
-onMounted(async () => {
-  try {
+const fechLivro = async () => {
     const response = await livroService.findById(route.params.id);
     livro.value = response.data;
+}
+
+onMounted(async () => {
+  try {
+    await fechLivro();
     await verificarSeEstaNaEstante();
   } catch (error) {
     console.error('Erro ao carregar livro:', error);
@@ -75,7 +79,7 @@ onMounted(async () => {
 
         <!-- Coluna dos ícones (EditBook) -->
         <div class="ms-3 d-flex align-items-start">
-          <EditBook :livro="livro" />
+          <EditBook :livro="livro" @livroAtualizado="fechLivro" />
         </div>
       </aside>
 

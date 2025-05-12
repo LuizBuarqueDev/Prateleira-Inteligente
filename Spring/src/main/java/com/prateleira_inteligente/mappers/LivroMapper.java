@@ -52,9 +52,7 @@ public class LivroMapper implements IMapper<Livro, LivroDTO> {
         }
 
         if (dto.getIdCategorias() != null) {
-            List<Categoria> categorias = dto.getIdCategorias().stream()
-                    .map(categoriaService::getById)
-                    .collect(Collectors.toList());
+            List<Categoria> categorias = categoriaService.findAllById(dto.getIdCategorias());
             livro.setCategorias(categorias);
         }
 
