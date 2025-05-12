@@ -55,16 +55,20 @@ onMounted(async () => {
 <template>
   <BaseLayout>
     <section class="row book-detail">
-      <aside class="col-12 col-sm-4 d-flex flex-column align-items-center">
-        <img :src="livro.capa" alt="Capa do livro" class="book-image" />
-        <button
-            @click="toggleEstante"
-            class="btn btn-estante mt-3"
-            :class="estaNaEstante ? 'btn-danger' : 'btn-primary'"
-        >
-          {{ estaNaEstante ? 'Remover da Estante' : 'Adicionar à Estante' }}
-        </button>
-        <EditBook :livro="livro" class="mt-3" />
+      <aside class="col-12 col-sm-4 d-flex">
+        <!-- Coluna da imagem + botão -->
+        <div class="d-flex flex-column align-items-center">
+          <img :src="livro.capa" alt="Capa do livro" class="book-image" />
+          <button @click="toggleEstante" class="btn btn-estante mt-3"
+            :class="estaNaEstante ? 'btn-danger' : 'btn-primary'">
+            {{ estaNaEstante ? 'Remover da Estante' : 'Adicionar à Estante' }}
+          </button>
+        </div>
+
+        <!-- Coluna dos ícones (EditBook) -->
+        <div class="ms-3 d-flex align-items-start">
+          <EditBook :livro="livro" />
+        </div>
       </aside>
 
       <div class="col-12 col-sm-8">
@@ -72,7 +76,6 @@ onMounted(async () => {
         <p><strong>Autor(es):</strong> {{ livro.idAutor?.join(', ') || 'Não informado' }}</p>
         <p><strong>Categoria(s):</strong> {{ livro.idCategorias?.join(', ') || 'Não informado' }}</p>
         <p><strong>Descrição:</strong> {{ livro.descricao || 'Descrição indisponível' }}</p>
-        <p><strong>Páginas:</strong> {{ livro.pagina_count || 'Não informado' }}</p>
         <p><strong>Data de Publicação:</strong> {{ livro.anoPublicacao || 'Não informado' }}</p>
         <p><strong>Editora:</strong> {{ livro.editora || 'Não informado' }}</p>
       </div>
