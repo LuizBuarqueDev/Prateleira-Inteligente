@@ -1,16 +1,34 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
+
 import livroService from '@/services/LivroService';
 import PrateleiraService from '@/services/PrateleiraService';
+
 import { modelLivro } from '@/models/modelLivro';
+
 import BaseLayout from '@/components/BaseLayout.vue';
 import EditBook from '@/components/EditBook.vue';
 
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
+
+const date = ref(null);
 const livro = ref(modelLivro());
 const route = useRoute();
 const estaNaEstante = ref(false);
 const userId = "1"; // ID do usuário fixo
+
+
+watch(livro, (newLivro) => {
+  if (newLivro.anoPublicacao) {
+    date.value = new Date(newLivro.anoPublicacao);
+  } else {
+    date.value = null;
+  }
+}, { immediate: true });
+
 
 const verificarSeEstaNaEstante = async () => {
   try {
@@ -41,8 +59,8 @@ const toggleEstante = async () => {
 };
 
 const fechLivro = async () => {
-    const response = await livroService.findById(route.params.id);
-    livro.value = response.data;
+  const response = await livroService.findById(route.params.id);
+  livro.value = response.data;
 }
 
 onMounted(async () => {
@@ -80,7 +98,10 @@ onMounted(async () => {
         <p><strong>Autor(es):</strong> {{ livro.idAutor?.join(', ') || 'Não informado' }}</p>
         <p><strong>Categoria(s):</strong> {{ livro.idCategorias?.join(', ') || 'Não informado' }}</p>
         <p><strong>Descrição:</strong> {{ livro.descricao || 'Descrição indisponível' }}</p>
-        <p><strong>Data de Publicação:</strong> {{ livro.anoPublicacao || 'Não informado' }}</p>
+        <p><strong>Data de Publicação:</strong>
+          <VueDatePicker v-model="date" placeholder="Selecione a data de publicação"
+            :format="(d) => d ? d.toLocaleDateString('pt-BR') : ''" :disabled="true" />
+        </p>
         <p><strong>Editora:</strong> {{ livro.editora || 'Não informado' }}</p>
       </div>
     </section>

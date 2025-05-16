@@ -1,10 +1,14 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
-import BaseModal from './base_layout/BaseModal.vue'
-import LivroService from '@/services/LivroService'
 import router from '@/router'
 
-// Recebe o livro como prop
+import BaseModal from './base_layout/BaseModal.vue'
+import LivroService from '@/services/LivroService'
+
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
+
 const props = defineProps({
   livro: {
     type: Object,
@@ -12,13 +16,12 @@ const props = defineProps({
   }
 })
 
+const date = ref(null);
 const showModal = ref(false)
 const modalContent = ref('');
 const modalSize = ref('md');
-// Cópia reativa do livro recebido (para edição sem afetar o original diretamente)
 const livroEditavel = ref({ ...props.livro })
 
-// Computed properties para idAutor e idCategorias
 const idAutor = computed({
   get() {
     return livroEditavel.value.idAutor?.[0] || ''
@@ -43,59 +46,73 @@ const idCategorias = computed({
   }
 })
 
-// Computed para validar o título e a data
 const isTituloValido = computed(() => livroEditavel.value.titulo && livroEditavel.value.titulo.trim() !== '')
 const isDataValida = computed(() => {
   const data = new Date(livroEditavel.value.anoPublicacao)
   return !isNaN(data.getTime()) && livroEditavel.value.anoPublicacao.length === 10
 })
 
-// Função para formatar a data para exibição
 const formatarData = (dataString) => {
   if (!dataString) return 'N/D'
   const data = new Date(dataString)
-  if (isNaN(data.getTime())) return 'N/D' // Verifica se a data é inválida
+  if (isNaN(data.getTime())) return 'N/D';
   const options = { year: 'numeric', month: 'long', day: 'numeric' }
-  return data.toLocaleDateString('pt-BR', options) // Exibe no formato: 1 de Janeiro de 2020
+  return data.toLocaleDateString('pt-BR', options);
 }
 
-// Função para validar e formatar a data no formato correto (YYYY-MM-DD)
 const validarData = (dataString) => {
   const data = new Date(dataString)
   if (isNaN(data.getTime())) {
     console.error('Data inválida')
-    return '' // Retorna uma string vazia ou você pode retornar um valor default como "N/D"
+    return '';
   }
-  // Se a data for válida, retorna no formato correto (YYYY-MM-DD)
-  return data.toISOString().split('T')[0] // Retorna apenas a data no formato correto
+  return data.toISOString().split('T')[0];
 }
 
-// Sempre que a prop mudar, atualiza a cópia reativa
+// Sincroniza a data do livro para o datepicker
+watch(() => props.livro.anoPublicacao, (novaData) => {
+  if (novaData) {
+    const d = new Date(novaData);
+    date.value = isNaN(d.getTime()) ? null : d;
+  } else {
+    date.value = null;
+  }
+}, { immediate: true });
+
+// Quando o datepicker muda, atualiza o livroEditavel.anoPublicacao
+watch(date, (novaDate) => {
+  if (novaDate instanceof Date && !isNaN(novaDate.getTime())) {
+    livroEditavel.value.anoPublicacao = novaDate.toISOString().split('T')[0];
+  } else {
+    livroEditavel.value.anoPublicacao = '';
+  }
+});
+
 watch(() => props.livro, (novoLivro) => {
   livroEditavel.value = {
     ...novoLivro,
-    idAutor: novoLivro.idAutor || [], // Inicializando com um array vazio
-    idCategorias: novoLivro.idCategorias || [] // Inicializando com um array vazio
+    idAutor: novoLivro.idAutor || [],
+    idCategorias: novoLivro.idCategorias || []
   }
 })
 
 const openEditModal = () => {
-  modalContent.value = 'edit'
-  modalSize.value = 'xl'
-  showModal.value = true
+  modalContent.value = 'edit';
+  modalSize.value = 'xl';
+  showModal.value = true;
 }
 
 const openDeleteModal = () => {
-  modalContent.value = 'delete'
-  modalSize.value = 'xl'
-  showModal.value = true
+  modalContent.value = 'delete';
+  modalSize.value = 'xl';
+  showModal.value = true;
 }
 
 const confirmDelete = () => {
   LivroService.delete(livroEditavel.value.id);
   router.push('/');
   alert('Livro excluído!');
-  showModal.value = false
+  showModal.value = false;
 }
 
 const emit = defineEmits(['livroAtualizado']);
@@ -136,8 +153,13 @@ const salvarEdicao = async () => {
         <input v-model="idAutor" type="text" placeholder="Autor" class="input" />
         <input v-model="idCategorias" type="text" placeholder="Categoria" class="input" />
         <textarea v-model="livroEditavel.descricao" placeholder="Descrição" class="input" rows="4"></textarea>
-        <input v-model="livroEditavel.anoPublicacao" type="text" placeholder="Ano de Publicação (YYYY-MM-DD)"
-          class="input" />
+
+        <VueDatePicker 
+          v-model="date" 
+          placeholder="Selecione a data de publicação"
+          :format="(d) => d ? d.toLocaleDateString('pt-BR') : ''" 
+          />
+
         <input v-model="livroEditavel.editora" type="text" placeholder="Editora" class="input" />
 
         <div class="d-flex justify-content-between mt-3">

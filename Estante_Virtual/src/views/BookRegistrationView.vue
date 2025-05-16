@@ -1,17 +1,33 @@
 <script setup>
-import { ref } from 'vue';
-import BaseLayout from '@/components/BaseLayout.vue';
-import livroService from '@/services/LivroService';
-import router from '@/router';
+import { ref, watch, nextTick } from 'vue';
 import { modelLivro } from '@/models/modelLivro';
+import { format } from 'date-fns';
 
+import router from '@/router';
+
+import BaseLayout from '@/components/BaseLayout.vue';
+
+import livroService from '@/services/LivroService';
+
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
+
+const date = ref(null);
 const livro = ref(modelLivro());
+
+watch(date, (newDate) => {
+    if (newDate) {
+        livro.value.anoPublicacao = format(newDate, 'yyyy-MM-dd'); // armazenar em formato ISO
+    }
+});
 
 const addLivro = async () => {
     try {
         await livroService.create(livro.value);
         alert('Livro Cadastrado');
         console.log(livro.value);
+        await nextTick(); // espera DOM estabilizar
         router.back();
     } catch (error) {
         alert('Erro ao cadastrar livro: ' + error.message);
@@ -47,11 +63,13 @@ const changeImage = () => {
                     </div>
 
                     <div class="form-group">
-                        <input type="number" v-model="livro.anoPublicacao" class="form-control" placeholder="Ano de Publicação">
+                        <VueDatePicker v-model="date" placeholder="Selecione a data de publicação"
+                            :format="(d) => d ? d.toLocaleDateString('pt-BR') : ''" />
                     </div>
 
                     <div class="form-group">
-                        <textarea class="form-control" v-model="livro.descricao" placeholder="Descrição" rows="4"></textarea>
+                        <textarea class="form-control" v-model="livro.descricao" placeholder="Descrição"
+                            rows="4"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -63,18 +81,17 @@ const changeImage = () => {
                     </div>
 
                     <div class="form-group">
-                        <input type="text" v-model="livro.idCategorias" class="form-control" placeholder="ID da Categoria">
+                        <input type="text" v-model="livro.idCategorias" class="form-control"
+                            placeholder="ID da Categoria">
                     </div>
 
                     <div class="form-group">
-                        <input type="text"
-                            placeholder="IDs dos Usuários (separe por vírgula)"
-                            class="form-control"
-                            @blur="livro.idUsuarios = $event.target.value.split(',').map(id => id.trim())"
-                        />
+                        <input type="text" placeholder="IDs dos Usuários (separe por vírgula)" class="form-control"
+                            @blur="livro.idUsuarios = $event.target.value.split(',').map(id => id.trim())" />
                     </div>
 
-                    <button @click="clickUploadButton()" type="button" class="btn btn-primary btn-lg custom-btn">Cadastrar</button>
+                    <button @click="clickUploadButton()" type="button"
+                        class="btn btn-primary btn-lg custom-btn">Cadastrar</button>
                 </form>
             </div>
         </section>
