@@ -2,9 +2,7 @@ package com.prateleira_inteligente.controllers;
 
 import com.prateleira_inteligente.dto.LivroDTO;
 import com.prateleira_inteligente.entities.Livro;
-import com.prateleira_inteligente.mappers.IMapper;
 import com.prateleira_inteligente.mappers.LivroMapper;
-import com.prateleira_inteligente.services.IService;
 import com.prateleira_inteligente.services.LivroService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

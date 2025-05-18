@@ -18,7 +18,7 @@ public class AutorService implements IService<Autor> {
     @Override
     @Transactional
     public Autor save(Autor autor) {
-        return null;
+        return autorRepository.save(autor);
     }
 
     @Override
@@ -31,14 +31,14 @@ public class AutorService implements IService<Autor> {
     @Override
     @Transactional(readOnly = true)
     public Autor getById(Long id) {
-        return null;
+        return autorRepository.findById(id).orElseThrow(() -> new RuntimeException("Autor não encontrado: " + id));
     }
 
     @Transactional
     @Override
     public void delete(Long id) {
+        livroService.delete(id);
     }
-
 
     @Override
     @Transactional(readOnly = true)

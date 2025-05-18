@@ -1,7 +1,9 @@
 package com.prateleira_inteligente;
 
+import com.prateleira_inteligente.entities.Autor;
 import com.prateleira_inteligente.entities.Categoria;
 import com.prateleira_inteligente.entities.Livro;
+import com.prateleira_inteligente.services.AutorService;
 import com.prateleira_inteligente.services.CategoriaService;
 import com.prateleira_inteligente.services.LivroService;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +20,19 @@ public class Mock {
 
     private final LivroService livroService;
     private final CategoriaService categoriaService;
+    private final AutorService autorService;
 
     @Transactional
     public void mocking() {
+
+        Autor autor1 = new Autor();
+        autor1.setNome("Teste autor id: 1");
+        autorService.save(autor1);
+
+        System.out.printf("Busca no service: " + autorService.getById(1L).getNome());
+
+
+
         // Criar categorias dentro da mesma transação
         Categoria terror = criarOuObterCategoria("Terror");
         Categoria romance = criarOuObterCategoria("Romance");
