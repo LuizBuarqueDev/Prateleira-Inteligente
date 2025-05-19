@@ -34,6 +34,12 @@ const router = createRouter({
       name: 'bookregistration',
       meta: { requiresAuth: true },
       component: () => import('../views/BookRegistrationView.vue')
+    },
+    {
+      path: '/categoria/:categoriaId/:nomeCategoria',
+      name: 'CategoryBooks',
+      component: () => import('@/views/CategoryBooks.vue'),
+      props: true
     }
   ]
 })
