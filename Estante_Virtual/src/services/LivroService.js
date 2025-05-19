@@ -33,5 +33,9 @@ export default {
         return api.get(`${LIVRO_ENDPOINT}/buscar`, {
       params: { busca: termo }
     });
+  },
+
+  findByCategoriaId(categoriaId) {
+    return api.get(`${LIVRO_ENDPOINT}/categoria/${categoriaId}`);
   }
 };
