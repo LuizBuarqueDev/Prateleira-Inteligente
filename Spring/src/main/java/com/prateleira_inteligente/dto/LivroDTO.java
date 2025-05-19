@@ -16,5 +16,6 @@ public class LivroDTO {
     private String editora;
     private Long idAutor;
     private List<Long> idCategorias;
+    private List<String> nomesCategorias;
     private List<Long> idUsuarios;
 }
