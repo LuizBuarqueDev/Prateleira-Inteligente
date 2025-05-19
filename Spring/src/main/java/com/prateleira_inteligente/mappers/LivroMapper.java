@@ -37,6 +37,11 @@ public class LivroMapper implements IMapper<Livro, LivroDTO> {
                         .map(Categoria::getId)
                         .collect(Collectors.toList()) : null)
 
+                .nomesCategorias(livro.getCategorias() != null ? livro.getCategorias()
+                        .stream()
+                        .map(Categoria::getNome)
+                        .collect(Collectors.toList()) : null)
+
                 .idUsuarios(livro.getUsuariosLivros() != null ? livro.getUsuariosLivros()
                         .stream()
                         .map(ul -> ul.getUsuario().getId()).collect(Collectors.toList()) : null)
