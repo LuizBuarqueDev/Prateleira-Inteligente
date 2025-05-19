@@ -96,7 +96,7 @@ onMounted(async () => {
       <div class="col-12 col-sm-8">
         <h2>{{ livro.titulo || 'Título não disponível' }}</h2>
         <p><strong>Autor(es):</strong> {{ livro.idAutor?.join(', ') || 'Não informado' }}</p>
-        <p><strong>Categoria(s):</strong> {{ livro.idCategorias?.join(', ') || 'Não informado' }}</p>
+        <p><strong>Categoria(s):</strong> {{ livro.nomesCategorias?.join(', ') || 'Não informado' }}</p>
         <p><strong>Descrição:</strong> {{ livro.descricao || 'Descrição indisponível' }}</p>
         <p><strong>Data de Publicação:</strong>
           <VueDatePicker v-model="date" placeholder="Selecione a data de publicação"
