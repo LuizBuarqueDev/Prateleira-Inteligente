@@ -96,7 +96,20 @@ onMounted(async () => {
       <div class="col-12 col-sm-8">
         <h2>{{ livro.titulo || 'Título não disponível' }}</h2>
         <p><strong>Autor(es):</strong> {{ livro.idAutor?.join(', ') || 'Não informado' }}</p>
-        <p><strong>Categoria(s):</strong> {{ livro.nomesCategorias?.join(', ') || 'Não informado' }}</p>
+
+
+        <p><strong>Categoria(s):</strong>
+          <span v-for="(categoria, index) in livro.nomesCategorias" :key="index">
+            <RouterLink
+               :to="{ name: 'CategoryBooks', params: { categoriaId: livro.idCategorias[index], nomeCategoria: categoria } }"
+               class="category-link"
+            >
+              {{ categoria }}{{ index < livro.nomesCategorias.length - 1 ? ', ' : '' }}
+           </RouterLink>
+          </span>
+          <span v-if="!livro.nomesCategorias?.length">Não informado</span>
+        </p>
+
         <p><strong>Descrição:</strong> {{ livro.descricao || 'Descrição indisponível' }}</p>
         <p><strong>Data de Publicação:</strong>
           <VueDatePicker v-model="date" placeholder="Selecione a data de publicação"
@@ -125,5 +138,16 @@ onMounted(async () => {
   border-radius: 8px;
   border: 2px solid red;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+.category-link {
+  color: var(--color_4);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  }
+
+.category-link:hover {
+  color: var(--color_1_hover);
+  text-decoration: underline;
+  }
 }
 </style>
