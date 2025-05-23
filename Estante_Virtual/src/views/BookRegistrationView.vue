@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import router from '@/router';
 
 import BaseLayout from '@/components/BaseLayout.vue';
+import AutorCard from '@/components/AutorCard.vue';
 
 import livroService from '@/services/LivroService';
 
@@ -77,7 +78,7 @@ const changeImage = () => {
                     </div>
 
                     <div class="form-group">
-                        <input type="text" v-model="livro.idAutor" class="form-control" placeholder="ID do Autor">
+                    <AutorCard/>
                     </div>
 
                     <div class="form-group">
