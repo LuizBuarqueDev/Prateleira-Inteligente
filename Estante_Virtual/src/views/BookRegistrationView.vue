@@ -62,7 +62,7 @@ const changeImage = () => {
             </div>
 
             <div class="form-div">
-                <form class="mt-5">
+                <form @submit.prevent class="mt-5">
                     <div class="form-group">
                         <input type="text" v-model="livro.titulo" class="form-control" placeholder="Título">
                     </div>

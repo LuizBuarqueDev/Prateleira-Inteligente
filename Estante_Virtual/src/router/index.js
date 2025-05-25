@@ -32,7 +32,7 @@ const router = createRouter({
     {
       path: '/bookregistration',
       name: 'bookregistration',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
       component: () => import('../views/BookRegistrationView.vue')
     },
     {
