@@ -96,7 +96,7 @@ onMounted(async () => {
 
       <div class="col-12 col-sm-8">
         <h2>{{ livro.titulo || 'Título não disponível' }}</h2>
-       <p><strong>Autor(es):</strong> {{ livro.autor.nome || 'Não informado' }}</p>
+       <p><strong>Autor(es):</strong> {{ livro.autor?.nome || 'Não informado' }}</p>
 
         <p><strong>Categoria(s):</strong>
           <span v-for="(categoria, index) in livro.nomesCategorias" :key="index">
