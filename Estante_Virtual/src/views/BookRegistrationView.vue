@@ -35,6 +35,10 @@ const addLivro = async () => {
     }
 };
 
+const handleAutorSelecionado = (id) => {
+  livro.value.idAutor = id;
+};
+
 const clickUploadButton = () => {
     addLivro();
 };
@@ -78,7 +82,7 @@ const changeImage = () => {
                     </div>
 
                     <div class="form-group">
-                    <AutorCard/>
+                    <AutorCard @update:selectedAuthorId="handleAutorSelecionado"/>
                     </div>
 
                     <div class="form-group">

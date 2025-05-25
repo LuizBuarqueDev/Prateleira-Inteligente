@@ -25,13 +25,11 @@ public class Mock {
     @Transactional
     public void mocking() {
 
-        Autor autor1 = new Autor();
-        autor1.setNome("Teste autor id: 1");
-        autorService.save(autor1);
-
-        System.out.printf("Busca no service: " + autorService.getById(1L).getNome());
-
-
+        for (int i = 0; i < 5; i++) {
+            Autor autor = new Autor();
+            autor.setNome("Autor " + (i+1));
+            autorService.save(autor);
+        }
 
         // Criar categorias dentro da mesma transação
         Categoria terror = criarOuObterCategoria("Terror");
