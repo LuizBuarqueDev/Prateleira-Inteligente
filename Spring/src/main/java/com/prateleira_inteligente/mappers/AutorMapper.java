@@ -17,10 +17,8 @@ public class AutorMapper implements IMapper<Autor, AutorDTO> {
     @Override
     public Autor toEntity(AutorDTO autorDTO) {
         Autor autor = new Autor();
-        if (autorDTO.getIdLivros() != null) {
-            autor.setNome(autorDTO.getNome());
-            autor.setLivros(autorService.getById(autor.getId()).getLivros());
-        }
+        autor.setId(autorDTO.getId());
+        autor.setNome(autorDTO.getNome());
         return autor;
     }
 
@@ -29,9 +27,11 @@ public class AutorMapper implements IMapper<Autor, AutorDTO> {
         return AutorDTO.builder()
                 .id(autor.getId())
                 .nome(autor.getNome())
-                .idLivros(autor.getLivros() != null ? autor.getLivros()
-                        .stream()
-                        .map(l -> l.getId()).collect(Collectors.toList()) : null)
+                .idLivros(autor.getLivros() != null
+                        ? autor.getLivros().stream()
+                        .map(l -> l.getId())
+                        .collect(Collectors.toList())
+                        : null)
                 .build();
     }
 }

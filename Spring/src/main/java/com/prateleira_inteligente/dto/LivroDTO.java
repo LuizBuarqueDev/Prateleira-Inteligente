@@ -14,7 +14,7 @@ public class LivroDTO {
     private LocalDate anoPublicacao;
     private String descricao;
     private String editora;
-    private Long idAutor;
+    private AutorDTO autor;
     private List<Long> idCategorias;
     private List<String> nomesCategorias;
     private List<Long> idUsuarios;

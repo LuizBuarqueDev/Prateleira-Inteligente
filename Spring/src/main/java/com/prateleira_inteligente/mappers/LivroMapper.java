@@ -1,11 +1,11 @@
 package com.prateleira_inteligente.mappers;
 
 import com.prateleira_inteligente.dto.LivroDTO;
+import com.prateleira_inteligente.dto.AutorDTO;
 import com.prateleira_inteligente.entities.Categoria;
 import com.prateleira_inteligente.entities.Livro;
 import com.prateleira_inteligente.entities.Usuario;
 import com.prateleira_inteligente.entities.UsuarioLivro;
-import com.prateleira_inteligente.services.AutorService;
 import com.prateleira_inteligente.services.CategoriaService;
 import com.prateleira_inteligente.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LivroMapper implements IMapper<Livro, LivroDTO> {
 
-    private final AutorService autorService;
+    private final AutorMapper autorMapper;
     private final CategoriaService categoriaService;
     private final UsuarioService usuarioService;
 
@@ -31,26 +31,26 @@ public class LivroMapper implements IMapper<Livro, LivroDTO> {
                 .anoPublicacao(livro.getAnoPublicacao())
                 .descricao(livro.getDescricao())
                 .editora(livro.getEditora())
-                .idAutor(livro.getAutor() != null ? livro.getAutor().getId() : null)
-                .idCategorias(livro.getCategorias() != null ? livro.getCategorias().
-                        stream()
+                .autor(livro.getAutor() != null ? autorMapper.toDTO(livro.getAutor()) : null)
+                .idCategorias(livro.getCategorias() != null ? livro.getCategorias()
+                        .stream()
                         .map(Categoria::getId)
                         .collect(Collectors.toList()) : null)
-
                 .nomesCategorias(livro.getCategorias() != null ? livro.getCategorias()
                         .stream()
                         .map(Categoria::getNome)
                         .collect(Collectors.toList()) : null)
-
                 .idUsuarios(livro.getUsuariosLivros() != null ? livro.getUsuariosLivros()
                         .stream()
-                        .map(ul -> ul.getUsuario().getId()).collect(Collectors.toList()) : null)
+                        .map(ul -> ul.getUsuario().getId())
+                        .collect(Collectors.toList()) : null)
                 .build();
     }
 
     @Override
     public Livro toEntity(LivroDTO dto) {
         Livro livro = new Livro();
+
         livro.setId(dto.getId());
         livro.setTitulo(dto.getTitulo());
         livro.setCapa(dto.getCapa());
@@ -58,8 +58,8 @@ public class LivroMapper implements IMapper<Livro, LivroDTO> {
         livro.setDescricao(dto.getDescricao());
         livro.setEditora(dto.getEditora());
 
-        if (dto.getIdAutor() != null) {
-            livro.setAutor(autorService.getById(dto.getIdAutor()));
+        if (dto.getAutor() != null) {
+            livro.setAutor(autorMapper.toEntity(dto.getAutor()));
         }
 
         if (dto.getIdCategorias() != null) {
