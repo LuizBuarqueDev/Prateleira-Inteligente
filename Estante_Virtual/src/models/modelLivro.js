@@ -1,6 +1,6 @@
 export const modelLivro = () => ({
     titulo: '',
-    idAutor: null,
+    autor: null,
     capa:  '/img/bookImg.png',
     idCategorias: null,
     descricao: '',

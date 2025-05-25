@@ -20,6 +20,11 @@ const route = useRoute();
 const estaNaEstante = ref(false);
 const userId = "1"; // ID do usuário fixo
 
+const fechLivro = async () => {
+  const response = await livroService.findById(route.params.id);
+  livro.value = response.data;
+  console.log(livro.value);
+}
 
 watch(livro, (newLivro) => {
   if (newLivro.anoPublicacao) {
@@ -58,10 +63,6 @@ const toggleEstante = async () => {
   }
 };
 
-const fechLivro = async () => {
-  const response = await livroService.findById(route.params.id);
-  livro.value = response.data;
-}
 
 onMounted(async () => {
   try {
@@ -95,8 +96,7 @@ onMounted(async () => {
 
       <div class="col-12 col-sm-8">
         <h2>{{ livro.titulo || 'Título não disponível' }}</h2>
-        <p><strong>Autor(es):</strong> {{ livro.idAutor?.join(', ') || 'Não informado' }}</p>
-
+       <p><strong>Autor(es):</strong> {{ livro.autor.nome || 'Não informado' }}</p>
 
         <p><strong>Categoria(s):</strong>
           <span v-for="(categoria, index) in livro.nomesCategorias" :key="index">
