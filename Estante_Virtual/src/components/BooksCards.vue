@@ -24,7 +24,7 @@ const goToLivroDetail = (livro) => {
       @click="goToLivroDetail(livro)"
     >
       <span class="title">{{ livro.titulo || 'Título não disponível' }}</span>
-      <img :src="livro.capa" alt="Capa do livro" />
+      <img :src="livro.capa" @error="livro.capa = '/img/bookImg.png'" alt="Capa do livro" />
     </div>
   </div>
 

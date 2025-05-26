@@ -58,7 +58,7 @@ const changeImage = () => {
         <section class="container">
             <h2 class="mb-4"><i class="fa-solid fa-paperclip me-3"></i>Cadastrar livros</h2>
             <div class="upload-div">
-                <img :src="livro.capa" class="imgdefault" alt="Capa do Livro" @click="changeImage">
+                <img :src="livro.capa" @error="livro.capa = '/img/bookImg.png'" class="imgdefault" alt="Capa do Livro" @click="changeImage">
             </div>
 
             <div class="form-div">

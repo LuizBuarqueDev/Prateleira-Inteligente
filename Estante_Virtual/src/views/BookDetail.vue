@@ -79,9 +79,11 @@ onMounted(async () => {
   <BaseLayout>
     <section class="row book-detail">
       <aside class="col-12 col-sm-4 d-flex">
+
         <!-- Coluna da imagem + botão -->
         <div class="d-flex flex-column align-items-center">
-          <img :src="livro.capa" alt="Capa do livro" class="book-image" />
+          <img :src="livro.capa" @error="livro.capa = '/img/bookImg.png'" alt="Capa do livro" class="book-image" />
+
           <button @click="toggleEstante" class="btn btn-estante mt-3"
             :class="estaNaEstante ? 'btn-danger' : 'btn-primary'">
             {{ estaNaEstante ? 'Remover da Estante' : 'Adicionar à Estante' }}
