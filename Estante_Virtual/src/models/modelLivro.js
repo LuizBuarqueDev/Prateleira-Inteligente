@@ -1,10 +1,14 @@
 export const modelLivro = () => ({
-    titulo: '',
-    autor: null,
-    capa:  '/img/bookImg.png',
-    idCategorias: null,
-    descricao: '',
-    editora: '',
-    anoPublicacao: null,
-    idUsuarios: []
+  titulo: '',
+  capa: '',
+  anoPublicacao: '',
+  descricao: '',
+  editora: '',
+  autor: {
+    id: null,
+    name:null,
+    idLivros: null
+  },
+  idCategorias: [],
+  idUsuarios: []
 });

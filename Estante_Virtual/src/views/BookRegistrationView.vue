@@ -36,7 +36,7 @@ const addLivro = async () => {
 };
 
 const handleAutorSelecionado = (id) => {
-  livro.value.idAutor = id;
+  livro.value.autor.id = id;
 };
 
 const clickUploadButton = () => {
