@@ -38,6 +38,7 @@ public class PrateleiraInteligenteApplication implements CommandLineRunner {
 
         Usuario usuario1 = new Usuario();
         usuario1.setNome("João Silva");
+        usuario1.setSenha("<PASSWORD>");
 
         usuarioService.save(usuario1);
         /*

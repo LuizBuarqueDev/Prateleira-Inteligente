@@ -12,8 +12,11 @@ import java.util.List;
 @Table(name = "Usuarios")
 public class Usuario extends BaseEntity {
 
-    @Column(unique = true)
+    @Column(unique = true , nullable = false)
     private String nome;
+
+    @Column(nullable = false)
+    private String senha;
 
     @Enumerated(EnumType.STRING)
     private Role role;

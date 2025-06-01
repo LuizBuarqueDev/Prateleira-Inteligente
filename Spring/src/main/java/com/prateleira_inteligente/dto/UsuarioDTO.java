@@ -1,5 +1,6 @@
 package com.prateleira_inteligente.dto;
 
+import com.prateleira_inteligente.config.security.Role;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,5 +9,6 @@ import lombok.Data;
 public class UsuarioDTO {
     private String id;
     private String nome;
-    private String role;
+    private String senha;
+    private Role role;
 }
