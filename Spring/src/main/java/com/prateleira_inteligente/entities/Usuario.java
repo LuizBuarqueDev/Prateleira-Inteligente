@@ -1,5 +1,6 @@
 package com.prateleira_inteligente.entities;
 
+import com.prateleira_inteligente.config.security.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,7 +12,11 @@ import java.util.List;
 @Table(name = "Usuarios")
 public class Usuario extends BaseEntity {
 
+    @Column(unique = true)
     private String nome;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comentario> comentarios = new ArrayList<>();
