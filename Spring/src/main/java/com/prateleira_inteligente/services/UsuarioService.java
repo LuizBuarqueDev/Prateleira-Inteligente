@@ -1,7 +1,5 @@
 package com.prateleira_inteligente.services;
 
-import com.prateleira_inteligente.entities.Comentario;
-import com.prateleira_inteligente.entities.Livro;
 import com.prateleira_inteligente.entities.Usuario;
 import com.prateleira_inteligente.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -51,5 +49,10 @@ public class UsuarioService  implements IService<Usuario>{
     @Transactional(readOnly = true)
     public List<Usuario> findAllById(List<Long> ids) {
         return usuarioRepository.findAllById(ids);
+    }
+
+    @Transactional(readOnly = true)
+    public Usuario findByNome(String nome) {
+        return (Usuario) usuarioRepository.findByNome(nome);
     }
 }
