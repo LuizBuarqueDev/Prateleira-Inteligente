@@ -1,60 +1,86 @@
-import { ref } from 'vue';
-import {onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
-
 import router from '@/router';
-import { auth } from '@/assets/js/firebase';
-
+import { ref } from 'vue';
+import api from '@/assets/js/axios';
 
 class AuthService {
-    constructor() {
-        this.auth = auth;
-        this.isAuthenticated = ref(false);
-        this.currentUser = ref(null);
+  constructor() {
+    this.isAuthenticated = ref(false);
+    this.currentUser = ref(null);
+    this.token = ref(localStorage.getItem('token') || '');
 
-        this._initAuthStateListener();
+    if (this.token.value) {
+      this.isAuthenticated.value = true;
+      this.currentUser.value = this._parseToken(this.token.value);
     }
+  }
 
-    _initAuthStateListener() {
-        onAuthStateChanged(this.auth, (user) => {
-            this.isAuthenticated.value = !!user;
-            this.currentUser.value = user;
-        });
+  _parseToken(token) {
+    try {
+      const payloadBase64 = token.split('.')[1];
+      const decodedPayload = atob(payloadBase64);
+      return JSON.parse(decodedPayload);
+    } catch (e) {
+      console.error('Erro ao decodificar token JWT:', e);
+      return null;
     }
+  }
 
-    async login(email, password) {
-        try {
-            const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
-            router.push('/');
-            return userCredential.user;
-        } catch (error) {
-            alert('Erro ao realizar login: ', error.message);
-            throw error;
-        }
+  async login(nomeUsuario, senha) {
+    try {
+      const response = await api.post('/auth/login', {
+        nomeUsuario,
+        senha
+      });
+
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      this.token.value = token;
+      this.isAuthenticated.value = true;
+      this.currentUser.value = this._parseToken(token);
+      router.push('/');
+    } catch (error) {
+      alert('Erro ao realizar login: ' + (error.response?.data?.message || error.message));
+      throw error;
     }
+  }
 
-    async createUser(email, password) {
-        try {
-            const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
-            router.push('/');
-            return userCredential;
-        } catch (error) {
-            alert('Erro ao criar usuário:', error.message);
-            throw error;
-        }
+  async createUser(nomeUsuario, senha) {
+    try {
+      const response = await api.post('/auth/registrar', {
+        nomeUsuario,
+        senha
+      });
+
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      this.token.value = token;
+      this.isAuthenticated.value = true;
+      this.currentUser.value = this._parseToken(token);
+      router.push('/');
+    } catch (error) {
+      alert('Erro ao criar usuário: ' + (error.response?.data?.message || error.message));
+      throw error;
     }
+  }
 
-    async logout() {
-        try {
-            await signOut(this.auth);
-            this.isAuthenticated.value = false;
-            this.currentUser.value = null;
-            router.push('/');
+  logout() {
+    localStorage.removeItem('token');
+    this.token.value = '';
+    this.isAuthenticated.value = false;
+    this.currentUser.value = null;
+  }
 
-        } catch (error) {
-            alert('Erro ao realizar logout: ', error.message);
-            throw error;
-        }
-    }
+  getUserName() {
+    return this.currentUser.value?.sub || '';
+  }
+
+  getUserRole() {
+    return this.currentUser.value?.role || 'USER';
+  }
+
+  getUserId() {
+    return this.currentUser.value?.id || null;
+  }
 }
 
 export default new AuthService();

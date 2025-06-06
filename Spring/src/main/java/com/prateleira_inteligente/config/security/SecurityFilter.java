@@ -1,8 +1,7 @@
 package com.prateleira_inteligente.config.security;
 
-import com.prateleira_inteligente.repositories.UsuarioRepository;
+
 import com.prateleira_inteligente.services.UsuarioDetailsService;
-import com.prateleira_inteligente.services.UsuarioService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
