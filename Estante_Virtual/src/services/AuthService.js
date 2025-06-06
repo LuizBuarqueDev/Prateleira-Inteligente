@@ -16,9 +16,11 @@ class AuthService {
 
   _parseToken(token) {
     try {
-      const payload = token.split('.')[1];
-      return JSON.parse(atob(payload));
+      const payloadBase64 = token.split('.')[1];
+      const decodedPayload = atob(payloadBase64);
+      return JSON.parse(decodedPayload);
     } catch (e) {
+      console.error('Erro ao decodificar token JWT:', e);
       return null;
     }
   }
@@ -37,7 +39,7 @@ class AuthService {
       this.currentUser.value = this._parseToken(token);
       router.push('/');
     } catch (error) {
-      alert('Erro ao realizar login: ' + error.response?.data?.message || error.message);
+      alert('Erro ao realizar login: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }
@@ -56,7 +58,7 @@ class AuthService {
       this.currentUser.value = this._parseToken(token);
       router.push('/');
     } catch (error) {
-      alert('Erro ao criar usuário: ' + error.response?.data?.message || error.message);
+      alert('Erro ao criar usuário: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }
@@ -66,7 +68,18 @@ class AuthService {
     this.token.value = '';
     this.isAuthenticated.value = false;
     this.currentUser.value = null;
-    router.push('/');
+  }
+
+  getUserName() {
+    return this.currentUser.value?.sub || '';
+  }
+
+  getUserRole() {
+    return this.currentUser.value?.role || 'USER';
+  }
+
+  getUserId() {
+    return this.currentUser.value?.id || null;
   }
 }
 
