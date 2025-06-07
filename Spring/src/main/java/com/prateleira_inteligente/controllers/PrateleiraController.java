@@ -33,8 +33,9 @@ public class PrateleiraController {
             @PathVariable Long idLivro) {
         return prateleiraService.buscarLivroNaPrateleira(idUsuario, idLivro)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.noContent().build());
     }
+
     @PostMapping
     public ResponseEntity<PrateleiraDTO> adicionarLivro(@RequestBody PrateleiraDTO dto) {
 

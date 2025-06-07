@@ -27,32 +27,6 @@ public class PrateleiraInteligenteApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Livro livro1 = new Livro();
-        livro1.setTitulo("Java para Iniciantes");
-        livro1.setAnoPublicacao(LocalDate.of(2020,1,1));
-        livro1.setDescricao("Um guia completo para aprender Java.");
-        livro1.setCapa("https://wallpapers.com/images/hd/weird-profile-pictures-idfvjaormuvjp8fy.jpg");
-        livro1.setEditora("McGraw-Hill");
-
-        livroService.save(livro1);
-
-        Usuario usuario1 = new Usuario();
-        usuario1.setNome("João Silva");
-        usuario1.setSenha("<PASSWORD>");
-
-        usuarioService.save(usuario1);
-        /*
-        UsuarioLivro usuarioLivro = new UsuarioLivro();
-        usuarioLivro.setUsuario(usuario1);
-        usuarioLivro.setLivro(livro1);
-
-
-        livro1.getUsuariosLivros().add(usuarioLivro);
-        usuario1.getUsuarioLivros().add(usuarioLivro);
-*/
-
-        livroService.save(livro1);
-
-        mock.mocking();
+//        mock.mocking();
     }
 }
