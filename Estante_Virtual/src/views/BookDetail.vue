@@ -38,11 +38,15 @@ watch(livro, (newLivro) => {
 const verificarSeEstaNaEstante = async () => {
   try {
     const response = await PrateleiraService.buscarLivroNaPrateleira(userId, route.params.id);
-    estaNaEstante.value = response.data !== null;
+
+    // Caso venha 204, Axios não lança erro, mas response.data será undefined
+    estaNaEstante.value = !!(response.data);
   } catch (error) {
     console.error('Erro ao verificar estante:', error);
+    estaNaEstante.value = false;
   }
 };
+
 
 const toggleEstante = async () => {
   const livroId = route.params.id;
@@ -98,16 +102,14 @@ onMounted(async () => {
 
       <div class="col-12 col-sm-8">
         <h2>{{ livro.titulo || 'Título não disponível' }}</h2>
-       <p><strong>Autor(es):</strong> {{ livro.autor?.nome || 'Não informado' }}</p>
+        <p><strong>Autor(es):</strong> {{ livro.autor?.nome || 'Não informado' }}</p>
 
         <p><strong>Categoria(s):</strong>
           <span v-for="(categoria, index) in livro.nomesCategorias" :key="index">
             <RouterLink
-               :to="{ name: 'CategoryBooks', params: { categoriaId: livro.idCategorias[index], nomeCategoria: categoria } }"
-               class="category-link"
-            >
-              {{ categoria }}{{ index < livro.nomesCategorias.length - 1 ? ', ' : '' }}
-           </RouterLink>
+              :to="{ name: 'CategoryBooks', params: { categoriaId: livro.idCategorias[index], nomeCategoria: categoria } }"
+              class="category-link">
+              {{ categoria }}{{ index < livro.nomesCategorias.length - 1 ? ', ' : '' }} </RouterLink>
           </span>
           <span v-if="!livro.nomesCategorias?.length">Não informado</span>
         </p>
@@ -141,15 +143,15 @@ onMounted(async () => {
   border: 2px solid red;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
-.category-link {
-  color: var(--color_4);
-  text-decoration: none;
-  transition: color 0.3s ease;
+  .category-link {
+    color: var(--color_4);
+    text-decoration: none;
+    transition: color 0.3s ease;
   }
 
-.category-link:hover {
-  color: var(--color_1_hover);
-  text-decoration: underline;
+  .category-link:hover {
+    color: var(--color_1_hover);
+    text-decoration: underline;
   }
 }
 </style>

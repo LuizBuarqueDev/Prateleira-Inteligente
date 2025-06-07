@@ -2,7 +2,7 @@
 import AuthService from '@/services/AuthService';
 import { computed } from 'vue';
 
-const userName = computed(() => AuthService.currentUser.value?.email || '');
+const userName = computed(() => AuthService.getUserName() || '');
 const isAuthenticated = computed(() => AuthService.isAuthenticated.value);
 
 const logout = async () => {
