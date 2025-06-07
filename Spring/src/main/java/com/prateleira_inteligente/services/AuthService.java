@@ -7,6 +7,7 @@ import com.prateleira_inteligente.entities.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,15 @@ public class AuthService {
     private final TokenService tokenService;
 
     public ResponseEntity<TokenDTO> authenticate(AuthDTO data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.getNomeUsuario(), data.getSenha());
-        var auth = authenticationManager.authenticate(usernamePassword);
-        Usuario usuario = (Usuario) auth.getPrincipal(); // Correto
-        var token = tokenService.generateToken(usuario); // Agora sim, Usuario correto
-        return ResponseEntity.ok(new TokenDTO(token));
+        try {
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.getNomeUsuario(), data.getSenha());
+            var auth = authenticationManager.authenticate(usernamePassword);
+            Usuario usuario = (Usuario) auth.getPrincipal();
+            var token = tokenService.generateToken(usuario);
+            return ResponseEntity.ok(new TokenDTO(token));
+
+        } catch (BadCredentialsException e) {
+            throw new IllegalArgumentException("Usuário ou senha inválidos.");
+        }
     }
 }
