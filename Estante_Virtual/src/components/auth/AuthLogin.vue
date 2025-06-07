@@ -51,12 +51,7 @@ const validateForm = () => {
 
 const loginUser = async () => {
   if (!validateForm()) return;
-
-try {
   await AuthService.login(loginData.value.email, loginData.value.password);
-} catch (error) {
-  alert(' | Erro ao realizar login: ' + error.message);
-}
 };
 </script>
 

@@ -26,7 +26,6 @@ class AuthService {
   }
 
   async login(nomeUsuario, senha) {
-    try {
       const response = await api.post('/auth/login', {
         nomeUsuario,
         senha
@@ -38,10 +37,6 @@ class AuthService {
       this.isAuthenticated.value = true;
       this.currentUser.value = this._parseToken(token);
       router.push('/');
-    } catch (error) {
-      alert('Erro ao realizar login: ' + (error.response?.data?.message || error.message));
-      throw error;
-    }
   }
 
   async createUser(nomeUsuario, senha) {
