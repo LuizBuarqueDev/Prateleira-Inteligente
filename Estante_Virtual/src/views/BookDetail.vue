@@ -37,10 +37,10 @@ watch(livro, (newLivro) => {
 
 
 const verificarSeEstaNaEstante = async () => {
-  if (AuthService.getUserId() != null) {
+  if (AuthService.isAuthenticated.value) {
     try {
+      alert("Chamando verificar")
       const response = await PrateleiraService.buscarLivroNaPrateleira(userId, route.params.id);
-
       estaNaEstante.value = !!(response.data);
     } catch (error) {
       console.error('Erro ao verificar estante:', error);

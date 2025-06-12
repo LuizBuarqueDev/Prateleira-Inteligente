@@ -1,3 +1,4 @@
+import AuthService from '@/services/AuthService';
 import axios from 'axios';
 
 const instance = axios.create({
@@ -41,7 +42,13 @@ instance.interceptors.response.use(
 
     // Exibição de mensagens conforme status
     if (error.response?.status === 401) {
-      alert('Não autorizado: ' + message);
+      if (message.toLowerCase().includes("token expirado")) {
+        alert("Sua sessão expirou, faça o login novamente");
+        AuthService.logout();
+      }
+      else {
+        alert('Não autorizado: ' + message);
+      }
     } else if (error.response?.status === 403) {
       alert('Acesso negado.');
     } else if (error.response?.status === 500) {

@@ -63,6 +63,7 @@ class AuthService {
     this.token.value = '';
     this.isAuthenticated.value = false;
     this.currentUser.value = null;
+    router.push('/');
   }
 
   getUserName() {

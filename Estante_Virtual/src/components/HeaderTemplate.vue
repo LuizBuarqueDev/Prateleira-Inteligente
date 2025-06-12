@@ -5,7 +5,7 @@ import { RouterLink } from 'vue-router';
 import AuthService from '@/services/AuthService';
 
 
-const isAuthenticated = ref(AuthService.isAuthenticated);
+const isAuthenticated = ref(AuthService.isAuthenticated.value);
 </script>
 
 
