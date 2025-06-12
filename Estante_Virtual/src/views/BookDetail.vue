@@ -29,7 +29,9 @@ const fechLivro = async () => {
 
 watch(livro, (newLivro) => {
   if (newLivro.anoPublicacao) {
-    date.value = new Date(newLivro.anoPublicacao);
+    const [year, month, day] = newLivro.anoPublicacao.split('-').map(Number);
+    date.value = new Date(year, month - 1, day, 0, 0, 0);
+
   } else {
     date.value = null;
   }
@@ -39,7 +41,6 @@ watch(livro, (newLivro) => {
 const verificarSeEstaNaEstante = async () => {
   if (AuthService.isAuthenticated.value) {
     try {
-      alert("Chamando verificar")
       const response = await PrateleiraService.buscarLivroNaPrateleira(userId, route.params.id);
       estaNaEstante.value = !!(response.data);
     } catch (error) {
