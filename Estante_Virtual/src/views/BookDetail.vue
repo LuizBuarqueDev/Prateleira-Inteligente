@@ -12,6 +12,7 @@ import EditBook from '@/components/EditBook.vue';
 
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import AuthService from '@/services/AuthService';
 
 
 const date = ref(null);
@@ -36,14 +37,15 @@ watch(livro, (newLivro) => {
 
 
 const verificarSeEstaNaEstante = async () => {
-  try {
-    const response = await PrateleiraService.buscarLivroNaPrateleira(userId, route.params.id);
+  if (AuthService.getUserId() != null) {
+    try {
+      const response = await PrateleiraService.buscarLivroNaPrateleira(userId, route.params.id);
 
-    // Caso venha 204, Axios não lança erro, mas response.data será undefined
-    estaNaEstante.value = !!(response.data);
-  } catch (error) {
-    console.error('Erro ao verificar estante:', error);
-    estaNaEstante.value = false;
+      estaNaEstante.value = !!(response.data);
+    } catch (error) {
+      console.error('Erro ao verificar estante:', error);
+      estaNaEstante.value = false;
+    }
   }
 };
 
