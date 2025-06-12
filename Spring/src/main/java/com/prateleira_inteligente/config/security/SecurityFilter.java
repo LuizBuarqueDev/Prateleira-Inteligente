@@ -23,15 +23,23 @@ public class SecurityFilter extends OncePerRequestFilter {
     private final UsuarioDetailsService usuarioService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var token = this.recoverToken(request);
-        if (token != null) {
-            var subject = tokenService.validateToken(token);
-            UserDetails user = usuarioService.loadUserByUsername(subject);
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        try {
+            String token = this.recoverToken(request);
+            if (token != null) {
+                String subject = tokenService.validateToken(token);
+                UserDetails user = usuarioService.loadUserByUsername(subject);
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+            filterChain.doFilter(request, response);
+
+        } catch (RuntimeException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
         }
-        filterChain.doFilter(request, response);
     }
 
     private String recoverToken(HttpServletRequest request) {
