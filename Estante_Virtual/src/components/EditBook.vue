@@ -7,6 +7,7 @@ import LivroService from '@/services/LivroService'
 
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import AuthService from '@/services/AuthService';
 
 
 const props = defineProps({
@@ -136,7 +137,7 @@ const salvarEdicao = async () => {
 </script>
 
 <template>
-  <div class="edit-bar">
+  <div v-show="AuthService.getUserRole() === 'ADMIN'" class="edit-bar">
     <i class="fa-solid fa-pen-to-square" @click="openEditModal"></i>
     <i class="fa-solid fa-trash" @click="openDeleteModal"></i>
   </div>
