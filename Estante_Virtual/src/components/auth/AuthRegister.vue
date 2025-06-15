@@ -60,13 +60,8 @@ const validateForm = () => {
 
 const registerUser = async () => {
   if (!validateForm()) return;
-
-  try {
     await AuthService.createUser(newUser.value.email, newUser.value.password);
     alert('Conta criada com sucesso!');
-  } catch (error) {
-    alert('Erro ao registrar: ' + error.message);
-  }
 };
 </script>
 

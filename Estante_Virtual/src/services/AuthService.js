@@ -40,7 +40,6 @@ class AuthService {
   }
 
   async createUser(nomeUsuario, senha) {
-    try {
       const response = await api.post('/auth/registrar', {
         nomeUsuario,
         senha
@@ -52,10 +51,6 @@ class AuthService {
       this.isAuthenticated.value = true;
       this.currentUser.value = this._parseToken(token);
       router.push('/');
-    } catch (error) {
-      alert('Erro ao criar usuário: ' + (error.response?.data?.message || error.message));
-      throw error;
-    }
   }
 
   logout() {
