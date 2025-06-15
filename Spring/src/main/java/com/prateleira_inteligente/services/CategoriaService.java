@@ -30,12 +30,14 @@ public class CategoriaService implements IService<Categoria> {
     @Override
     @Transactional(readOnly = true)
     public Categoria getById(Long id) {
-        return null;
+        return categoriaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada: " + id));
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
+        categoriaRepository.deleteById(id);
     }
 
     @Override

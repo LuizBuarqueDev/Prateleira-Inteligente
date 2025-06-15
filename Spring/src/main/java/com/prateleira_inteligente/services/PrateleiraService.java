@@ -9,6 +9,7 @@ import com.prateleira_inteligente.repositories.UsuarioLivroRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.prateleira_inteligente.services.PrateleiraService;
 
 import java.util.List;
 import java.util.Optional;
@@ -66,5 +67,36 @@ public class PrateleiraService {
         Livro livro = livroService.getById(idLivro);
         return usuarioLivroRepository.findByUsuarioAndLivro(usuario, livro)
                 .map(prateleiraMapper::toDTO);
+    }
+
+    @Transactional
+    public PrateleiraDTO avaliarLivro(Long idUsuario, Long idLivro, Double nota) {
+        if (nota < 0 || nota > 5) {
+            throw new IllegalArgumentException("A nota deve estar entre 0 e 5");
+        }
+
+        Usuario usuario = usuarioService.getById(idUsuario);
+        Livro livro = livroService.getById(idLivro);
+
+        UsuarioLivro usuarioLivro = usuarioLivroRepository.findByUsuarioAndLivro(usuario, livro)
+                .orElseThrow(() -> new RuntimeException("Livro não encontrado na prateleira do usuário"));
+
+        usuarioLivro.setNota(nota);
+        usuarioLivro = usuarioLivroRepository.save(usuarioLivro);
+
+        return prateleiraMapper.toDTO(usuarioLivro);
+    }
+
+    // BACKEND - PrateleiraService.java
+    @Transactional(readOnly = true)
+    public Double calcularMediaAvaliacoes(Long idLivro) {
+        Livro livro = livroService.getById(idLivro);
+        List<UsuarioLivro> usuarioLivros = usuarioLivroRepository.findByLivro(livro);
+
+        return usuarioLivros.stream()
+                .filter(ul -> ul.getNota() != null) // Filtra apenas os que têm avaliação
+                .mapToDouble(UsuarioLivro::getNota)
+                .average()
+                .orElse(0.0);
     }
 }

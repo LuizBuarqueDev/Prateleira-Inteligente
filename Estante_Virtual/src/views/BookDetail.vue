@@ -20,6 +20,7 @@ const livro = ref(modelLivro());
 const route = useRoute();
 const estaNaEstante = ref(false);
 const userId = "1"; // ID do usuário fixo
+const similarBooks = ref([]);
 
 const fechLivro = async () => {
   const response = await livroService.findById(route.params.id);
@@ -79,6 +80,20 @@ onMounted(async () => {
     console.error('Erro ao carregar livro:', error);
   }
 });
+
+  onMounted(async () => {
+    try {
+      await fechLivro();
+      await verificarSeEstaNaEstante();
+
+      // Carregar livros similares
+      const response = await livroService.findSimilarBooks(route.params.id);
+      similarBooks.value = response.data;
+    } catch (error) {
+      console.error('Erro ao carregar livro:', error);
+    }
+  });
+
 </script>
 
 
@@ -156,5 +171,19 @@ onMounted(async () => {
     color: var(--color_1_hover);
     text-decoration: underline;
   }
+
+<section v-if="similarBooks.length" class="similar-books">
+<h3>Livros similares</h3>
+<BooksCards :livros="similarBooks" />
+</section>
+</template>
+
+<style scoped>
+.similar-books {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
 }
+}
+
 </style>

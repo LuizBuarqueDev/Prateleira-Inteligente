@@ -18,4 +18,5 @@ public class LivroDTO {
     private List<Long> idCategorias;
     private List<String> nomesCategorias;
     private List<Long> idUsuarios;
+    private Double mediaAvaliacoes;
 }

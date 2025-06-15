@@ -7,6 +7,7 @@ import com.prateleira_inteligente.entities.Livro;
 import com.prateleira_inteligente.entities.Usuario;
 import com.prateleira_inteligente.entities.UsuarioLivro;
 import com.prateleira_inteligente.services.CategoriaService;
+import com.prateleira_inteligente.services.PrateleiraService;
 import com.prateleira_inteligente.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ public class LivroMapper implements IMapper<Livro, LivroDTO> {
     private final AutorMapper autorMapper;
     private final CategoriaService categoriaService;
     private final UsuarioService usuarioService;
+    private final PrateleiraService prateleiraService;
 
     @Override
     public LivroDTO toDTO(Livro livro) {
@@ -44,6 +46,7 @@ public class LivroMapper implements IMapper<Livro, LivroDTO> {
                         .stream()
                         .map(ul -> ul.getUsuario().getId())
                         .collect(Collectors.toList()) : null)
+                .mediaAvaliacoes(prateleiraService.calcularMediaAvaliacoes(livro.getId()))
                 .build();
     }
 

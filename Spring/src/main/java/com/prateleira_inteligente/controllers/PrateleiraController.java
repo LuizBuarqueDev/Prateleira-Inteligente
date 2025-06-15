@@ -41,4 +41,14 @@ public class PrateleiraController {
 
         return ResponseEntity.ok(prateleiraService.adicionarLivro(dto));
     }
+    @PutMapping("/avaliar/{idUsuario}/{idLivro}")
+    public ResponseEntity<PrateleiraDTO> avaliarLivro(
+            @PathVariable Long idUsuario,
+            @PathVariable Long idLivro,
+            @RequestParam Double nota) {
+        return ResponseEntity.ok(prateleiraService.avaliarLivro(idUsuario, idLivro, nota));
+    }
+
+
+
 }

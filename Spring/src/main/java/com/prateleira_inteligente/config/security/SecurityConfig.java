@@ -37,6 +37,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/livro/create").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/livro/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/livro/delete/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/livro/filter", "/api/livro/similares/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/prateleira/avaliar/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
