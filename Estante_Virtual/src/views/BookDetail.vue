@@ -19,7 +19,7 @@ const date = ref(null);
 const livro = ref(modelLivro());
 const route = useRoute();
 const estaNaEstante = ref(false);
-const userId = "1"; // ID do usuário fixo
+const userId = AuthService.getUserId();
 const similarBooks = ref([]);
 
 const fechLivro = async () => {
@@ -81,18 +81,18 @@ onMounted(async () => {
   }
 });
 
-  onMounted(async () => {
-    try {
-      await fechLivro();
-      await verificarSeEstaNaEstante();
+onMounted(async () => {
+  try {
+    await fechLivro();
+    await verificarSeEstaNaEstante();
 
-      // Carregar livros similares
-      const response = await livroService.findSimilarBooks(route.params.id);
-      similarBooks.value = response.data;
-    } catch (error) {
-      console.error('Erro ao carregar livro:', error);
-    }
-  });
+    // Carregar livros similares
+    const response = await livroService.findSimilarBooks(route.params.id);
+    similarBooks.value = response.data;
+  } catch (error) {
+    console.error('Erro ao carregar livro:', error);
+  }
+});
 
 </script>
 
@@ -106,7 +106,7 @@ onMounted(async () => {
         <div class="d-flex flex-column align-items-center">
           <img :src="livro.capa" @error="livro.capa = '/img/bookImg.png'" alt="Capa do livro" class="book-image" />
 
-          <button @click="toggleEstante" class="btn btn-estante mt-3"
+          <button v-show="AuthService.isAuthenticated.value" @click="toggleEstante" class="btn btn-estante mt-3"
             :class="estaNaEstante ? 'btn-danger' : 'btn-primary'">
             {{ estaNaEstante ? 'Remover da Estante' : 'Adicionar à Estante' }}
           </button>
@@ -140,6 +140,12 @@ onMounted(async () => {
         <p><strong>Editora:</strong> {{ livro.editora || 'Não informado' }}</p>
       </div>
     </section>
+
+    <section v-if="similarBooks.length" class="similar-books">
+      <h3>Livros similares</h3>
+      <BooksCards :livros="similarBooks" />
+    </section>
+
   </BaseLayout>
 </template>
 
@@ -172,18 +178,10 @@ onMounted(async () => {
     text-decoration: underline;
   }
 
-<section v-if="similarBooks.length" class="similar-books">
-<h3>Livros similares</h3>
-<BooksCards :livros="similarBooks" />
-</section>
-</template>
-
-<style scoped>
-.similar-books {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+  .similar-books {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+  }
 }
-}
-
 </style>
