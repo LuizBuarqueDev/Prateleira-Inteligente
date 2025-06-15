@@ -71,16 +71,6 @@ const toggleEstante = async () => {
   }
 };
 
-
-onMounted(async () => {
-  try {
-    await fechLivro();
-    await verificarSeEstaNaEstante();
-  } catch (error) {
-    console.error('Erro ao carregar livro:', error);
-  }
-});
-
 onMounted(async () => {
   try {
     await fechLivro();
