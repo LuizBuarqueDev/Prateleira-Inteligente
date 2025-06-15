@@ -19,15 +19,18 @@ const livro = ref(modelLivro());
 
 watch(date, (newDate) => {
     if (newDate) {
-        livro.value.anoPublicacao = format(newDate, 'yyyy-MM-dd'); // armazenar em formato ISO
+        livro.value.anoPublicacao = format(newDate, 'yyyy-MM-dd');
     }
 });
 
 const addLivro = async () => {
     try {
+        if (!livro.value.autor?.id) {
+            livro.value.autor = null;
+        }
+        console.log(livro.value);
         await livroService.create(livro.value);
         alert('Livro Cadastrado');
-        console.log(livro.value);
         await nextTick(); // espera DOM estabilizar
         router.back();
     } catch (error) {
@@ -36,7 +39,7 @@ const addLivro = async () => {
 };
 
 const handleAutorSelecionado = (id) => {
-  livro.value.autor.id = id;
+    livro.value.autor.id = id;
 };
 
 const clickUploadButton = () => {
@@ -58,7 +61,8 @@ const changeImage = () => {
         <section class="container">
             <h2 class="mb-4"><i class="fa-solid fa-paperclip me-3"></i>Cadastrar livros</h2>
             <div class="upload-div">
-                <img :src="livro.capa" @error="livro.capa = '/img/bookImg.png'" class="imgdefault" alt="Capa do Livro" @click="changeImage">
+                <img :src="livro.capa" @error="livro.capa = '/img/bookImg.png'" class="imgdefault" alt="Capa do Livro"
+                    @click="changeImage">
             </div>
 
             <div class="form-div">
@@ -82,7 +86,7 @@ const changeImage = () => {
                     </div>
 
                     <div class="form-group">
-                    <AutorCard @update:selectedAuthorId="handleAutorSelecionado"/>
+                        <AutorCard @update:selectedAuthorId="handleAutorSelecionado" />
                     </div>
 
                     <div class="form-group">

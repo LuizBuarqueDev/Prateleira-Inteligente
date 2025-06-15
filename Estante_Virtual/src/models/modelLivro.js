@@ -10,5 +10,6 @@ export const modelLivro = () => ({
     idLivros: null
   },
   idCategorias: [],
-  idUsuarios: []
+  idUsuarios: [],
+  mediaAvaliacoes: 0
 });
