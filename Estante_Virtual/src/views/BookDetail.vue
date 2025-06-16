@@ -25,8 +25,18 @@ const similarBooks = ref([]);
 const fechLivro = async () => {
   const response = await livroService.findById(route.params.id);
   livro.value = response.data;
-  console.log(livro.value);
 }
+
+const handleLivroAtualizado = async () => {
+  await fechLivro();
+  try {
+    const response = await livroService.findSimilarBooks(route.params.id);
+    similarBooks.value = response.data;
+  } catch (error) {
+    console.error('Erro ao atualizar livros similares:', error);
+  }
+};
+
 
 watch(livro, (newLivro) => {
   if (newLivro.anoPublicacao) {
@@ -104,7 +114,7 @@ onMounted(async () => {
 
         <!-- Coluna dos ícones (EditBook) -->
         <div class="ms-3 d-flex align-items-start">
-          <EditBook :livro="livro" @livroAtualizado="fechLivro" />
+          <EditBook :livro="livro" @livroAtualizado="handleLivroAtualizado" />
         </div>
       </aside>
 

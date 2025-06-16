@@ -47,7 +47,7 @@ const goToLivroDetail = (livro) => {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.74);
-  cursor: pointer; /* 👈 garante que o cursor mostre que é clicável */
+  cursor: pointer;
 }
 
 .book-item img {
@@ -74,7 +74,7 @@ const goToLivroDetail = (livro) => {
   color: var(--color_white);
   opacity: 0;
   transition: opacity 0.3s ease;
-  z-index: 2; /* 👈 garante que o texto fique acima da imagem */
+  z-index: 2;
   text-align: center;
   width: 100%;
   padding: 0 10px;

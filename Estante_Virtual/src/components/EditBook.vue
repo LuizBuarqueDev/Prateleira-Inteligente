@@ -1,12 +1,13 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
-import router from '@/router'
-
-import BaseModal from './base_layout/BaseModal.vue'
-import LivroService from '@/services/LivroService'
+import { ref, computed, watch } from 'vue';
+import router from '@/router';
 
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+
+import BaseModal from './base_layout/BaseModal.vue';
+import LivroService from '@/services/LivroService';
+
 import AuthService from '@/services/AuthService';
 
 
@@ -16,6 +17,8 @@ const props = defineProps({
     required: true
   }
 })
+
+const emit = defineEmits(['livroAtualizado', 'livroDeletado']);
 
 const date = ref(null);
 const showModal = ref(false)
@@ -112,23 +115,22 @@ const openDeleteModal = () => {
 const confirmDelete = () => {
   LivroService.delete(livroEditavel.value.id);
   router.push('/');
-  alert('Livro excluído!');
+  emit('livroDeletado');
   showModal.value = false;
 }
 
-const emit = defineEmits(['livroAtualizado']);
 
 const salvarEdicao = async () => {
   try {
-    livroEditavel.value.idAutor = Number(idAutor.value); // ← Corrige aqui
-    livroEditavel.value.idCategorias = [Number(idCategorias.value)]; // ← Certifique-se que isso é um array de números
+    livroEditavel.value.idAutor = Number(idAutor.value);
+    livroEditavel.value.idCategorias = [Number(idCategorias.value)];
 
     if (livroEditavel.value.anoPublicacao) {
       livroEditavel.value.anoPublicacao = validarData(livroEditavel.value.anoPublicacao);
     }
 
     await LivroService.update(livroEditavel.value.id, livroEditavel.value);
-    emit('livroAtualizado', livroEditavel.value);
+    emit('livroAtualizado');
     showModal.value = false;
   } catch (error) {
     console.error('Erro ao atualizar:', error);
@@ -143,12 +145,12 @@ const salvarEdicao = async () => {
   </div>
 
   <BaseModal :isOpen="showModal" :onClose="() => showModal = false" :size="modalSize">
-    <!-- Modal de Edição com INPUTS -->
     <template v-if="modalContent === 'edit'">
       <h2 class="text-xl font-bold mb-4">
         <i class="fa-solid fa-pen-to-square"></i>
         Editar Livro
       </h2>
+
       <form class="grid gap-4">
         <input v-model="livroEditavel.titulo" type="text" placeholder="Título" class="input" />
         <input v-model="idAutor" type="text" placeholder="Autor" class="input" />
