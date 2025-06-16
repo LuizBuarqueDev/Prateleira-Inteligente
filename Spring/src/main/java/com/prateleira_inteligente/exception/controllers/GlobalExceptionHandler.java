@@ -11,6 +11,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgument(IllegalArgumentException ex) {
+        System.err.println(ex.getMessage());
         return ResponseEntity
                 .badRequest()
                 .body(Map.of("erro", ex.getMessage()));
@@ -18,6 +19,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception ex) {
+        System.err.println(ex.getMessage());
         return ResponseEntity
                 .status(500)
                 .body(Map.of("erro", "Erro interno no servidor"));

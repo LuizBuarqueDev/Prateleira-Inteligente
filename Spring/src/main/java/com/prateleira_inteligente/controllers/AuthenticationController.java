@@ -27,7 +27,6 @@ public class AuthenticationController {
 
     @PostMapping("/registrar")
     public ResponseEntity<TokenDTO> registrar(@RequestBody AuthDTO data) {
-        System.out.printf(usuarioService.findByNome(data.getNomeUsuario()).toString());
         if (usuarioService.findByNome(data.getNomeUsuario()) != null) {
             throw new IllegalArgumentException("Este email já está vinculado a uma conta");
         }
