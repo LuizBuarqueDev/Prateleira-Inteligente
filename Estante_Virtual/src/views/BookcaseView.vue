@@ -5,10 +5,11 @@ import livroService from '@/services/LivroService';
 import BaseLayout from '@/components/BaseLayout.vue';
 import BooksCards from '@/components/BooksCards.vue';
 import Spinner from '@/components/Spinner.vue';
+import AuthService from '@/services/AuthService';
 
 const userBooks = ref([]);
 const isLoading = ref(true);
-const userId = "1"; // ID fixo
+const userId = AuthService.getUserId();
 
 const fetchUserBooks = async () => {
   try {
