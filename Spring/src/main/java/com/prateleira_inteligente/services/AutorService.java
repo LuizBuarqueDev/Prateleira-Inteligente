@@ -40,6 +40,11 @@ public class AutorService implements IService<Autor> {
         livroService.delete(id);
     }
 
+    @Transactional(readOnly = true)
+    public Autor findByname(String name) {
+        return autorRepository.findByNome(name);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<Autor> findAll() {
