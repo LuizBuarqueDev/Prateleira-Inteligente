@@ -1,0 +1,19 @@
+###
+POST http://localhost:8080/api/auth/registrar
+Content-Type: application/json
+
+{
+  "nomeUsuario": "LuizAdmin@gmail.com",
+  "senha": "LuizAdmin@gmail.com",
+  "role": "ADMIN"
+}
+
+###
+POST http://localhost:8080/api/auth/registrar
+Content-Type: application/json
+
+{
+  "nomeUsuario": "CarllaAdmin@gmail.com",
+  "senha": "CarllaAdmin@gmail.com",
+  "role": "ADMIN"
+}

@@ -18,7 +18,6 @@ public class PrateleiraInteligenteApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-//        mock.mocking();
         openLibraryImporter.importarLivrosAutomaticamente();
     }
 }
