@@ -95,7 +95,7 @@ public class LivroService implements IService<Livro> {
     }
 
     @Transactional(readOnly = true)
-    public List<Livro> filterLivros(Double minRating, String sortBy) {
+    public List<Livro> filterLivros(Double minRating, String sortBy){
         List<Livro> livros = livroRepository.findAll();
 
         // Filtro por avaliação mínima
@@ -131,8 +131,8 @@ public class LivroService implements IService<Livro> {
 
         return livros;
     }
-    @Transactional(readOnly = true)
-    public List<Livro> findSimilarBooks(Long idLivro) {
+        @Transactional(readOnly = true)
+        public List<Livro> findSimilarBooks(Long idLivro) {
         Livro livroAtual = getById(idLivro);
 
         return livroRepository.findAll().stream()

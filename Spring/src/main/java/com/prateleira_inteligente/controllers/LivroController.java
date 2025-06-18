@@ -79,19 +79,19 @@ public class LivroController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/filter")
+    @GetMapping("/filter/minRating/{minRating}/sortBy/{sortBy}")
     public ResponseEntity<List<LivroDTO>> filterLivros(
-            @RequestParam(required = false) Double minRating,
-            @RequestParam(required = false) String sortBy) {
+            @PathVariable Double minRating,
+            @PathVariable String sortBy) {
 
         List<Livro> livros = service.filterLivros(minRating, sortBy);
         List<LivroDTO> dtos = livros.stream()
                 .map(mapper::toDTO)
                 .collect(Collectors.toList());
-
         return ResponseEntity.ok(dtos);
     }
-    @GetMapping("/similares/{idLivro}")
+
+    @GetMapping("/similares/livro/{idLivro}")
     public ResponseEntity<List<LivroDTO>> findSimilarBooks(@PathVariable Long idLivro) {
         List<LivroDTO> dtos = service.findSimilarBooks(idLivro)
                 .stream()
@@ -99,5 +99,4 @@ public class LivroController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
-
 }
