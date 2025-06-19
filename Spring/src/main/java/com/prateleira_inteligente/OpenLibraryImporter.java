@@ -1,4 +1,5 @@
 package com.prateleira_inteligente;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prateleira_inteligente.entities.Autor;
@@ -29,24 +30,20 @@ public class OpenLibraryImporter {
 
     @Transactional
     public void importarLivrosAutomaticamente() {
-        int maxResults = 100; // <-- define aqui a quantidade que você quer
-        String query = "b";   // query genérica para buscar livros variados
+        int maxResults = 100;
+        String query = "b";
+        int page = 1;
+        int totalInseridos = 0;
 
         HttpClient client = HttpClient.newHttpClient();
         ObjectMapper mapper = new ObjectMapper();
 
-        int page = 1;
-        int totalInseridos = 0;
-
         while (totalInseridos < maxResults) {
             try {
                 String url = "https://openlibrary.org/search.json?q=" + query + "&page=" + page;
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(url))
-                        .GET()
-                        .build();
-
+                HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
                 if (response.statusCode() != 200) break;
 
                 JsonNode root = mapper.readTree(response.body());
@@ -64,23 +61,21 @@ public class OpenLibraryImporter {
                         livro.setAnoPublicacao(LocalDate.of(year, 1, 1));
                     }
 
-                    if (doc.has("first_sentence") && doc.get("first_sentence").isArray()) {
-                        livro.setDescricao(doc.get("first_sentence").get(0).asText());
-                    } else {
-                        livro.setDescricao("Sem descrição.");
-                    }
-
+                    // Imagem de capa
                     if (doc.has("cover_i")) {
                         String coverId = doc.get("cover_i").asText();
                         livro.setCapa("https://covers.openlibrary.org/b/id/" + coverId + "-L.jpg");
                     }
 
-                    if (doc.has("publisher") && doc.get("publisher").isArray()) {
+                    // Editora
+                    if (doc.has("publisher") && doc.get("publisher").isArray() && doc.get("publisher").size() > 0) {
                         livro.setEditora(doc.get("publisher").get(0).asText());
+                    } else {
+                        livro.setEditora("Editora desconhecida");
                     }
 
                     // Autor
-                    if (doc.has("author_name") && doc.get("author_name").isArray()) {
+                    if (doc.has("author_name") && doc.get("author_name").isArray() && doc.get("author_name").size() > 0) {
                         String nomeAutor = doc.get("author_name").get(0).asText();
                         Autor autor = autorService.findByname(nomeAutor);
                         if (autor == null) {
@@ -91,26 +86,62 @@ public class OpenLibraryImporter {
                         livro.setAutor(autor);
                     }
 
-                    // Categoria
-                    if (doc.has("subject") && doc.get("subject").isArray()) {
-                        String nomeCategoria = doc.get("subject").get(0).asText();
-                        Categoria categoria = categoriaService.findByNome(nomeCategoria);
-                        if (categoria == null) {
-                            categoria = new Categoria();
-                            categoria.setNome(nomeCategoria);
-                            categoria = categoriaService.save(categoria);
+                    // Descrição (first_sentence ou fallback via /works/{key}.json)
+                    String descricao = "Sem descrição.";
+                    if (doc.has("first_sentence")) {
+                        JsonNode fs = doc.get("first_sentence");
+                        if (fs.isArray() && fs.size() > 0) {
+                            descricao = fs.get(0).asText();
+                        } else if (fs.isTextual()) {
+                            descricao = fs.asText();
                         }
-                        List<Categoria> categorias = new ArrayList<>();
-                        categorias.add(categoria);
-                        livro.setCategorias(categorias);
                     }
 
+                    // Complemento via /works/{id}.json
+                    if (doc.has("key")) {
+                        String workKey = doc.get("key").asText();
+                        String workUrl = "https://openlibrary.org" + workKey + ".json";
+
+                        HttpRequest workRequest = HttpRequest.newBuilder().uri(URI.create(workUrl)).GET().build();
+                        HttpResponse<String> workResponse = client.send(workRequest, HttpResponse.BodyHandlers.ofString());
+
+                        if (workResponse.statusCode() == 200) {
+                            JsonNode workData = mapper.readTree(workResponse.body());
+
+                            // Descrição mais completa
+                            if (workData.has("description")) {
+                                JsonNode descNode = workData.get("description");
+                                if (descNode.isTextual()) {
+                                    descricao = descNode.asText();
+                                } else if (descNode.has("value")) {
+                                    descricao = descNode.get("value").asText();
+                                }
+                            }
+
+                            // Categorias (subjects)
+                            if (workData.has("subjects") && workData.get("subjects").isArray()) {
+                                List<Categoria> categorias = new ArrayList<>();
+                                for (int i = 0; i < Math.min(3, workData.get("subjects").size()); i++) {
+                                    String nomeCategoria = workData.get("subjects").get(i).asText();
+                                    Categoria categoria = categoriaService.findByNome(nomeCategoria);
+                                    if (categoria == null) {
+                                        categoria = new Categoria();
+                                        categoria.setNome(nomeCategoria);
+                                        categoria = categoriaService.save(categoria);
+                                    }
+                                    categorias.add(categoria);
+                                }
+                                livro.setCategorias(categorias);
+                            }
+                        }
+                    }
+
+                    livro.setDescricao(descricao);
                     livroService.save(livro);
                     totalInseridos++;
                 }
 
                 page++;
-
             } catch (Exception e) {
                 System.out.println("Erro ao importar livros: " + e.getMessage());
                 break;

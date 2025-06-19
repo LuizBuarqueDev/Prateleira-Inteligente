@@ -15,7 +15,9 @@ public class Livro extends BaseEntity {
     private String titulo;
     private String capa;
     private LocalDate anoPublicacao;
+    @Column(columnDefinition = "TEXT")
     private String descricao;
+    @Column(length = 255)
     private String editora;
 
     @ManyToOne
