@@ -127,7 +127,7 @@ onMounted(async () => {
             <RouterLink
               :to="{ name: 'CategoryBooks', params: { categoriaId: livro.idCategorias[index], nomeCategoria: categoria } }"
               class="category-link">
-              {{ categoria }}{{ index < livro.nomesCategorias.length - 1 ? ', ' : '' }} </RouterLink>
+              {{ categoria }}{{ index < livro.nomesCategorias.length - 1 ? '' : '' }} </RouterLink>
           </span>
           <span v-if="!livro.nomesCategorias?.length">Não informado</span>
         </p>
@@ -151,37 +151,43 @@ onMounted(async () => {
 
 <style scoped>
 .book-detail {
-  margin: 50px;
+  margin: 30px;
+
+  .book-image {
+  height: 500px;
+  width: 350px;
+  border-radius: 8px;
+  border: 2px solid red;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+  .btn-estante {
+    width: 200px;
+    height: 50px;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+
+  .category-link {
+    text-decoration: none;
+    margin: 5px;
+    padding: 2px;
+    color: var(--color_4);
+    border-radius: 10px;
+    border: 2px solid var(--color_4);
+    font-weight: bold;
+    transition: all 0.5s ease;
+  }
+
+  .category-link:hover {
+    background-color: var(--color_4);
+    color: var(--color_white);
+  }
 }
 
 .custom-btn {
   margin: 10px;
   background-color: var(--color_1);
   color: var(--color_white);
-}
-
-.book-image {
-  height: 500px;
-  width: 350px;
-  border-radius: 8px;
-  border: 2px solid red;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-
-  .category-link {
-    color: var(--color_4);
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-
-  .category-link:hover {
-    color: var(--color_1_hover);
-    text-decoration: underline;
-  }
-
-  .similar-books {
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
-  }
 }
 </style>
