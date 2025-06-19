@@ -53,6 +53,8 @@ public class OpenLibraryImporter {
                 for (JsonNode doc : docs) {
                     if (totalInseridos >= maxResults) break;
 
+                    System.out.println(doc.toString());
+
                     Livro livro = new Livro();
                     livro.setTitulo(doc.has("title") ? doc.get("title").asText() : "Sem título");
 
