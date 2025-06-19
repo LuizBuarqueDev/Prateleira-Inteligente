@@ -87,7 +87,6 @@ public class PrateleiraService {
         return prateleiraMapper.toDTO(usuarioLivro);
     }
 
-    // BACKEND - PrateleiraService.java
     @Transactional(readOnly = true)
     public Double calcularMediaAvaliacoes(Long idLivro) {
         Livro livro = livroService.getById(idLivro);

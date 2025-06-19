@@ -131,8 +131,8 @@ public class LivroService implements IService<Livro> {
 
         return livros;
     }
-        @Transactional(readOnly = true)
-        public List<Livro> findSimilarBooks(Long idLivro) {
+    @Transactional(readOnly = true)
+    public List<Livro> findSimilarBooks(Long idLivro) {
         Livro livroAtual = getById(idLivro);
 
         return livroRepository.findAll().stream()

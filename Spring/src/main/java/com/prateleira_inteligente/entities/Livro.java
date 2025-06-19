@@ -11,13 +11,14 @@ import java.util.List;
 @Entity
 @Table(name = "Livros")
 public class Livro extends BaseEntity {
-
+    @Column(length = 500)
     private String titulo;
+    @Column(length = 1000)
     private String capa;
     private LocalDate anoPublicacao;
     @Column(columnDefinition = "TEXT")
     private String descricao;
-    @Column(length = 255)
+    @Column(length = 500)
     private String editora;
 
     @ManyToOne

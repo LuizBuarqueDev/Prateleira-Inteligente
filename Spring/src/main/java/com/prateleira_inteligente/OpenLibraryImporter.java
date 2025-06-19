@@ -134,6 +134,14 @@ public class OpenLibraryImporter {
                                     categorias.add(categoria);
                                 }
                                 livro.setCategorias(categorias);
+                            } else{
+                                Categoria categoria = categoriaService.findByNome("Geral");
+                                if (categoria == null) {
+                                    categoria = new Categoria();
+                                    categoria.setNome("Geral");
+                                    categoria = categoriaService.save(categoria);
+                                }
+                                livro.setCategorias(List.of(categoria));
                             }
                         }
                     }
