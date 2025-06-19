@@ -104,7 +104,7 @@ onMounted(async () => {
 
         <!-- Coluna da imagem + botão -->
         <div class="d-flex flex-column align-items-center">
-          <img :src="livro.capa" @error="livro.capa = '/img/bookImg.png'" alt="Capa do livro" class="book-image" />
+          <img :src="livro.capa" @error="livro.capa = '/img/loading.gif'" alt="Capa do livro" class="book-image" />
 
           <button v-show="AuthService.isAuthenticated.value" @click="toggleEstante" class="btn btn-estante mt-3"
             :class="estaNaEstante ? 'btn-danger' : 'btn-primary'">
