@@ -36,9 +36,15 @@ const router = createRouter({
       component: () => import('../views/BookRegistrationView.vue')
     },
     {
-      path: '/categoria/:categoriaId/:nomeCategoria',
+      path: '/category/:categoriaId/:nomeCategoria',
       name: 'CategoryBooks',
       component: () => import('@/views/CategoryBooks.vue'),
+      props: true
+    },
+    {
+      path: '/authors/:authorId/',
+      name: 'AuthorBooks',
+      component: () => import('@/views/AuthorBooks.vue'),
       props: true
     }
   ]

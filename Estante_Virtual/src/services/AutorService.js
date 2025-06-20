@@ -22,7 +22,7 @@ export default {
   findAllByIds(ids) {
     const params = new URLSearchParams();
     ids.forEach(id => params.append('ids', id));
-    return api.get(`${LIVRO_ENDPOINT}/findByIds?${params.toString()}`);
+    return api.get(`${LIVRO_ENDPOINT}/encontrarPorID?${params.toString()}`);
   },
 
   findAll() {
