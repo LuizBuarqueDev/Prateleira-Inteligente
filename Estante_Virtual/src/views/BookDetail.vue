@@ -1,13 +1,15 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 import livroService from '@/services/LivroService';
 import PrateleiraService from '@/services/PrateleiraService';
+
 import { modelLivro } from '@/models/modelLivro';
 import BaseLayout from '@/components/BaseLayout.vue';
 import EditBook from '@/components/EditBook.vue';
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
 import AuthService from '@/services/AuthService';
 import StarRating from '@/components/StarRating.vue';
 
@@ -125,13 +127,10 @@ onMounted(loadBookData);
       <section class="row book-detail">
         <aside class="col-12 col-sm-4 d-flex">
           <div class="d-flex flex-column align-items-center">
-            <img :src="livro.capa" @error="livro.capa = '/img/loading.gif'" 
-                 alt="Capa do livro" class="book-image" />
+            <img :src="livro.capa" @error="livro.capa = '/img/loading.gif'" alt="Capa do livro" class="book-image" />
 
-            <button v-show="AuthService.isAuthenticated.value" 
-                    @click="toggleEstante" 
-                    class="btn btn-estante mt-3"
-                    :class="estaNaEstante ? 'btn-danger' : 'btn-primary'">
+            <button v-show="AuthService.isAuthenticated.value" @click="toggleEstante" class="btn btn-estante mt-3"
+              :class="estaNaEstante ? 'btn-danger' : 'btn-primary'">
               {{ estaNaEstante ? 'Remover da Estante' : 'Adicionar à Estante' }}
             </button>
           </div>
@@ -143,39 +142,40 @@ onMounted(loadBookData);
 
         <div class="col-12 col-sm-8">
           <h2>{{ livro.titulo || 'Título não disponível' }}</h2>
-          
+
           <div class="rating-section mb-3">
-            <StarRating :livro-id="livro.id" 
-                       :user-id="userId"
-                       :initial-rating="avaliacaoUsuario"
-                       @rated="fetchLivro" />
-            
+            <StarRating :livro-id="livro.id" :user-id="userId" :initial-rating="avaliacaoUsuario" @rated="fetchLivro" />
+
             <div v-if="livro.mediaAvaliacoes > 0" class="rating-average ms-2">
               {{ livro.mediaAvaliacoes.toFixed(1) }} ({{ totalAvaliacoes }} avaliações)
             </div>
           </div>
 
-          <p><strong>Autor(es):</strong> {{ livro.autor?.nome || 'Não informado' }}</p>
+          <p>
+            <strong>Autor(es):</strong>
+            <router-link class="ref-link" v-if="livro.autor" :to="{ name: 'AuthorBooks', params: { authorId: livro.autor.id } }">
+              {{ livro.autor.nome }}
+            </router-link>
+            <span v-else>Não informado</span>
+          </p>
 
           <p><strong>Categoria(s):</strong>
             <span v-for="(categoria, index) in livro.nomesCategorias" :key="index">
-              <RouterLink :to="{ name: 'CategoryBooks', params: { categoriaId: livro.idCategorias[index], nomeCategoria: categoria } }"
-                         class="category-link">
-                {{ categoria }}{{ index < livro.nomesCategorias.length - 1 ? ', ' : '' }}
-              </RouterLink>
+              <RouterLink
+                :to="{ name: 'CategoryBooks', params: { categoriaId: livro.idCategorias[index], nomeCategoria: categoria } }"
+                class="ref-link">
+                {{ categoria }}{{ index < livro.nomesCategorias.length - 1 ? ', ' : '' }} </RouterLink>
             </span>
             <span v-if="!livro.nomesCategorias?.length">Não informado</span>
           </p>
 
           <p><strong>Descrição:</strong> {{ livro.descricao || 'Descrição indisponível' }}</p>
-          
+
           <p><strong>Data de Publicação:</strong>
-            <VueDatePicker v-model="date" 
-                          placeholder="Selecione a data de publicação"
-                          :format="(d) => d ? d.toLocaleDateString('pt-BR') : ''" 
-                          :disabled="true" />
+            <VueDatePicker v-model="date" placeholder="Selecione a data de publicação"
+              :format="(d) => d ? d.toLocaleDateString('pt-BR') : ''" :disabled="true" />
           </p>
-          
+
           <p><strong>Editora:</strong> {{ livro.editora || 'Não informado' }}</p>
         </div>
       </section>
@@ -209,9 +209,10 @@ onMounted(loadBookData);
   font-weight: bold;
 }
 
-.category-link {
+.ref-link {
   text-decoration: none;
   margin-right: 5px;
+  margin-left: 5px;
   padding: 2px 6px;
   color: var(--color_4);
   border-radius: 10px;
@@ -220,7 +221,7 @@ onMounted(loadBookData);
   transition: all 0.3s ease;
 }
 
-.category-link:hover {
+.ref-link:hover {
   background-color: var(--color_4);
   color: var(--color_white);
 }
