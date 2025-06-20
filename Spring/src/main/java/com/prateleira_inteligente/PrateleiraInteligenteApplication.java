@@ -18,6 +18,6 @@ public class PrateleiraInteligenteApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        openLibraryImporter.importarLivrosAutomaticamente();
+//        openLibraryImporter.importarLivrosAutomaticamente();
     }
 }
