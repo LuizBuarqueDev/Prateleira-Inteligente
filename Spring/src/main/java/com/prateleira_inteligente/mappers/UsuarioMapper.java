@@ -2,6 +2,7 @@ package com.prateleira_inteligente.mappers;
 
 import com.prateleira_inteligente.config.security.Role;
 import com.prateleira_inteligente.dto.UsuarioDTO;
+import com.prateleira_inteligente.dto.simplified.UsuarioSimplificado;
 import com.prateleira_inteligente.entities.Usuario;
 import com.prateleira_inteligente.util.HashId;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,13 @@ public class UsuarioMapper implements IMapper<Usuario, UsuarioDTO> {
                 .id(hashId.encode(usuario.getId()))
                 .nome(usuario.getNome())
                 .role(usuario.getRole())
+                .build();
+    }
+
+    public UsuarioSimplificado toSimplifiedUser(Usuario usuario) {
+        return UsuarioSimplificado.builder()
+                .id(hashId.encode(usuario.getId()))
+                .nome(usuario.getNome())
                 .build();
     }
 }
