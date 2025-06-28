@@ -17,25 +17,25 @@ public class ComentarioService implements IService<Comentario> {
     @Override
     @Transactional
     public Comentario save(Comentario comentario) {
-        return null;
+        return comentarioRepository.save(comentario);
     }
 
     @Override
     @Transactional
     public Comentario update(Long id, Comentario comentario) {
-        //TODO: Consertar, quando um livro e atualizado os autores que não foram atualizados perdem seus livros.
         return null;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Comentario getById(Long id) {
-        return null;
+        return comentarioRepository.findById(id).orElseThrow(()-> new RuntimeException("Comentario não encontrado: " + id));
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
+        comentarioRepository.deleteById(id);
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class ComentarioDTO {
     private Long id;
     private UsuarioSimplificado usuario;
-    private LivroDTO livro;
     private String texto;
+    private Long idLivro;
     private LocalDateTime dataCriacao;
 }

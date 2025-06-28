@@ -2,11 +2,9 @@ package com.prateleira_inteligente.mappers;
 
 import com.prateleira_inteligente.dto.LivroDTO;
 import com.prateleira_inteligente.dto.AutorDTO;
-import com.prateleira_inteligente.entities.Categoria;
-import com.prateleira_inteligente.entities.Livro;
-import com.prateleira_inteligente.entities.Usuario;
-import com.prateleira_inteligente.entities.UsuarioLivro;
+import com.prateleira_inteligente.entities.*;
 import com.prateleira_inteligente.services.CategoriaService;
+import com.prateleira_inteligente.services.ComentarioService;
 import com.prateleira_inteligente.services.PrateleiraService;
 import com.prateleira_inteligente.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +21,7 @@ public class LivroMapper implements IMapper<Livro, LivroDTO> {
     private final CategoriaService categoriaService;
     private final UsuarioService usuarioService;
     private final PrateleiraService prateleiraService;
+    private final ComentarioService comentarioService;
 
     @Override
     public LivroDTO toDTO(Livro livro) {
@@ -38,14 +37,22 @@ public class LivroMapper implements IMapper<Livro, LivroDTO> {
                         .stream()
                         .map(Categoria::getId)
                         .collect(Collectors.toList()) : null)
+
                 .nomesCategorias(livro.getCategorias() != null ? livro.getCategorias()
                         .stream()
                         .map(Categoria::getNome)
                         .collect(Collectors.toList()) : null)
+
                 .idUsuarios(livro.getUsuariosLivros() != null ? livro.getUsuariosLivros()
                         .stream()
                         .map(ul -> ul.getUsuario().getId())
                         .collect(Collectors.toList()) : null)
+
+                .idComentarios(livro.getComentarios() != null ? livro.getComentarios()
+                        .stream()
+                        .map(Comentario::getId)
+                        .collect(Collectors.toList()) : null)
+
                 .mediaAvaliacoes(prateleiraService.calcularMediaAvaliacoes(livro.getId()))
                 .build();
     }
@@ -72,6 +79,11 @@ public class LivroMapper implements IMapper<Livro, LivroDTO> {
         if (dto.getIdUsuarios() != null) {
             List<Usuario> usuarios = usuarioService.findAllById(dto.getIdUsuarios());
             livro.setUsuariosLivros(mapUsuariosParaUsuarioLivro(usuarios, livro));
+        }
+
+        if (dto.getIdComentarios() != null) {
+            List<Comentario> comentarios = comentarioService.findAllById(dto.getIdComentarios());
+            livro.setComentarios(comentarioService.findAllById(dto.getIdComentarios()));
         }
 
         return livro;

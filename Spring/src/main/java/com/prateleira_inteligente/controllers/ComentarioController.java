@@ -23,7 +23,6 @@ public class ComentarioController {
     public ResponseEntity<ComentarioDTO> create(@RequestBody ComentarioDTO dto) {
         Comentario entity = service.save(mapper.toEntity(dto));
         return ResponseEntity.ok(mapper.toDTO(entity));
-
     }
 
     @GetMapping("/{id}")
@@ -37,8 +36,8 @@ public class ComentarioController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/buscarPorIDs")
-    public ResponseEntity<List<ComentarioDTO>> findByIDs(@RequestBody List<Long> ids) {
+    @GetMapping("/encontrarPorID")
+    public ResponseEntity<List<ComentarioDTO>> findByIDs(@RequestParam List<Long> ids) {
         List<ComentarioDTO> dtos = service.findAllById(ids)
                 .stream()
                 .map(mapper::toDTO)

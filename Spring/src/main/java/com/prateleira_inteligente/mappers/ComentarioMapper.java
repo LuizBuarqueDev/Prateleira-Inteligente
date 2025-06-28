@@ -4,6 +4,7 @@ import com.prateleira_inteligente.dto.ComentarioDTO;
 import com.prateleira_inteligente.entities.Comentario;
 import com.prateleira_inteligente.services.LivroService;
 import com.prateleira_inteligente.services.UsuarioService;
+import com.prateleira_inteligente.util.HashId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +19,9 @@ public class ComentarioMapper implements IMapper<Comentario, ComentarioDTO> {
     @Override
     public Comentario toEntity(ComentarioDTO comentarioDTO) {
         Comentario comentario = new Comentario();
-        comentario.setUsuario(usuarioService.getById(comentarioDTO.getId()));
+        comentario.setUsuario(usuarioService.getById(comentarioDTO.getUsuario().getId()));
         comentario.setTexto(comentarioDTO.getTexto());
-        comentario.setLivro(livroService.getById(comentarioDTO.getLivro().getId()));
+        comentario.setLivro(livroService.getById(comentarioDTO.getIdLivro()));
         comentario.setDataCriacao(comentarioDTO.getDataCriacao());
         return comentario;
     }

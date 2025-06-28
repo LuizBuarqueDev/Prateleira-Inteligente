@@ -14,12 +14,11 @@ import org.springframework.stereotype.Component;
 public class UsuarioMapper implements IMapper<Usuario, UsuarioDTO> {
 
     private PasswordEncoder passwordEncoder;
-    private final HashId hashId;
 
     @Override
     public Usuario toEntity(UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario();
-        usuario.setId(hashId.decode(usuarioDTO.getId()));
+        usuario.setId((usuarioDTO.getId()));
         usuario.setNome(usuarioDTO.getNome());
         usuario.setSenha(passwordEncoder.encode(usuarioDTO.getSenha()));
         usuario.setRole(usuarioDTO.getRole() != null ? usuarioDTO.getRole() : Role.USER);
@@ -29,7 +28,7 @@ public class UsuarioMapper implements IMapper<Usuario, UsuarioDTO> {
     @Override
     public UsuarioDTO toDTO(Usuario usuario) {
         return UsuarioDTO.builder()
-                .id(hashId.encode(usuario.getId()))
+                .id(usuario.getId())
                 .nome(usuario.getNome())
                 .role(usuario.getRole())
                 .build();
@@ -37,7 +36,7 @@ public class UsuarioMapper implements IMapper<Usuario, UsuarioDTO> {
 
     public UsuarioSimplificado toSimplifiedUser(Usuario usuario) {
         return UsuarioSimplificado.builder()
-                .id(hashId.encode(usuario.getId()))
+                .id(usuario.getId())
                 .nome(usuario.getNome())
                 .build();
     }

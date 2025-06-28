@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class UsuarioSimplificado {
-    private String id;
+    private Long id;
     private String nome;
 }
