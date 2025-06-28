@@ -12,6 +12,7 @@ import BaseLayout from '@/components/BaseLayout.vue';
 import EditBook from '@/components/EditBook.vue';
 import AuthService from '@/services/AuthService';
 import StarRating from '@/components/StarRating.vue';
+import Comments from '@/components/Comments.vue';
 
 // Variáveis reativas
 const date = ref(null);
@@ -28,14 +29,10 @@ const avaliacaoUsuario = computed(() => {
   return livro.value.usuariosLivros?.find(ul => ul.usuario?.id === userId.value)?.nota || 0;
 });
 
-// Funções
 const fetchLivro = async () => {
-  try {
     const response = await livroService.findById(route.params.id);
     livro.value = response.data;
-  } catch (error) {
-    console.error('Erro ao carregar livro:', error);
-  }
+    console.log('Livro carregado:', livro.value);
 };
 
 const handleLivroAtualizado = async () => {
@@ -184,6 +181,8 @@ onMounted(loadBookData);
         <h3 class="mb-4">Livros similares</h3>
         <BooksCards :livros="similarBooks" />
       </section>
+
+      <Comments :bookId="livro.id" :commentIds="livro.idComentarios"/>
     </template>
   </BaseLayout>
 </template>

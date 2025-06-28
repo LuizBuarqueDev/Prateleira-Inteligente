@@ -2,68 +2,66 @@
 import { ref, onMounted, watch, computed } from 'vue';
 
 import AuthService from '@/services/AuthService';
-import DAOService from '@/services/DAOService';
-
-const currentUser = computed(() => AuthService.currentUser.value);
-const isAuthenticated = computed(() => AuthService.isAuthenticated.value);
-
-const userComment = ref({
-  userName: '',
-  userUID: '',
-  message: '',
-  date: '',
-  idBook: ''
-});
-
-const commentsList = ref([]);
-
-const commentsService = new DAOService('comments');
+import ComentarioService from '@/services/ComentarioService';
 
 const props = defineProps({
+  commentIds: {
+    type: Array,
+    required: true
+  },
   bookId: {
-    type: String,
+    type: Number,
     required: true
   }
 });
 
+const isAuthenticated = computed(() => AuthService.isAuthenticated.value);
+
+const userComment = ref({
+  usuario: {
+    id: '',
+    nome: ''
+  },
+  texto: '',
+  dataCriacao: '',
+  idLivro: 0
+});
+
+const commentsList = ref([]);
+
 const setUserComment = () => {
-  if (currentUser.value) {
-    userComment.value.userName = currentUser.value.email;
-    userComment.value.userUID = currentUser.value.uid;
-  }
+  userComment.value.usuario.id = AuthService.getUserId();
+  userComment.value.usuario.nome = AuthService.getUserName();
 };
 
 const postComment = async () => {
-  if (!userComment.value.message.trim()) return;
+  const texto = userComment.value.texto.trim();
 
-  if (!userComment.value.message.trim()) {
+  if (!texto) {
     alert("O campo de mensagem não pode estar vazio.");
     return;
   }
 
-  if (userComment.value.message.length > 700) {
+  if (texto.length > 700) {
     alert("O comentário deve ter no máximo 700 caracteres.");
     return;
   }
 
-  userComment.value.date = new Date().toLocaleString('pt-BR');
-  userComment.value.idBook = props.bookId;
+  userComment.value.dataCriacao = new Date().toISOString();
+  userComment.value.idLivro = props.bookId;
 
-  await commentsService.insert(userComment.value);
-  console.log(userComment.value);
+  await ComentarioService.create(userComment.value);
+  userComment.value.texto = '';
 
-  userComment.value.message = '';
   fetchCommentsList();
   alert("Comentário publicado com sucesso!");
 };
 
 const fetchCommentsList = async () => {
-  commentsList.value = await commentsService.search('idBook', props.bookId);
-
-    // Ordenando os comentários do mais recente para o mais antigo
-    commentsList.value = comments.sort((a, b) => {
-    return new Date(b.date) - new Date(a.date); // Comparação de datas
-  });
+  if (props.commentIds.length > 0) {
+    const response = await ComentarioService.findAllByIds(props.commentIds);
+    commentsList.value = response.data;
+  }
 };
 
 onMounted(() => {
@@ -71,28 +69,25 @@ onMounted(() => {
   setUserComment();
 });
 
-// Atualiza os dados quando ele muda
-watch(() => props.bookId, async () => {
+watch(() => props.commentIds, async () => {
   await fetchCommentsList();
 });
-
-// Atualiza os dados quando ele muda
-watch(currentUser, () => {
-  setUserComment();
-});
 </script>
-
-
 
 <template>
   <section class="container">
     <h3><i class="fa-regular fa-comments me-3"></i>Comentários</h3>
-    <hr>
+    <hr />
 
     <div v-show="isAuthenticated" class="comment-input">
-      <textarea class="form-control input-text" v-model="userComment.message" rows="5"
-        placeholder="Deixe seu comentário..."></textarea>
-        <span class="text-danger" v-if="userComment.message.length > 700">
+      <textarea
+        class="form-control input-text"
+        v-model="userComment.texto"
+        rows="5"
+        placeholder="Deixe seu comentário..."
+      ></textarea>
+
+      <span class="text-danger" v-if="userComment.texto.length > 700">
         O comentário deve ter no máximo 700 caracteres.
       </span>
 
@@ -103,17 +98,15 @@ watch(currentUser, () => {
 
     <div v-for="comment in commentsList" :key="comment.id" class="comment-item">
       <div class="d-flex justify-content-between">
-        <span><strong>{{ comment.userName }}</strong></span>
-        <span class="text-muted">{{ comment.date }}</span>
+        <span><strong>{{ comment.usuario?.nome || 'Anônimo' }}</strong></span>
+        <span class="text-muted">{{ comment.dataCriacao }}</span>
       </div>
       <div class="comment-body">
-        <p>{{ comment.message }}</p>
+        <p>{{ comment.texto }}</p>
       </div>
     </div>
   </section>
 </template>
-
-
 
 <style scoped>
 .comment-input {

@@ -1,4 +1,5 @@
 export const modelLivro = () => ({
+  id: null,
   titulo: '',
   capa: '',
   anoPublicacao: '',
@@ -11,5 +12,6 @@ export const modelLivro = () => ({
   },
   idCategorias: [],
   idUsuarios: [],
+  idComentarios: [],
   mediaAvaliacoes: 0
 });
