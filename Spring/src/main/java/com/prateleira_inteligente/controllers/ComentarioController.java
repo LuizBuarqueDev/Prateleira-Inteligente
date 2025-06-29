@@ -44,4 +44,13 @@ public class ComentarioController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
+
+    @GetMapping("/encontrarPorLivro/{id}")
+    public ResponseEntity<List<ComentarioDTO>> findByLivro(@PathVariable Long id) {
+        List<ComentarioDTO> dtos = service.findByBook(id)
+                .stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
+    }
 }

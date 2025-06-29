@@ -49,4 +49,9 @@ public class ComentarioService implements IService<Comentario> {
     public List<Comentario> findAllById(List<Long> ids) {
         return comentarioRepository.findAllById(ids);
     }
+
+    @Transactional(readOnly = true)
+    public List<Comentario> findByBook(Long idLivro) {
+        return comentarioRepository.findByLivroId(idLivro);
+    }
 }
