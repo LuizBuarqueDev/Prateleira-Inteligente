@@ -1,14 +1,10 @@
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 import AuthService from '@/services/AuthService';
 import ComentarioService from '@/services/ComentarioService';
 
 const props = defineProps({
-  commentIds: {
-    type: Array,
-    required: true
-  },
   bookId: {
     type: Number,
     required: true
@@ -53,26 +49,21 @@ const postComment = async () => {
   await ComentarioService.create(userComment.value);
   userComment.value.texto = '';
 
-  fetchCommentsList();
+  await fetchCommentsList();
   alert("Comentário publicado com sucesso!");
 };
 
 const fetchCommentsList = async () => {
-  if (props.commentIds.length > 0) {
-    const response = await ComentarioService.findAllByIds(props.commentIds);
-    commentsList.value = response.data;
-  }
+  const response = await ComentarioService.findAllByLivroId(props.bookId);
+  commentsList.value = response.data;
 };
 
 onMounted(() => {
   fetchCommentsList();
   setUserComment();
 });
-
-watch(() => props.commentIds, async () => {
-  await fetchCommentsList();
-});
 </script>
+
 
 <template>
   <section class="container">

@@ -182,7 +182,7 @@ onMounted(loadBookData);
         <BooksCards :livros="similarBooks" />
       </section>
 
-      <Comments :bookId="livro.id" :commentIds="livro.idComentarios"/>
+      <Comments :bookId="livro.id"/>
     </template>
   </BaseLayout>
 </template>

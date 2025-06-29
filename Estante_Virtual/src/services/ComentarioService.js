@@ -21,6 +21,10 @@ export default {
     return api.get(`${COMENTARIO_ENDPOINT}/encontrarPorID?${params.toString()}`);
   },
 
+  findAllByLivroId(livroId) {
+    return api.get(`${COMENTARIO_ENDPOINT}/encontrarPorLivro/${livroId}`);
+  },
+
   findAll() {
     return api.get(COMENTARIO_ENDPOINT);
   }
