@@ -91,7 +91,7 @@ public class LivroController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/similares/livro/{idLivro}")
+    @GetMapping("/similar/{idLivro}")
     public ResponseEntity<List<LivroDTO>> findSimilarBooks(@PathVariable Long idLivro) {
         List<LivroDTO> dtos = service.findSimilarBooks(idLivro)
                 .stream()

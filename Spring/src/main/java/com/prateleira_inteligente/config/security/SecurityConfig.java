@@ -34,10 +34,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login", "/api/auth/registrar", "/css/**", "/js/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/livro/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/livro/create").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/livro/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/livro/delete/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/autor/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/comentario/**").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/livro/filter/minRating/{minRating}/sortBy/{sortBy}",
                                 "/api/livro/similares/livro/{idLivro}")
