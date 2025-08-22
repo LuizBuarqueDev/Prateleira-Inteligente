@@ -4,10 +4,10 @@ import LivroService from '@/services/LivroService';
 import { onMounted, ref } from 'vue';
 
 const props = defineProps({
-  bookId: {
-    type: Number,
-    required: true
-  }
+    bookId: {
+        type: Number,
+        required: true
+    }
 });
 
 const similarBooks = ref([]);
@@ -24,9 +24,9 @@ onMounted(() => {
 
 
 <template>
-    <section>
+    <section class="similar-books container">
         <h2 class="">Livros Similares</h2>
-        <div class="similar-books mb-5">
+        <div class=" mb-5">
             <p v-if="!similarBooks.length">Nenhum livro similar encontrado.</p>
 
             <div v-else>
@@ -39,10 +39,15 @@ onMounted(() => {
 
 
 <style>
-h2 {
-    text-align: center;
-    font-size: 2.8rem;
-    margin: 50px;
-    color: var(--color-2);
+.similar-books {
+
+    h2 {
+        text-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+        text-align: center;
+        font-weight: bold;
+        font-size: 2.8rem;
+        margin: 50px;
+        color: var(--color_4);
+    }
 }
 </style>

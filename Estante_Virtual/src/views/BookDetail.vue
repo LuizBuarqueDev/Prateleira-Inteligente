@@ -13,7 +13,7 @@ import EditBook from '@/components/EditBook.vue';
 import AuthService from '@/services/AuthService';
 import StarRating from '@/components/StarRating.vue';
 import Comments from '@/components/Comments.vue';
-import SimilarBooks from './SimilarBooks.vue';
+import SimilarBooks from '../components/SimilarBooks.vue';
 
 // Variáveis reativas
 const date = ref(null);
