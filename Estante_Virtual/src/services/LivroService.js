@@ -30,12 +30,16 @@ export default {
   },
 
   search(termo) {
-        return api.get(`${LIVRO_ENDPOINT}/buscar`, {
+    return api.get(`${LIVRO_ENDPOINT}/buscar`, {
       params: { busca: termo }
     });
   },
 
   findByCategoriaId(categoriaId) {
     return api.get(`${LIVRO_ENDPOINT}/categoria/${categoriaId}`);
+  },
+
+  findSimilarBooks(bookId) {
+    return api.get(`${LIVRO_ENDPOINT}/similar/${bookId}`);
   }
 };

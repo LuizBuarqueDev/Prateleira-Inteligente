@@ -13,13 +13,13 @@ import EditBook from '@/components/EditBook.vue';
 import AuthService from '@/services/AuthService';
 import StarRating from '@/components/StarRating.vue';
 import Comments from '@/components/Comments.vue';
+import SimilarBooks from './SimilarBooks.vue';
 
 // Variáveis reativas
 const date = ref(null);
 const livro = ref(modelLivro());
 const route = useRoute();
 const estaNaEstante = ref(false);
-const similarBooks = ref([]);
 const isLoading = ref(true);
 
 // Computed properties
@@ -30,23 +30,12 @@ const avaliacaoUsuario = computed(() => {
 });
 
 const fetchLivro = async () => {
-    const response = await livroService.findById(route.params.id);
-    livro.value = response.data;
-    console.log('Livro carregado:', livro.value);
+  const response = await livroService.findById(route.params.id);
+  livro.value = response.data;
 };
 
 const handleLivroAtualizado = async () => {
   await fetchLivro();
-  await loadSimilarBooks();
-};
-
-const loadSimilarBooks = async () => {
-  try {
-    const response = await livroService.findSimilarBooks(route.params.id);
-    similarBooks.value = response.data;
-  } catch (error) {
-    console.error('Erro ao carregar livros similares:', error);
-  }
 };
 
 const verificarSeEstaNaEstante = async () => {
@@ -72,7 +61,7 @@ const toggleEstante = async () => {
       });
     }
     estaNaEstante.value = !estaNaEstante.value;
-    await fetchLivro(); // Recarrega os dados do livro após alteração
+    await fetchLivro();
   } catch (error) {
     console.error('Erro ao atualizar estante:', error);
     alert('Ocorreu um erro ao atualizar sua estante');
@@ -101,7 +90,6 @@ const loadBookData = async () => {
   try {
     await fetchLivro();
     await verificarSeEstaNaEstante();
-    await loadSimilarBooks();
   } finally {
     isLoading.value = false;
   }
@@ -121,7 +109,7 @@ onMounted(loadBookData);
     </template>
 
     <template v-else>
-      <section class="row book-detail">
+      <section class="row book-detail m-5">
         <aside class="col-12 col-sm-4 d-flex">
           <div class="d-flex flex-column align-items-center">
             <img :src="livro.capa" @error="livro.capa = '/img/loading.gif'" alt="Capa do livro" class="book-image" />
@@ -150,7 +138,8 @@ onMounted(loadBookData);
 
           <p>
             <strong>Autor(es):</strong>
-            <router-link class="ref-link" v-if="livro.autor" :to="{ name: 'AuthorBooks', params: { authorId: livro.autor.id } }">
+            <router-link class="ref-link" v-if="livro.autor"
+              :to="{ name: 'AuthorBooks', params: { authorId: livro.autor.id } }">
               {{ livro.autor.nome }}
             </router-link>
             <span v-else>Não informado</span>
@@ -175,14 +164,16 @@ onMounted(loadBookData);
 
           <p><strong>Editora:</strong> {{ livro.editora || 'Não informado' }}</p>
         </div>
+
+        <div>
+          <SimilarBooks :bookId="livro.id" class="similar-books" />
+        </div>
+  
+        <div>
+          <Comments :bookId="livro.id" />
+        </div>
       </section>
 
-      <section v-if="similarBooks.length" class="similar-books mt-5">
-        <h3 class="mb-4">Livros similares</h3>
-        <BooksCards :livros="similarBooks" />
-      </section>
-
-      <Comments :bookId="livro.id"/>
     </template>
   </BaseLayout>
 </template>
@@ -246,7 +237,7 @@ onMounted(loadBookData);
     height: 350px;
     width: 250px;
   }
-  
+
   .btn-estante {
     width: 180px;
     height: 45px;
