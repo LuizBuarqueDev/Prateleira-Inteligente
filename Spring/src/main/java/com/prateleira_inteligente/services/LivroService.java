@@ -1,16 +1,16 @@
 package com.prateleira_inteligente.services;
 
 
+import com.prateleira_inteligente.entities.Categoria;
 import com.prateleira_inteligente.entities.Livro;
 import com.prateleira_inteligente.entities.UsuarioLivro;
 import com.prateleira_inteligente.repositories.LivroRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.prateleira_inteligente.services.PrateleiraService;
 
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -18,8 +18,6 @@ import java.util.stream.Collectors;
 public class LivroService implements IService<Livro> {
 
     private final LivroRepository livroRepository;
-    private final ComentarioService comentarioService;
-
 
     @Override
     @Transactional
@@ -103,6 +101,7 @@ public class LivroService implements IService<Livro> {
         if (minRating != null) {
             livros = livros.stream()
                     .filter(l -> {
+                        assert false;
                         Double media = prateleiraService.calcularMediaAvaliacoes(l.getId());
                         return media != null && media >= minRating;
                     })
@@ -114,7 +113,7 @@ public class LivroService implements IService<Livro> {
             switch (sortBy.toLowerCase()) {
                 case "rating":
                     livros.sort((l1, l2) -> {
-                        assert prateleiraService != null;
+                        assert false;
                         Double media1 = prateleiraService.calcularMediaAvaliacoes(l1.getId());
                         Double media2 = prateleiraService.calcularMediaAvaliacoes(l2.getId());
                         return media2.compareTo(media1);
@@ -134,22 +133,62 @@ public class LivroService implements IService<Livro> {
     @Transactional(readOnly = true)
     public List<Livro> findSimilarBooks(Long idLivro) {
         Livro livroAtual = getById(idLivro);
+        Set<Long> adicionados = new HashSet<>();
+        adicionados.add(idLivro); // não incluir o próprio livro
 
-        return livroRepository.findAll().stream()
-                .filter(l -> !l.getId().equals(idLivro))
-                .filter(l -> l.getCategorias().stream()
-                        .anyMatch(c -> livroAtual.getCategorias().contains(c)))
-                .sorted((l1, l2) -> {
-                    long commonCats1 = l1.getCategorias().stream()
-                            .filter(c -> livroAtual.getCategorias().contains(c))
-                            .count();
-                    long commonCats2 = l2.getCategorias().stream()
-                            .filter(c -> livroAtual.getCategorias().contains(c))
-                            .count();
-                    return Long.compare(commonCats2, commonCats1);
-                })
-                .limit(4)
-                .collect(Collectors.toList());
+        List<Livro> resultado = new ArrayList<>();
+
+        // Adiciona livros por categoria
+        resultado.addAll(findBooksByCategoryRandom(livroAtual, adicionados));
+
+        // Adiciona livros por autor
+        resultado.addAll(findBooksByAuthorRandom(livroAtual, adicionados));
+
+        return resultado;
     }
 
+    // ==== Função: livros por categoria aleatórios ====
+    private List<Livro> findBooksByCategoryRandom(Livro livroAtual, Set<Long> adicionados) {
+        Map<Categoria, List<Livro>> livrosPorCategoria = livroRepository.findAll().stream()
+                .filter(l -> !adicionados.contains(l.getId()))
+                .filter(l -> l.getCategorias().stream()
+                        .anyMatch(c -> livroAtual.getCategorias().contains(c)))
+                .collect(Collectors.groupingBy(
+                        l -> {
+                            return l.getCategorias().stream()
+                                    .filter(c -> livroAtual.getCategorias().contains(c))
+                                    .findFirst().get();
+                        }
+                ));
+
+        List<Livro> resultado = new ArrayList<>();
+        for (List<Livro> lista : livrosPorCategoria.values()) {
+            // Embaralha os livros da categoria
+            Collections.shuffle(lista);
+            int count = 0;
+            for (Livro l : lista) {
+                if (!adicionados.contains(l.getId()) && count < 2) {
+                    resultado.add(l);
+                    adicionados.add(l.getId());
+                    count++;
+                }
+            }
+        }
+        return resultado;
+    }
+
+    private List<Livro> findBooksByAuthorRandom(Livro livroAtual, Set<Long> adicionados) {
+        List<Livro> livrosPorAutor = livroRepository.findAll().stream()
+                .filter(l -> !adicionados.contains(l.getId()))
+                .filter(l -> l.getAutor().equals(livroAtual.getAutor()))
+                .collect(Collectors.toList());
+
+        Collections.shuffle(livrosPorAutor);
+        List<Livro> resultado = livrosPorAutor.stream()
+                .limit(2)
+                .collect(Collectors.toList());
+
+        resultado.forEach(l -> adicionados.add(l.getId()));
+        return resultado;
+    }
 }
